@@ -88,6 +88,8 @@ enum OperationId {
     BA_GANG = 17; //扒杠
     HU = 18; //胡
     PASS = 19; //过
+
+    CHI = 20; //吃
 }
 
 //错误码

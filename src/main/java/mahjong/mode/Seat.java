@@ -18,7 +18,8 @@ public class Seat {
     private float score;                        //输赢分数
     private String areaString;                  //地区
     private boolean isRobot;                    //是否托管
-    private int operation;                      //标识，0.未操作，1.胡，2.杠，3.碰，4.过
+    private int operation;                      //临时标识，0.未操作，1.胡，2.杠，3.碰，4.过
+    private List<Integer> chiCard;                 //存放吃的临时牌
     private boolean ready;                      //准备
     private boolean completed;                  //就绪
     private List<GameResult> gameResults;       //结算
@@ -109,6 +110,14 @@ public class Seat {
 
     public void setOperation(int operation) {
         this.operation = operation;
+    }
+
+    public List<Integer> getChiCard() {
+        return chiCard;
+    }
+
+    public void setChiCard(List<Integer> chiCard) {
+        this.chiCard = chiCard;
     }
 
     public boolean isReady() {

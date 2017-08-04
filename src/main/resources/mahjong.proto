@@ -89,6 +89,17 @@ message GangResponse {
     uint32 card = 2; //牌
 }
 
+//吃
+message ChiRequest {
+    repeated uint32 cards = 1; //牌
+}
+
+//吃
+message ChiResponse {
+    string ID = 1; //吃牌的人
+    repeated uint32 card = 2; //牌
+}
+
 //胡
 message HuResponse {
     string ID = 1; //胡牌的人

@@ -180,4 +180,12 @@ public class Room {
         }
         return next;
     }
+
+    public int getSeat(int seat, int count) {
+        seat += count;
+        if (seat > this.count) {
+            seat = seat % this.count;
+        }
+        return seat;
+    }
 }
