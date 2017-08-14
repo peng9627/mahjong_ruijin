@@ -1,6 +1,7 @@
 package mahjong.mode;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -27,7 +28,12 @@ public class MahjongUtil {
         cards.addAll(cardList);
         List<Integer> dui_arr = new ArrayList<>();
         if (cards.size() >= 2) {
-            cards.sort(Integer::compareTo);
+            cards.sort(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1.compareTo(o2);
+                }
+            });
             for (int i = 0; i < cards.size() - 1; i++) {
                 if (cards.get(i).intValue() == cardList.get(i + 1).intValue()) {
                     dui_arr.add(cards.get(i));
@@ -44,7 +50,12 @@ public class MahjongUtil {
         cards.addAll(cardList);
         List<Integer> san_arr = new ArrayList<>();
         if (cards.size() >= 3) {
-            cards.sort(Integer::compareTo);
+            cards.sort(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1.compareTo(o2);
+                }
+            });
             for (int i = 0; i < cards.size() - 2; i++) {
                 if (cards.get(i).intValue() == cards.get(i + 2).intValue()) {
                     san_arr.add(cards.get(i));
@@ -62,7 +73,12 @@ public class MahjongUtil {
         cards.addAll(cardList);
         List<Integer> san_arr = new ArrayList<>();
         if (cards.size() >= 4) {
-            cards.sort(Integer::compareTo);
+            cards.sort(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1.compareTo(o2);
+                }
+            });
             for (int i = 0; i < cards.size() - 3; i++) {
                 if (cards.get(i).intValue() == cards.get(i + 3).intValue()) {
                     san_arr.add(cards.get(i));
@@ -79,7 +95,12 @@ public class MahjongUtil {
     public static List<Integer> get_shun(List<Integer> cardList) {
         List<Integer> cards = new ArrayList<>();
         cards.addAll(cardList);
-        cards.sort(Integer::compareTo);
+        cards.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1.compareTo(o2);
+            }
+        });
         List<Integer> sun_arr = new ArrayList<>();
         List<Integer> temp = new ArrayList<>();
         temp.addAll(cards);
@@ -168,10 +189,85 @@ public class MahjongUtil {
      * @param cardList
      * @return
      */
-    public static boolean hu(List<Integer> cardList) {
+    public static boolean hu(List<Integer> cardList, Integer bao, Integer jiabao) {
+
         List<Integer> cards = new ArrayList<>();
-        cards.addAll(cardList);
-        cards.sort(Integer::compareTo);
+        final int[] baoSize = {0};
+        for (int card : cardList) {
+            if (card > 50) {
+                cards.add(jiabao);
+            } else if (card == bao) {
+                baoSize[0]++;
+            } else {
+                cards.add(card);
+            }
+        }
+        if (4 == baoSize[0]) {
+            return true;
+        }
+
+        List<Integer> baoCan = Card.getBaoCan();
+
+        List<Integer> temp = new ArrayList<>();
+        if (0 != baoSize[0]) {
+            switch (baoSize[0]) {
+                case 1:
+                    for (int aBaoCan : baoCan) {
+                        temp.clear();
+                        temp.addAll(cards);
+                        temp.add(aBaoCan);
+                        if (hu(temp)) {
+                            return true;
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < baoCan.size(); i++) {
+                        temp.clear();
+                        temp.addAll(cards);
+                        temp.add(baoCan.get(i));
+                        for (int aBaoCan : baoCan) {
+                            temp.addAll(cards);
+                            temp.add(aBaoCan);
+                            if (hu(temp)) {
+                                return true;
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < baoCan.size(); i++) {
+                        temp.clear();
+                        temp.addAll(cards);
+                        temp.add(baoCan.get(i));
+                        for (int j = 0; j < baoCan.size(); j++) {
+                            temp.addAll(cards);
+                            temp.add(baoCan.get(j));
+                            for (int aBaoCan : baoCan) {
+                                temp.addAll(cards);
+                                temp.add(aBaoCan);
+                                if (hu(temp)) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+        } else {
+            return hu(cards);
+        }
+        return false;
+    }
+
+    private static boolean hu(List<Integer> cards) {
+
+        cards.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1.compareTo(o2);
+            }
+        });
         List<Integer> temp = new ArrayList<>();
         temp.addAll(cards);
 
@@ -643,9 +739,20 @@ public class MahjongUtil {
      * @param card
      * @return
      */
-    public static boolean checkChi(List<Integer> cards, Integer card) {
+    public static boolean checkChi(List<Integer> cards, Integer card, Integer jiabao) {
         int color = card % 10;
         List<Integer> sameColor = Card.getSameColor(cards, color);
+
+        if (jiabao % 10 == color) {
+            List<Integer> jiabaoCards = Card.getSameColor(cards, 5);
+
+            if (0 < jiabaoCards.size()) {
+                for (int i = 0; i < jiabaoCards.size(); i++) {
+                    sameColor.add(jiabao);
+                }
+            }
+        }
+
         if (color < 3) {
             if ((sameColor.contains(card - 2) && sameColor.contains(card - 1)) || (sameColor.contains(card - 1) && sameColor.contains(card + 1))
                     || (sameColor.contains(card + 1) && sameColor.contains(card + 2))) {
@@ -669,130 +776,35 @@ public class MahjongUtil {
     /**
      * 牌型
      *
-     * @param cards         手牌
-     * @param invertedCards 碰或杠的牌
+     * @param cards 手牌
+     * @param bao   碰或杠的牌
      * @return
      */
-    public static List<ScoreType> getHuType(List<Integer> cards, List<Integer> invertedCards) {
-        List<ScoreType> scoreTypes = new ArrayList<>();
+    public static ScoreType getHuType(List<Integer> cards, Integer bao) {
 
-        //门清
-        if (14 == cards.size()) {
-            scoreTypes.add(ScoreType.MENQING_HU);
-        }
         List<Integer> cardList = new ArrayList<>();
         cardList.addAll(cards);
 
-        //碰碰胡
-        if (get_san(cardList).size() + 2 == cards.size()) {
-            scoreTypes.add(ScoreType.PENGPENG_HU);
+        if (cardList.contains(bao)) {
+            return ScoreType.FEI;
         }
 
-        List<Integer> allCard = new ArrayList<>();
-        allCard.addAll(cards);
-        allCard.addAll(invertedCards);
-
-        //清一色，混一色
-        if ((!Card.hasSameColor(allCard, 0) && !Card.hasSameColor(allCard, 1)) || (!Card.hasSameColor(allCard, 0) && !Card.hasSameColor(allCard, 2))
-                || (!Card.hasSameColor(allCard, 1) && !Card.hasSameColor(allCard, 2))) {
-            if (!Card.hasSameColor(allCard, 3) && !Card.hasSameColor(allCard, 4)) {
-                scoreTypes.add(ScoreType.QINGYISE_HU);
-            } else {
-                scoreTypes.add(ScoreType.HUNYISE_HU);
-            }
-        }
-
-        //七对
-        if (get_dui(cardList).size() == 14) {
-            List<Integer> si = get_si(cardList);
-            switch (si.size() / 4) {
-                case 0:
-                    scoreTypes.add(ScoreType.QIXIAODUI_HU);
-                    break;
-                case 1:
-                    scoreTypes.add(ScoreType.HAOHUAQIXIAODUI_HU);
-                    break;
-                case 2:
-                    scoreTypes.add(ScoreType.SHUANGHAOHUAQIXIAODUI_HU);
-                    break;
-                case 3:
-                    scoreTypes.add(ScoreType.SANHAOHUAQIXIAODUI_HU);
-                    break;
-            }
-        }
-
-        //幺九
-        if (Card.isYJ(allCard)) {
-            if (!Card.hasSameColor(allCard, 3) && !Card.hasSameColor(allCard, 4)) {
-                scoreTypes.add(ScoreType.QUANYAOJIU_HU);
-            } else {
-                scoreTypes.add(ScoreType.HUNYAOJIU_HU);
-            }
-        }
-
-        //十三幺
-        if (Card.isSSY(cardList)) {
-            scoreTypes.add(ScoreType.SHISANYAO_HU);
-        }
-
-        //全风
-        if (Card.isQF(allCard)) {
-            scoreTypes.add(ScoreType.QUANFENG_HU);
-        }
-
-        //无红中
-        if (!allCard.contains(31)) {
-            scoreTypes.add(ScoreType.WUHONGZHONG_HU);
-        }
-        return scoreTypes;
+        return ScoreType.PINGHU;
     }
 
     /**
      * 算分
      *
-     * @param scoreTypes
+     * @param scoreType
      * @return
      */
-    public static int getScore(List<ScoreType> scoreTypes) {
-        int score = 1;
-        for (ScoreType scoreType : scoreTypes) {
-            switch (scoreType) {
-                case MENQING_HU:
-                    score += 2;
-                    break;
-                case PENGPENG_HU:
-                case HUNYISE_HU:
-                    score += 4;
-                    break;
-                case QINGYISE_HU:
-                case QIXIAODUI_HU:
-                    score += 8;
-                    break;
-                case HUNYAOJIU_HU:
-                    score += 10;
-                    break;
-                case HAOHUAQIXIAODUI_HU:
-                    score += 14;
-                    break;
-                case QUANYAOJIU_HU:
-                case QUANFENG_HU:
-                    score += 20;
-                    break;
-                case SHUANGHAOHUAQIXIAODUI_HU:
-                    score += 28;
-                    break;
-                case SANHAOHUAQIXIAODUI_HU:
-                    score += 42;
-                    break;
-                case WUHONGZHONG_HU:
-                    score += 1;
-                    break;
-            }
+    public static int getScore(ScoreType scoreType) {
+        switch (scoreType) {
+            case TIANHU:
+            case DIHU:
+            case FEI:
+                return 10;
         }
-        //十三幺不与其它牌型叠加
-        if (scoreTypes.contains(ScoreType.SHISANYAO_HU) && score < 20) {
-            score = 20;
-        }
-        return score;
+        return 1;
     }
 }

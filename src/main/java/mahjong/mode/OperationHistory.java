@@ -9,32 +9,32 @@ import java.util.List;
  */
 public class OperationHistory {
 
-    private String userName;
+    private int userId;
     private OperationHistoryType historyType;
-    private List<Integer> card;
+    private List<Integer> cards;
 
     public OperationHistory() {
     }
 
-    public OperationHistory(String userName, OperationHistoryType historyType, List<Integer> card) {
-        this.userName = userName;
+    public OperationHistory(int userId, OperationHistoryType historyType, Integer card) {
+        this.userId = userId;
         this.historyType = historyType;
-        this.card = card;
+        this.cards = new ArrayList<>();
+        this.cards.add(card);
     }
 
-    public OperationHistory(String userName, OperationHistoryType historyType, Integer card) {
-        this.userName = userName;
+    public OperationHistory(int userId, OperationHistoryType historyType, List<Integer> cards) {
+        this.userId = userId;
         this.historyType = historyType;
-        this.card = new ArrayList<>();
-        this.card.add(card);
+        this.cards = cards;
     }
 
-    public String getUserName() {
-        return userName;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public OperationHistoryType getHistoryType() {
@@ -45,11 +45,11 @@ public class OperationHistory {
         this.historyType = historyType;
     }
 
-    public List<Integer> getCard() {
-        return card;
+    public List<Integer> getCards() {
+        return cards;
     }
 
-    public void setCard(List<Integer> card) {
-        this.card = card;
+    public void setCards(List<Integer> cards) {
+        this.cards = cards;
     }
 }

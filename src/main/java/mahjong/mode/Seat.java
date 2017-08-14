@@ -1,5 +1,6 @@
 package mahjong.mode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,20 +10,32 @@ import java.util.List;
 public class Seat {
 
     private int seatNo;                         //座位号
-    private String userName;                    //用户名
-    private float gold;                         //金币
-    private List<Integer> cards;                //牌
-    private List<Integer> invertedCards;        //碰或杠的牌
-    private List<Integer> invertedIndex;        //碰或杠下标 自己为扒杠，0为暗杠
-    private List<Integer> playedCards;          //出牌
-    private float score;                        //输赢分数
+    private int userId;                         //用户名
+    private int gold;                           //金币
+    private List<Integer> initialCards = new ArrayList<>();         //初始牌
+    private List<Integer> cards = new ArrayList<>();                 //牌
+    private List<Integer> pengCards = new ArrayList<>();             //碰牌
+    private List<Integer> gangCards = new ArrayList<>();             //杠的牌
+    private List<Integer> chiCards = new ArrayList<>();              //吃的牌
+    private List<Integer> playedCards = new ArrayList<>();           //出牌
+    private int score;                          //输赢分数
     private String areaString;                  //地区
     private boolean isRobot;                    //是否托管
-    private int operation;                      //临时标识，0.未操作，1.胡，2.杠，3.碰，4.过
-    private List<Integer> chiCard;                 //存放吃的临时牌
+    private int operation;                      //标识，0.未操作，1.胡，2.杠，3.碰，4.过
     private boolean ready;                      //准备
     private boolean completed;                  //就绪
-    private List<GameResult> gameResults;       //结算
+    private GameResult cardResult;              //结算
+    private List<GameResult> gangResult = new ArrayList<>();        //杠
+
+    private int huCount;//胡牌次数
+    private int zimoCount; //自摸次数
+    private int dianpaoCount; //点炮次数
+    private int angang; //暗杠次数
+    private int minggang; //明杠次数
+
+    private List<Integer> ma = new ArrayList<>();//买的马
+    private int maCount;
+    private List<Integer> chiTemp = new ArrayList<>();
 
     public int getSeatNo() {
         return seatNo;
@@ -32,20 +45,28 @@ public class Seat {
         this.seatNo = seatNo;
     }
 
-    public String getUserName() {
-        return userName;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public float getGold() {
+    public int getGold() {
         return gold;
     }
 
-    public void setGold(float gold) {
+    public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    public List<Integer> getInitialCards() {
+        return initialCards;
+    }
+
+    public void setInitialCards(List<Integer> initialCards) {
+        this.initialCards = initialCards;
     }
 
     public List<Integer> getCards() {
@@ -56,20 +77,28 @@ public class Seat {
         this.cards = cards;
     }
 
-    public List<Integer> getInvertedCards() {
-        return invertedCards;
+    public List<Integer> getPengCards() {
+        return pengCards;
     }
 
-    public void setInvertedCards(List<Integer> invertedCards) {
-        this.invertedCards = invertedCards;
+    public void setPengCards(List<Integer> pengCards) {
+        this.pengCards = pengCards;
     }
 
-    public List<Integer> getInvertedIndex() {
-        return invertedIndex;
+    public List<Integer> getGangCards() {
+        return gangCards;
     }
 
-    public void setInvertedIndex(List<Integer> invertedIndex) {
-        this.invertedIndex = invertedIndex;
+    public void setGangCards(List<Integer> gangCards) {
+        this.gangCards = gangCards;
+    }
+
+    public List<Integer> getChiCards() {
+        return chiCards;
+    }
+
+    public void setChiCards(List<Integer> chiCards) {
+        this.chiCards = chiCards;
     }
 
     public List<Integer> getPlayedCards() {
@@ -80,11 +109,11 @@ public class Seat {
         this.playedCards = playedCards;
     }
 
-    public float getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(float score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
@@ -112,14 +141,6 @@ public class Seat {
         this.operation = operation;
     }
 
-    public List<Integer> getChiCard() {
-        return chiCard;
-    }
-
-    public void setChiCard(List<Integer> chiCard) {
-        this.chiCard = chiCard;
-    }
-
     public boolean isReady() {
         return ready;
     }
@@ -136,11 +157,97 @@ public class Seat {
         this.completed = completed;
     }
 
-    public List<GameResult> getGameResults() {
-        return gameResults;
+    public GameResult getCardResult() {
+        return cardResult;
     }
 
-    public void setGameResults(List<GameResult> gameResults) {
-        this.gameResults = gameResults;
+    public void setCardResult(GameResult cardResult) {
+        this.cardResult = cardResult;
+    }
+
+    public List<GameResult> getGangResult() {
+        return gangResult;
+    }
+
+    public void setGangResult(List<GameResult> gangResult) {
+        this.gangResult = gangResult;
+    }
+
+    public int getHuCount() {
+        return huCount;
+    }
+
+    public void setHuCount(int huCount) {
+        this.huCount = huCount;
+    }
+
+    public int getZimoCount() {
+        return zimoCount;
+    }
+
+    public void setZimoCount(int zimoCount) {
+        this.zimoCount = zimoCount;
+    }
+
+    public int getDianpaoCount() {
+        return dianpaoCount;
+    }
+
+    public void setDianpaoCount(int dianpaoCount) {
+        this.dianpaoCount = dianpaoCount;
+    }
+
+    public int getAngang() {
+        return angang;
+    }
+
+    public void setAngang(int angang) {
+        this.angang = angang;
+    }
+
+    public int getMinggang() {
+        return minggang;
+    }
+
+    public void setMinggang(int minggang) {
+        this.minggang = minggang;
+    }
+
+    public List<Integer> getMa() {
+        return ma;
+    }
+
+    public void setMa(List<Integer> ma) {
+        this.ma = ma;
+    }
+
+    public int getMaCount() {
+        return maCount;
+    }
+
+    public void setMaCount(int maCount) {
+        this.maCount = maCount;
+    }
+
+    public List<Integer> getChiTemp() {
+        return chiTemp;
+    }
+
+    public void setChiTemp(List<Integer> chiTemp) {
+        this.chiTemp = chiTemp;
+    }
+
+    public void clear() {
+        initialCards.clear();
+        cards.clear();
+        pengCards.clear();
+        gangCards.clear();
+        chiCards.clear();
+        playedCards.clear();
+        ma.clear();
+        ready = false;
+        completed = false;
+        cardResult = null;
+        gangResult.clear();
     }
 }
