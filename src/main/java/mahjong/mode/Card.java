@@ -138,4 +138,24 @@ public class Card {
         List<Integer> cards = Arrays.asList(41, 43, 45, 47);
         return containAll(cardList, cards) && containAll(cards, cardList);
     }
+
+    public static void remove(List<Integer> cards, Integer card) {
+        for (Integer card1 : cards) {
+            if (card1.intValue() == card) {
+                cards.remove(card1);
+                return;
+            }
+        }
+    }
+
+    public static void removeAll(List<Integer> cards, List<Integer> removes) {
+        for (Integer card : removes) {
+            for (Integer card1 : cards) {
+                if (card1.intValue() == card) {
+                    cards.remove(card1);
+                    break;
+                }
+            }
+        }
+    }
 }

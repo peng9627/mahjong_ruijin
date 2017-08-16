@@ -109,7 +109,7 @@ public class MahjongUtil {
             for (int i = 0; i < temp.size() - 2; i++) {
                 int start = temp.get(i);
                 if (temp.get(i) < 30) {
-                    if (cards.contains(start + 1) && cards.contains(start + 2)) {
+                    if (temp.contains(start + 1) && temp.contains(start + 2)) {
                         sun_arr.add(start);
                         sun_arr.add(start + 1);
                         sun_arr.add(start + 2);
@@ -120,7 +120,7 @@ public class MahjongUtil {
                         break;
                     }
                 } else if (temp.get(i) < 36) {//中发白
-                    if (cards.contains(31) && cards.contains(33) && cards.contains(35)) {
+                    if (temp.contains(31) && temp.contains(33) && temp.contains(35)) {
                         sun_arr.add(31);
                         sun_arr.add(33);
                         sun_arr.add(35);
@@ -132,32 +132,32 @@ public class MahjongUtil {
                     }
                 } else {//东南西北
                     int fengSize = 0;
-                    if (cards.contains(41)) {
+                    if (temp.contains(41)) {
                         fengSize++;
                     }
-                    if (cards.contains(43)) {
+                    if (temp.contains(43)) {
                         fengSize++;
                     }
-                    if (cards.contains(45)) {
+                    if (temp.contains(45)) {
                         fengSize++;
                     }
-                    if (cards.contains(47)) {
+                    if (temp.contains(47)) {
                         fengSize++;
                     }
 
                     if (fengSize >= 3) {
                         fengSize = 0;
-                        if (cards.contains(41)) {
+                        if (temp.contains(41)) {
                             sun_arr.add(41);
                             temp.remove(Integer.valueOf(41));
                             fengSize++;
                         }
-                        if (cards.contains(43)) {
+                        if (temp.contains(43)) {
                             sun_arr.add(43);
                             temp.remove(Integer.valueOf(43));
                             fengSize++;
                         }
-                        if (cards.contains(45)) {
+                        if (temp.contains(45)) {
                             sun_arr.add(45);
                             temp.remove(Integer.valueOf(45));
                             fengSize++;
@@ -166,7 +166,7 @@ public class MahjongUtil {
                             find = true;
                             break;
                         }
-                        if (cards.contains(47)) {
+                        if (temp.contains(47)) {
                             sun_arr.add(45);
                             temp.remove(Integer.valueOf(45));
                             find = true;
@@ -566,8 +566,8 @@ public class MahjongUtil {
                                 for (int k = 0; k < dui.size() / 2; k++) {
                                     dui_temp.clear();
                                     dui_temp.addAll(cai);
-                                    dui_temp.remove(dui.get(2 * i));
-                                    dui_temp.remove(dui.get(2 * i + 1));
+                                    dui_temp.remove(dui.get(2 * k));
+                                    dui_temp.remove(dui.get(2 * k + 1));
                                     if (dui_temp.size() == get_shun(dui_temp).size()) {
                                         return true;
                                     }
@@ -806,5 +806,41 @@ public class MahjongUtil {
                 return 10;
         }
         return 1;
+    }
+
+    public static int CheckHu(List<Integer> handVals) {
+        int ret = 0;
+        List<Integer> pairs = get_dui(handVals);
+        for (int i = 0; i < pairs.size(); i += 2) {
+            boolean isBreak = false;
+            int md_val = pairs.get(i);
+            List<Integer> hand = new ArrayList<>(handVals);
+            hand.remove(Integer.valueOf(md_val));
+            hand.remove(Integer.valueOf(md_val));
+            if (CheckLug(hand)) {
+                ret = 1;
+                isBreak = true;
+            }
+            if (isBreak) break;
+        }
+        return ret;
+    }
+
+    protected static boolean CheckLug(List<Integer> handVals) {
+        if (handVals.size() == 0) return true;
+        int md_val = handVals.get(0);
+        handVals.remove(0);
+        if (Card.containSize(handVals, md_val) == 2) {
+            handVals.remove(Integer.valueOf(md_val));
+            handVals.remove(Integer.valueOf(md_val));
+            return CheckLug(handVals);
+        } else {
+            if (handVals.contains(md_val + 1) && handVals.contains(md_val + 2)) {
+                handVals.remove(Integer.valueOf(md_val + 1));
+                handVals.remove(Integer.valueOf(md_val + 2));
+                return CheckLug(handVals);
+            }
+        }
+        return false;
     }
 }
