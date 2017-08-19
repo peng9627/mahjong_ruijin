@@ -20,10 +20,10 @@ public class Card {
     }
 
     public static List<Integer> getAllCard() {
-        return Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        return new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                 11, 12, 13, 14, 15, 16, 17, 18, 19, 11, 12, 13, 14, 15, 16, 17, 18, 19, 11, 12, 13, 14, 15, 16, 17, 18, 19, 11, 12, 13, 14, 15, 16, 17, 18, 19,
                 21, 22, 23, 24, 25, 26, 27, 28, 29, 21, 22, 23, 24, 25, 26, 27, 28, 29, 21, 22, 23, 24, 25, 26, 27, 28, 29, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-                31, 33, 35, 41, 43, 45, 47, 31, 33, 35, 41, 43, 45, 47, 31, 33, 35, 41, 43, 45, 47, 31, 33, 35, 41, 43, 45, 47, 51, 53, 55, 57);
+                31, 33, 35, 41, 43, 45, 47, 31, 33, 35, 41, 43, 45, 47, 31, 33, 35, 41, 43, 45, 47, 31, 33, 35, 41, 43, 45, 47, 51, 53, 55, 57));
     }
 
     public static boolean containAll(List<Integer> cardList, List<Integer> cards) {
@@ -97,16 +97,6 @@ public class Card {
     }
 
     /**
-     * 获取宝牌可以用的牌
-     *
-     * @return
-     */
-    public static List<Integer> getBaoCan() {
-
-        return Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31, 33, 35, 41, 43, 45, 47);
-    }
-
-    /**
      * 十三幺
      *
      * @param cardList
@@ -117,26 +107,8 @@ public class Card {
         return containAll(cardList, cards) && containAll(cards, cardList);
     }
 
-    /**
-     * 幺九
-     *
-     * @param cardList
-     * @return
-     */
-    public static boolean isYJ(List<Integer> cardList) {
-        List<Integer> cards = Arrays.asList(1, 9, 11, 19, 21, 29, 31, 33, 35, 41, 43, 45, 47);
-        return containAll(cards, cardList);
-    }
-
-    /**
-     * 全风
-     *
-     * @param cardList
-     * @return
-     */
-    public static boolean isQF(List<Integer> cardList) {
-        List<Integer> cards = Arrays.asList(41, 43, 45, 47);
-        return containAll(cardList, cards) && containAll(cards, cardList);
+    public static boolean legal(int card) {
+        return getAllCard().contains(card);
     }
 
     public static void remove(List<Integer> cards, Integer card) {

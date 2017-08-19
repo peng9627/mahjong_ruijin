@@ -1,8 +1,6 @@
 package mahjong.mode;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Author pengyi
@@ -192,25 +190,38 @@ public class MahjongUtil {
     public static boolean hu(List<Integer> cardList, Integer bao, Integer jiabao) {
 
         List<Integer> cards = new ArrayList<>();
-        final int[] baoSize = {0};
-        for (int card : cardList) {
-            if (card > 50) {
-                cards.add(jiabao);
-            } else if (card == bao) {
-                baoSize[0]++;
-            } else {
-                cards.add(card);
+        int baoSize = 0;
+        if (bao > 50) {
+            for (int card : cardList) {
+                if (card > 50) {
+                    baoSize++;
+                } else {
+                    cards.add(card);
+                }
+            }
+            if (3 == baoSize) {
+                return true;
+            }
+        } else {
+            for (int card : cardList) {
+                if (card > 50) {
+                    cards.add(jiabao);
+                } else if (card == bao) {
+                    baoSize++;
+                } else {
+                    cards.add(card);
+                }
+            }
+            if (4 == baoSize) {
+                return true;
             }
         }
-        if (4 == baoSize[0]) {
-            return true;
-        }
 
-        List<Integer> baoCan = Card.getBaoCan();
+        List<Integer> baoCan = getComputePossible(cardList, 2);
 
         List<Integer> temp = new ArrayList<>();
-        if (0 != baoSize[0]) {
-            switch (baoSize[0]) {
+        if (0 != baoSize) {
+            switch (baoSize) {
                 case 1:
                     for (int aBaoCan : baoCan) {
                         temp.clear();
@@ -227,11 +238,11 @@ public class MahjongUtil {
                         temp.addAll(cards);
                         temp.add(baoCan.get(i));
                         for (int aBaoCan : baoCan) {
-                            temp.addAll(cards);
                             temp.add(aBaoCan);
                             if (hu(temp)) {
                                 return true;
                             }
+                            Card.remove(temp, aBaoCan);
                         }
                     }
                     break;
@@ -241,15 +252,15 @@ public class MahjongUtil {
                         temp.addAll(cards);
                         temp.add(baoCan.get(i));
                         for (int j = 0; j < baoCan.size(); j++) {
-                            temp.addAll(cards);
                             temp.add(baoCan.get(j));
                             for (int aBaoCan : baoCan) {
-                                temp.addAll(cards);
                                 temp.add(aBaoCan);
                                 if (hu(temp)) {
                                     return true;
                                 }
+                                Card.remove(temp, aBaoCan);
                             }
+                            Card.remove(temp, baoCan.get(j));
                         }
                     }
                     break;
@@ -258,442 +269,6 @@ public class MahjongUtil {
             return hu(cards);
         }
         return false;
-    }
-
-    private static boolean hu(List<Integer> cards) {
-
-        cards.sort(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1.compareTo(o2);
-            }
-        });
-        List<Integer> temp = new ArrayList<>();
-        temp.addAll(cards);
-
-        //检查七对
-        List<Integer> dui = get_dui(cards);
-        if (dui.size() == 14) {
-            return true;
-        }
-
-        //正常的胡
-        temp.clear();
-        temp.addAll(cards);
-
-        //非七对先检查三个的,没个三个的都可以拆分成顺着听不同的牌
-        List<Integer> san = get_san(cards);
-        List<Integer> dui_temp = new ArrayList<>();
-        List<Integer> cai = new ArrayList<>();
-        if (0 != san.size()) {
-            switch (san.size() / 3) {
-                case 1:
-                    //拆分三个的可能会影响听牌，先拆分
-                    dui = get_dui(temp);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(temp);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //不拆分
-                    temp.removeAll(san);
-                    //拆分三个的可能会影响听牌，先拆分
-                    dui = get_dui(temp);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(temp);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    break;
-
-                case 2:
-
-                    //拆分三个的可能会影响听牌，先全部拆分
-                    dui = get_dui(temp);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(temp);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第一个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(3, 6));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第二个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(0, 3));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //不拆分
-                    temp.removeAll(san);
-                    dui = get_dui(temp);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(temp);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    break;
-                case 3:
-                    //拆分三个的可能会影响听牌，先全部拆分
-                    dui = get_dui(temp);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(temp);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分前两个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(6, 9));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第一个和第三个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(3, 6));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分后两个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(0, 3));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第一个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(3, 9));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第二个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(0, 3));
-                    cai.removeAll(san.subList(6, 9));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第三个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(0, 6));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-
-                    //不拆分
-                    temp.removeAll(san);
-                    dui = get_dui(temp);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(temp);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    break;
-
-                case 4:
-                    //拆分三个的可能会影响听牌，先拆分
-                    dui = get_dui(temp);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(temp);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分前三个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(0, 3));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分后三个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(9, 12));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    for (int i = 0; i < 4; i++) {
-                        for (int j = 0; j < 4; j++) {
-                            if (i != j) {
-                                cai.clear();
-                                cai.addAll(temp);
-                                cai.removeAll(san.subList(3 * i, 3 * i + 3));
-                                cai.removeAll(san.subList(3 * j, 3 * j + 3));
-                                dui = get_dui(cai);
-                                dui_temp.clear();
-                                for (int k = 0; k < dui.size() / 2; k++) {
-                                    dui_temp.clear();
-                                    dui_temp.addAll(cai);
-                                    dui_temp.remove(dui.get(2 * k));
-                                    dui_temp.remove(dui.get(2 * k + 1));
-                                    if (dui_temp.size() == get_shun(dui_temp).size()) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第一个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(3, 12));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第二个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(0, 3));
-                    cai.removeAll(san.subList(6, 12));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第三个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(0, 6));
-                    cai.removeAll(san.subList(9, 12));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //拆分三个的可能会影响听牌，拆分第四个
-                    cai.clear();
-                    cai.addAll(temp);
-                    cai.removeAll(san.subList(0, 9));
-                    dui = get_dui(cai);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(cai);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-
-                    //不拆分
-                    temp.removeAll(san);
-                    dui = get_dui(temp);
-                    dui_temp.clear();
-                    for (int i = 0; i < dui.size() / 2; i++) {
-                        dui_temp.clear();
-                        dui_temp.addAll(temp);
-                        dui_temp.remove(dui.get(2 * i));
-                        dui_temp.remove(dui.get(2 * i + 1));
-                        if (dui_temp.size() == get_shun(dui_temp).size()) {
-                            return true;
-                        }
-                    }
-                    break;
-            }
-        } else {
-            //拆分三个的可能会影响听牌，拆分第一个
-            dui = get_dui(temp);
-            dui_temp.clear();
-            for (int i = 0; i < dui.size() / 2; i++) {
-                dui_temp.clear();
-                dui_temp.addAll(temp);
-                dui_temp.remove(dui.get(2 * i));
-                dui_temp.remove(dui.get(2 * i + 1));
-                if (dui_temp.size() == get_shun(dui_temp).size()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * 传入手牌，找到可胡牌
-     *
-     * @param userCards
-     * @return
-     */
-    public static List<Integer> ting(List<Integer> userCards) {
-        List<Integer> ting_arr = new ArrayList<>();
-        List<Integer> temp = new ArrayList<>();
-        List<Integer> allCard = Card.getAllCard();
-        for (Integer card : allCard) {
-            temp.clear();
-            temp.addAll(userCards);
-            temp.add(card);
-            if (hu(temp)) {
-                ting_arr.add(card);
-            }
-        }
-        return ting_arr;
     }
 
     /**
@@ -705,7 +280,12 @@ public class MahjongUtil {
     public static Integer checkGang(List<Integer> cards) {
         List<Integer> cardList = new ArrayList<>();
         cardList.addAll(cards);
-        cardList.sort(Integer::compareTo);
+        cardList.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1.compareTo(o2);
+            }
+        });
         for (int i = 0; i < cardList.size() - 3; i++) {
             if (cardList.get(i).intValue() == cardList.get(i + 3)) {
                 return cardList.get(i);
@@ -740,10 +320,14 @@ public class MahjongUtil {
      * @return
      */
     public static boolean checkChi(List<Integer> cards, Integer card, Integer jiabao) {
-        int color = card % 10;
+        int color = card / 10;
+        if (color == 5) {
+            card = jiabao;
+        }
+
         List<Integer> sameColor = Card.getSameColor(cards, color);
 
-        if (jiabao % 10 == color) {
+        if (jiabao / 10 == color) {
             List<Integer> jiabaoCards = Card.getSameColor(cards, 5);
 
             if (0 < jiabaoCards.size()) {
@@ -758,8 +342,9 @@ public class MahjongUtil {
                     || (sameColor.contains(card + 1) && sameColor.contains(card + 2))) {
                 return true;
             }
-        } else {
-            List<Integer> allSameColor = Card.getAllSameColor(color);
+        } else if (5 != color) {
+            Set<Integer> allSameColor = new HashSet<>();
+            allSameColor.addAll(Card.getSameColor(cards, color));
             int count = 0;
             for (Integer integer : allSameColor) {
                 if (integer.intValue() != card) {
@@ -808,22 +393,95 @@ public class MahjongUtil {
         return 1;
     }
 
-    public static int CheckHu(List<Integer> handVals) {
-        int ret = 0;
+    private static Map<Integer, Integer> cardsSize(List<Integer> mahjongs) {
+        Map<Integer, Integer> dic = new HashMap<>();
+        for (Integer card : mahjongs) {
+            if (dic.containsKey(card)) {
+                dic.put(card, dic.get(card) + 1);
+            } else {
+                dic.put(card, 1);
+            }
+        }
+        return dic;
+    }
+
+    public static int findPairNumber(List<Integer> mahjongs) {
+        int number = 0;
+        int single = 0;
+        Map<Integer, Integer> dic = cardsSize(mahjongs);
+        for (int i = 0; i < mahjongs.size(); i++) {
+            int mahjong = mahjongs.get(i);
+            if (dic.containsKey(mahjong)) {
+                int count = dic.get(mahjong);
+                if (count > 1) {
+                    if (count == 2 || count == 4) number++;
+                    else single++;
+                }
+            }
+        }
+        return number / 2 + single / 3;
+    }
+
+    public static ArrayList<Integer> getComputePossible(List<Integer> hand_list, int number) {
+        Set<Integer> ret = new HashSet<>();
+        for (int i = 0; i < hand_list.size(); i++) {
+            int mahjong = hand_list.get(i);
+            if (!ret.contains(mahjong)) {
+                ret.add(mahjong);
+            }
+            int stepNum = 1;
+            do {
+                if (!ret.contains(mahjong - stepNum) && Card.legal(mahjong - stepNum)) {
+                    ret.add(mahjong - stepNum);
+                }
+                if (!ret.contains(mahjong + stepNum) && Card.legal(mahjong + stepNum)) {
+                    ret.add(mahjong + stepNum);
+                }
+                stepNum++;
+            } while (stepNum <= number);
+        }
+        ArrayList<Integer> cards = new ArrayList<>();
+        cards.addAll(ret);
+        return cards;
+    }
+
+    /**
+     * 传入14张牌，判断是否可胡牌
+     *
+     * @param cardList
+     * @return
+     */
+    public static boolean hu(List<Integer> cardList) {
+        List<Integer> handVals = new ArrayList<>();
+        handVals.addAll(cardList);
+        handVals.sort(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1.compareTo(o2);
+            }
+        });
+
+        //检查七对
         List<Integer> pairs = get_dui(handVals);
+        if (pairs.size() == 14) {
+            return true;
+        }
+
+        //检测十三幺
+        if (Card.isSSY(handVals)) {
+            return true;
+        }
+
         for (int i = 0; i < pairs.size(); i += 2) {
-            boolean isBreak = false;
             int md_val = pairs.get(i);
             List<Integer> hand = new ArrayList<>(handVals);
             hand.remove(Integer.valueOf(md_val));
             hand.remove(Integer.valueOf(md_val));
             if (CheckLug(hand)) {
-                ret = 1;
-                isBreak = true;
+                return true;
             }
-            if (isBreak) break;
         }
-        return ret;
+        return false;
     }
 
     protected static boolean CheckLug(List<Integer> handVals) {
