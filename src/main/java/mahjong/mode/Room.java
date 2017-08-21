@@ -1,8 +1,12 @@
 package mahjong.mode;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import mahjong.entrance.MahjongTcpService;
 import mahjong.redis.RedisService;
+import mahjong.utils.HttpUtil;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,7 @@ public class Room {
     private Integer[] dice;//骰子
     private List<Record> recordList = new ArrayList<>();//战绩
     private int gameCount;
+    private int roomOwner;
 
     private int initMaCount;
     private Integer bao;
@@ -165,6 +170,14 @@ public class Room {
         this.gameCount = gameCount;
     }
 
+    public int getRoomOwner() {
+        return roomOwner;
+    }
+
+    public void setRoomOwner(int roomOwner) {
+        this.roomOwner = roomOwner;
+    }
+
     public int getInitMaCount() {
         return initMaCount;
     }
@@ -288,7 +301,7 @@ public class Room {
             case 1:
             case 2:
                 if (9 == jiabao % 10) {
-                    bao = jiabao / 10 + 1;
+                    bao = (jiabao / 10 * 10) + 1;
                 } else {
                     bao = jiabao + 1;
                 }
@@ -486,7 +499,10 @@ public class Room {
             over.addGameOver(seatGameOver);
         }
 
+        StringBuilder people = new StringBuilder();
+
         for (Seat seat : seats) {
+            people.append(",").append(seat.getUserId());
             redisService.delete("reconnect" + seat.getUserId());
             if (MahjongTcpService.userClients.containsKey(seat.getUserId())) {
                 String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -499,6 +515,22 @@ public class Room {
                 MahjongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
             }
         }
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("gameType", "RUIJIN_MAHJONG");
+        jsonObject.put("roomOwner", roomOwner);
+        jsonObject.put("people", people.toString().substring(1));
+        jsonObject.put("gameTotal", gameTimes);
+        jsonObject.put("gameCount", gameCount);
+        jsonObject.put("peopleCount", count);
+        jsonObject.put("roomNo", Integer.parseInt(roomNo));
+        jsonObject.put("gameData", JSON.toJSONString(recordList).getBytes());
+
+        ApiResponse apiResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/gamerecord/create", jsonObject.toJSONString()), ApiResponse.class);
+        if (!"SUCCESS".equals(apiResponse.getCode())) {
+            LoggerFactory.getLogger(this.getClass()).error("http://127.0.0.1:9999/api/gamerecord/create?" + jsonObject.toJSONString());
+        }
+
 
         //删除该桌
         redisService.delete("room" + roomNo);
@@ -922,13 +954,14 @@ public class Room {
                     seat.setMinggang(seat.getMinggang() + 1);
                     historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.DIAN_GANG, card[0]));
 
+                    operationSeat.getPlayedCards().remove(operationSeat.getPlayedCards().size() - 1);
+
                     actionResponse.setOperationId(GameBase.ActionId.DIAN_GANG).setData(Mahjong.MahjongGang.newBuilder()
                             .setCard(card[0]).build().toByteString());
                     response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
                     seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
                             .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
 
-                    operationSeat.getPlayedCards().remove(seat.getPlayedCards().size() - 1);
                     //点杠后需要摸牌
                     getCard(response, seat.getSeatNo(), redisService);
                     return;
@@ -938,6 +971,8 @@ public class Room {
                     seat.getPengCards().add(card[0]);
                     operationSeatNo = seat.getSeatNo();
                     historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.PENG, card[0]));
+
+                    operationSeat.getPlayedCards().remove(operationSeat.getPlayedCards().size() - 1);
 
                     actionResponse.setOperationId(GameBase.ActionId.PENG).setData(Mahjong.MahjongPengResponse.newBuilder().setCard(card[0]).build().toByteString());
                     response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
@@ -962,7 +997,8 @@ public class Room {
                 operationSeatNo = seat.getSeatNo();
                 historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.CHI, chiCard));
 
-                System.out.println("---------------" + chiCard.size());
+                operationSeat.getPlayedCards().remove(operationSeat.getPlayedCards().size() - 1);
+
                 actionResponse.setOperationId(GameBase.ActionId.CHI).setData(Mahjong.MahjongChi.newBuilder().addAllCards(chiCard).build().toByteString());
                 response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
                 seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
