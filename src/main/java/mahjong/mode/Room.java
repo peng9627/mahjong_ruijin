@@ -37,8 +37,8 @@ public class Room {
     private List<Record> recordList = new ArrayList<>();//战绩
     private int gameCount;
     private int roomOwner;
+    private int zhuangxian;
 
-    private int initMaCount;
     private Integer bao;
     private Integer jiabao;
 
@@ -178,12 +178,12 @@ public class Room {
         this.roomOwner = roomOwner;
     }
 
-    public int getInitMaCount() {
-        return initMaCount;
+    public int getZhuangxian() {
+        return zhuangxian;
     }
 
-    public void setInitMaCount(int initMaCount) {
-        this.initMaCount = initMaCount;
+    public void setZhuangxian(int zhuangxian) {
+        this.zhuangxian = zhuangxian;
     }
 
     public Integer getBao() {
@@ -219,9 +219,6 @@ public class Room {
         surplusCards = Card.getAllCard();
         //卖马 发牌
         for (Seat seat : seats) {
-            if (seat.getMaCount() == 0) {
-                seat.setMaCount(initMaCount);
-            }
             List<Integer> cardList = new ArrayList<>();
             if (banker == seat.getUserId()) {
                 int cardIndex = 27;
@@ -284,13 +281,6 @@ public class Room {
                 surplusCards.remove(cardIndex);
             }
 
-            List<Integer> maList = new ArrayList<>();
-            for (int i = 0; i < seat.getMaCount(); i++) {
-                int cardIndex = (int) (Math.random() * surplusCards.size());
-                maList.add(surplusCards.get(cardIndex));
-                surplusCards.remove(cardIndex);
-            }
-            seat.setMa(maList);
         }
 //        int cardIndex = (int) (Math.random() * surplusCards.size());
 //        jiabao = surplusCards.get(cardIndex);
@@ -426,21 +416,12 @@ public class Room {
      */
     public void gameOver(GameBase.BaseConnection.Builder response, RedisService redisService, int winSeat) {
 
-
         List<Integer> loseSeats = new ArrayList<>();
         final int[] score = {0};
 
         //TODO 扣款
         Mahjong.MahjongResultResponse.Builder resultResponse = Mahjong.MahjongResultResponse.newBuilder();
         seats.forEach(seat -> {
-            if (seat.getSeatNo() == winSeat) {
-                if (seat.getMaCount() != initMaCount + 6) {
-                    seat.setMaCount(seat.getMaCount() + 2);
-                }
-            } else {
-                seat.setMaCount(initMaCount);
-            }
-
             Mahjong.MahjongUserResult.Builder userResult = Mahjong.MahjongUserResult.newBuilder();
             userResult.setID(seat.getUserId());
             userResult.addAllCards(seat.getCards());

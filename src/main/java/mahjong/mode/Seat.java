@@ -33,8 +33,6 @@ public class Seat {
     private int angang; //暗杠次数
     private int minggang; //明杠次数
 
-    private List<Integer> ma = new ArrayList<>();//买的马
-    private int maCount;
     private List<Integer> chiTemp = new ArrayList<>();
 
     public int getSeatNo() {
@@ -213,22 +211,6 @@ public class Seat {
         this.minggang = minggang;
     }
 
-    public List<Integer> getMa() {
-        return ma;
-    }
-
-    public void setMa(List<Integer> ma) {
-        this.ma = ma;
-    }
-
-    public int getMaCount() {
-        return maCount;
-    }
-
-    public void setMaCount(int maCount) {
-        this.maCount = maCount;
-    }
-
     public List<Integer> getChiTemp() {
         return chiTemp;
     }
@@ -244,7 +226,6 @@ public class Seat {
         gangCards.clear();
         chiCards.clear();
         playedCards.clear();
-        ma.clear();
         ready = false;
         completed = false;
         cardResult = null;
