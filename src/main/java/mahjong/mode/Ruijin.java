@@ -10,6 +10,11 @@ public final class Ruijin {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internal_static_RuijinStartResponse_fieldAccessorTable;
     private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_RuijinMahjongIntoResponse_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_RuijinMahjongIntoResponse_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
             internal_static_RuijinMahjongGameInfo_descriptor;
     private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -27,13 +32,16 @@ public final class Ruijin {
                 "\n\014ruijin.proto\032\016gameBase.proto\032\rmahjong." +
                         "proto\"Y\n\023RuijinStartResponse\0223\n\024mahjongS" +
                         "tartResponse\030\001 \001(\0132\025.MahjongStartRespons" +
-                        "e\022\r\n\005rogue\030\002 \001(\005\"Q\n\025RuijinMahjongGameInf" +
-                        "o\022)\n\017mahjongGameInfo\030\001 \001(\0132\020.MahjongGame" +
-                        "Info\022\r\n\005rogue\030\002 \001(\005\"\216\001\n\033RuijinMahjongRep" +
-                        "layResponse\022#\n\005start\030\001 \001(\0132\024.RuijinStart" +
-                        "Response\022\"\n\007history\030\002 \003(\0132\021.OperationHis" +
-                        "tory\022&\n\006result\030\003 \001(\0132\026.MahjongResultResp" +
-                        "onseB\016\n\014mahjong.modeb\006proto3"
+                        "e\022\r\n\005rogue\030\002 \001(\005\"u\n\031RuijinMahjongIntoRes" +
+                        "ponse\022\021\n\tbaseScore\030\001 \001(\r\022\021\n\tgameTimes\030\002 " +
+                        "\001(\r\022\r\n\005count\030\003 \001(\r\022\017\n\007dianpao\030\004 \001(\010\022\022\n\nz" +
+                        "huangxian\030\005 \001(\r\"Q\n\025RuijinMahjongGameInfo" +
+                        "\022)\n\017mahjongGameInfo\030\001 \001(\0132\020.MahjongGameI" +
+                        "nfo\022\r\n\005rogue\030\002 \001(\005\"\216\001\n\033RuijinMahjongRepl" +
+                        "ayResponse\022#\n\005start\030\001 \001(\0132\024.RuijinStartR",
+                "esponse\022\"\n\007history\030\002 \003(\0132\021.OperationHist" +
+                        "ory\022&\n\006result\030\003 \001(\0132\026.MahjongResultRespo" +
+                        "nseB\016\n\014mahjong.modeb\006proto3"
         };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
                 new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -55,14 +63,20 @@ public final class Ruijin {
                 com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
                 internal_static_RuijinStartResponse_descriptor,
                 new java.lang.String[]{"MahjongStartResponse", "Rogue",});
-        internal_static_RuijinMahjongGameInfo_descriptor =
+        internal_static_RuijinMahjongIntoResponse_descriptor =
                 getDescriptor().getMessageTypes().get(1);
+        internal_static_RuijinMahjongIntoResponse_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_RuijinMahjongIntoResponse_descriptor,
+                new java.lang.String[]{"BaseScore", "GameTimes", "Count", "Dianpao", "Zhuangxian",});
+        internal_static_RuijinMahjongGameInfo_descriptor =
+                getDescriptor().getMessageTypes().get(2);
         internal_static_RuijinMahjongGameInfo_fieldAccessorTable = new
                 com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
                 internal_static_RuijinMahjongGameInfo_descriptor,
                 new java.lang.String[]{"MahjongGameInfo", "Rogue",});
         internal_static_RuijinMahjongReplayResponse_descriptor =
-                getDescriptor().getMessageTypes().get(2);
+                getDescriptor().getMessageTypes().get(3);
         internal_static_RuijinMahjongReplayResponse_fieldAccessorTable = new
                 com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
                 internal_static_RuijinMahjongReplayResponse_descriptor,
@@ -116,6 +130,56 @@ public final class Ruijin {
          * <code>int32 rogue = 2;</code>
          */
         int getRogue();
+    }
+
+    public interface RuijinMahjongIntoResponseOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:RuijinMahjongIntoResponse)
+            com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <pre>
+         * 底分
+         * </pre>
+         * <p>
+         * <code>uint32 baseScore = 1;</code>
+         */
+        int getBaseScore();
+
+        /**
+         * <pre>
+         * 游戏局数
+         * </pre>
+         * <p>
+         * <code>uint32 gameTimes = 2;</code>
+         */
+        int getGameTimes();
+
+        /**
+         * <pre>
+         * 人数
+         * </pre>
+         * <p>
+         * <code>uint32 count = 3;</code>
+         */
+        int getCount();
+
+        /**
+         * <pre>
+         * 点炮
+         * </pre>
+         * <p>
+         * <code>bool dianpao = 4;</code>
+         */
+        boolean getDianpao();
+
+        /**
+         * <pre>
+         * 庄闲
+         * </pre>
+         * <p>
+         * <code>uint32 zhuangxian = 5;</code>
+         */
+        int getZhuangxian();
     }
 
     public interface RuijinMahjongGameInfoOrBuilder extends
@@ -187,9 +251,9 @@ public final class Ruijin {
 
         /**
          * <pre>
-         * 操作记录
+         *操作记录
          * </pre>
-         * <p>
+         *
          * <code>repeated .OperationHistory history = 2;</code>
          */
         int getHistoryCount();
@@ -905,6 +969,799 @@ public final class Ruijin {
 
 
             // @@protoc_insertion_point(builder_scope:RuijinStartResponse)
+        }
+
+    }
+
+    /**
+     * <pre>
+     * 进入房间返回 ROOM_INFO
+     * </pre>
+     * <p>
+     * Protobuf type {@code RuijinMahjongIntoResponse}
+     */
+    public static final class RuijinMahjongIntoResponse extends
+            com.google.protobuf.GeneratedMessageV3 implements
+            // @@protoc_insertion_point(message_implements:RuijinMahjongIntoResponse)
+            RuijinMahjongIntoResponseOrBuilder {
+        public static final int BASESCORE_FIELD_NUMBER = 1;
+        public static final int GAMETIMES_FIELD_NUMBER = 2;
+        public static final int COUNT_FIELD_NUMBER = 3;
+        public static final int DIANPAO_FIELD_NUMBER = 4;
+        public static final int ZHUANGXIAN_FIELD_NUMBER = 5;
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:RuijinMahjongIntoResponse)
+        private static final mahjong.mode.Ruijin.RuijinMahjongIntoResponse DEFAULT_INSTANCE;
+        private static final com.google.protobuf.Parser<RuijinMahjongIntoResponse>
+                PARSER = new com.google.protobuf.AbstractParser<RuijinMahjongIntoResponse>() {
+            public RuijinMahjongIntoResponse parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new RuijinMahjongIntoResponse(input, extensionRegistry);
+            }
+        };
+
+        static {
+            DEFAULT_INSTANCE = new mahjong.mode.Ruijin.RuijinMahjongIntoResponse();
+        }
+
+        private int baseScore_;
+        private int gameTimes_;
+        private int count_;
+        private boolean dianpao_;
+        private int zhuangxian_;
+        private byte memoizedIsInitialized = -1;
+
+        // Use RuijinMahjongIntoResponse.newBuilder() to construct.
+        private RuijinMahjongIntoResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+            super(builder);
+        }
+
+        private RuijinMahjongIntoResponse() {
+            baseScore_ = 0;
+            gameTimes_ = 0;
+            count_ = 0;
+            dianpao_ = false;
+            zhuangxian_ = 0;
+        }
+
+        private RuijinMahjongIntoResponse(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            this();
+            int mutable_bitField0_ = 0;
+            try {
+                boolean done = false;
+                while (!done) {
+                    int tag = input.readTag();
+                    switch (tag) {
+                        case 0:
+                            done = true;
+                            break;
+                        default: {
+                            if (!input.skipField(tag)) {
+                                done = true;
+                            }
+                            break;
+                        }
+                        case 8: {
+
+                            baseScore_ = input.readUInt32();
+                            break;
+                        }
+                        case 16: {
+
+                            gameTimes_ = input.readUInt32();
+                            break;
+                        }
+                        case 24: {
+
+                            count_ = input.readUInt32();
+                            break;
+                        }
+                        case 32: {
+
+                            dianpao_ = input.readBool();
+                            break;
+                        }
+                        case 40: {
+
+                            zhuangxian_ = input.readUInt32();
+                            break;
+                        }
+                    }
+                }
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(this);
+            } catch (java.io.IOException e) {
+                throw new com.google.protobuf.InvalidProtocolBufferException(
+                        e).setUnfinishedMessage(this);
+            } finally {
+                makeExtensionsImmutable();
+            }
+        }
+
+        public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+            return mahjong.mode.Ruijin.internal_static_RuijinMahjongIntoResponse_descriptor;
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(mahjong.mode.Ruijin.RuijinMahjongIntoResponse prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        public static com.google.protobuf.Parser<RuijinMahjongIntoResponse> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
+
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+            return mahjong.mode.Ruijin.internal_static_RuijinMahjongIntoResponse_fieldAccessorTable
+                    .ensureFieldAccessorsInitialized(
+                            mahjong.mode.Ruijin.RuijinMahjongIntoResponse.class, mahjong.mode.Ruijin.RuijinMahjongIntoResponse.Builder.class);
+        }
+
+        /**
+         * <pre>
+         * 底分
+         * </pre>
+         * <p>
+         * <code>uint32 baseScore = 1;</code>
+         */
+        public int getBaseScore() {
+            return baseScore_;
+        }
+
+        /**
+         * <pre>
+         * 游戏局数
+         * </pre>
+         * <p>
+         * <code>uint32 gameTimes = 2;</code>
+         */
+        public int getGameTimes() {
+            return gameTimes_;
+        }
+
+        /**
+         * <pre>
+         * 人数
+         * </pre>
+         * <p>
+         * <code>uint32 count = 3;</code>
+         */
+        public int getCount() {
+            return count_;
+        }
+
+        /**
+         * <pre>
+         * 点炮
+         * </pre>
+         * <p>
+         * <code>bool dianpao = 4;</code>
+         */
+        public boolean getDianpao() {
+            return dianpao_;
+        }
+
+        /**
+         * <pre>
+         * 庄闲
+         * </pre>
+         * <p>
+         * <code>uint32 zhuangxian = 5;</code>
+         */
+        public int getZhuangxian() {
+            return zhuangxian_;
+        }
+
+        public final boolean isInitialized() {
+            byte isInitialized = memoizedIsInitialized;
+            if (isInitialized == 1) return true;
+            if (isInitialized == 0) return false;
+
+            memoizedIsInitialized = 1;
+            return true;
+        }
+
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+                throws java.io.IOException {
+            if (baseScore_ != 0) {
+                output.writeUInt32(1, baseScore_);
+            }
+            if (gameTimes_ != 0) {
+                output.writeUInt32(2, gameTimes_);
+            }
+            if (count_ != 0) {
+                output.writeUInt32(3, count_);
+            }
+            if (dianpao_ != false) {
+                output.writeBool(4, dianpao_);
+            }
+            if (zhuangxian_ != 0) {
+                output.writeUInt32(5, zhuangxian_);
+            }
+        }
+
+        public int getSerializedSize() {
+            int size = memoizedSize;
+            if (size != -1) return size;
+
+            size = 0;
+            if (baseScore_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeUInt32Size(1, baseScore_);
+            }
+            if (gameTimes_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeUInt32Size(2, gameTimes_);
+            }
+            if (count_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeUInt32Size(3, count_);
+            }
+            if (dianpao_ != false) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeBoolSize(4, dianpao_);
+            }
+            if (zhuangxian_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeUInt32Size(5, zhuangxian_);
+            }
+            memoizedSize = size;
+            return size;
+        }
+
+        @java.lang.Override
+        public boolean equals(final java.lang.Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof mahjong.mode.Ruijin.RuijinMahjongIntoResponse)) {
+                return super.equals(obj);
+            }
+            mahjong.mode.Ruijin.RuijinMahjongIntoResponse other = (mahjong.mode.Ruijin.RuijinMahjongIntoResponse) obj;
+
+            boolean result = true;
+            result = result && (getBaseScore()
+                    == other.getBaseScore());
+            result = result && (getGameTimes()
+                    == other.getGameTimes());
+            result = result && (getCount()
+                    == other.getCount());
+            result = result && (getDianpao()
+                    == other.getDianpao());
+            result = result && (getZhuangxian()
+                    == other.getZhuangxian());
+            return result;
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            if (memoizedHashCode != 0) {
+                return memoizedHashCode;
+            }
+            int hash = 41;
+            hash = (19 * hash) + getDescriptor().hashCode();
+            hash = (37 * hash) + BASESCORE_FIELD_NUMBER;
+            hash = (53 * hash) + getBaseScore();
+            hash = (37 * hash) + GAMETIMES_FIELD_NUMBER;
+            hash = (53 * hash) + getGameTimes();
+            hash = (37 * hash) + COUNT_FIELD_NUMBER;
+            hash = (53 * hash) + getCount();
+            hash = (37 * hash) + DIANPAO_FIELD_NUMBER;
+            hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+                    getDianpao());
+            hash = (37 * hash) + ZHUANGXIAN_FIELD_NUMBER;
+            hash = (53 * hash) + getZhuangxian();
+            hash = (29 * hash) + unknownFields.hashCode();
+            memoizedHashCode = hash;
+            return hash;
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
+        public Builder toBuilder() {
+            return this == DEFAULT_INSTANCE
+                    ? new Builder() : new Builder().mergeFrom(this);
+        }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+                com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            Builder builder = new Builder(parent);
+            return builder;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<RuijinMahjongIntoResponse> getParserForType() {
+            return PARSER;
+        }
+
+        public mahjong.mode.Ruijin.RuijinMahjongIntoResponse getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
+        /**
+         * <pre>
+         * 进入房间返回 ROOM_INFO
+         * </pre>
+         * <p>
+         * Protobuf type {@code RuijinMahjongIntoResponse}
+         */
+        public static final class Builder extends
+                com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+                // @@protoc_insertion_point(builder_implements:RuijinMahjongIntoResponse)
+                mahjong.mode.Ruijin.RuijinMahjongIntoResponseOrBuilder {
+            private int baseScore_;
+            private int gameTimes_;
+            private int count_;
+            private boolean dianpao_;
+            private int zhuangxian_;
+
+            // Construct using mahjong.mode.Ruijin.RuijinMahjongIntoResponse.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
+            public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+                return mahjong.mode.Ruijin.internal_static_RuijinMahjongIntoResponse_descriptor;
+            }
+
+            protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+                return mahjong.mode.Ruijin.internal_static_RuijinMahjongIntoResponse_fieldAccessorTable
+                        .ensureFieldAccessorsInitialized(
+                                mahjong.mode.Ruijin.RuijinMahjongIntoResponse.class, mahjong.mode.Ruijin.RuijinMahjongIntoResponse.Builder.class);
+            }
+
+            private void maybeForceBuilderInitialization() {
+                if (com.google.protobuf.GeneratedMessageV3
+                        .alwaysUseFieldBuilders) {
+                }
+            }
+
+            public Builder clear() {
+                super.clear();
+                baseScore_ = 0;
+
+                gameTimes_ = 0;
+
+                count_ = 0;
+
+                dianpao_ = false;
+
+                zhuangxian_ = 0;
+
+                return this;
+            }
+
+            public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+                return mahjong.mode.Ruijin.internal_static_RuijinMahjongIntoResponse_descriptor;
+            }
+
+            public mahjong.mode.Ruijin.RuijinMahjongIntoResponse getDefaultInstanceForType() {
+                return mahjong.mode.Ruijin.RuijinMahjongIntoResponse.getDefaultInstance();
+            }
+
+            public mahjong.mode.Ruijin.RuijinMahjongIntoResponse build() {
+                mahjong.mode.Ruijin.RuijinMahjongIntoResponse result = buildPartial();
+                if (!result.isInitialized()) {
+                    throw newUninitializedMessageException(result);
+                }
+                return result;
+            }
+
+            public mahjong.mode.Ruijin.RuijinMahjongIntoResponse buildPartial() {
+                mahjong.mode.Ruijin.RuijinMahjongIntoResponse result = new mahjong.mode.Ruijin.RuijinMahjongIntoResponse(this);
+                result.baseScore_ = baseScore_;
+                result.gameTimes_ = gameTimes_;
+                result.count_ = count_;
+                result.dianpao_ = dianpao_;
+                result.zhuangxian_ = zhuangxian_;
+                onBuilt();
+                return result;
+            }
+
+            public Builder clone() {
+                return (Builder) super.clone();
+            }
+
+            public Builder setField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    Object value) {
+                return (Builder) super.setField(field, value);
+            }
+
+            public Builder clearField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field) {
+                return (Builder) super.clearField(field);
+            }
+
+            public Builder clearOneof(
+                    com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+                return (Builder) super.clearOneof(oneof);
+            }
+
+            public Builder setRepeatedField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    int index, Object value) {
+                return (Builder) super.setRepeatedField(field, index, value);
+            }
+
+            public Builder addRepeatedField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    Object value) {
+                return (Builder) super.addRepeatedField(field, value);
+            }
+
+            public Builder mergeFrom(com.google.protobuf.Message other) {
+                if (other instanceof mahjong.mode.Ruijin.RuijinMahjongIntoResponse) {
+                    return mergeFrom((mahjong.mode.Ruijin.RuijinMahjongIntoResponse) other);
+                } else {
+                    super.mergeFrom(other);
+                    return this;
+                }
+            }
+
+            public Builder mergeFrom(mahjong.mode.Ruijin.RuijinMahjongIntoResponse other) {
+                if (other == mahjong.mode.Ruijin.RuijinMahjongIntoResponse.getDefaultInstance()) return this;
+                if (other.getBaseScore() != 0) {
+                    setBaseScore(other.getBaseScore());
+                }
+                if (other.getGameTimes() != 0) {
+                    setGameTimes(other.getGameTimes());
+                }
+                if (other.getCount() != 0) {
+                    setCount(other.getCount());
+                }
+                if (other.getDianpao() != false) {
+                    setDianpao(other.getDianpao());
+                }
+                if (other.getZhuangxian() != 0) {
+                    setZhuangxian(other.getZhuangxian());
+                }
+                onChanged();
+                return this;
+            }
+
+            public final boolean isInitialized() {
+                return true;
+            }
+
+            public Builder mergeFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws java.io.IOException {
+                mahjong.mode.Ruijin.RuijinMahjongIntoResponse parsedMessage = null;
+                try {
+                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                    parsedMessage = (mahjong.mode.Ruijin.RuijinMahjongIntoResponse) e.getUnfinishedMessage();
+                    throw e.unwrapIOException();
+                } finally {
+                    if (parsedMessage != null) {
+                        mergeFrom(parsedMessage);
+                    }
+                }
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 底分
+             * </pre>
+             * <p>
+             * <code>uint32 baseScore = 1;</code>
+             */
+            public int getBaseScore() {
+                return baseScore_;
+            }
+
+            /**
+             * <pre>
+             * 底分
+             * </pre>
+             * <p>
+             * <code>uint32 baseScore = 1;</code>
+             */
+            public Builder setBaseScore(int value) {
+
+                baseScore_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 底分
+             * </pre>
+             * <p>
+             * <code>uint32 baseScore = 1;</code>
+             */
+            public Builder clearBaseScore() {
+
+                baseScore_ = 0;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 游戏局数
+             * </pre>
+             * <p>
+             * <code>uint32 gameTimes = 2;</code>
+             */
+            public int getGameTimes() {
+                return gameTimes_;
+            }
+
+            /**
+             * <pre>
+             * 游戏局数
+             * </pre>
+             * <p>
+             * <code>uint32 gameTimes = 2;</code>
+             */
+            public Builder setGameTimes(int value) {
+
+                gameTimes_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 游戏局数
+             * </pre>
+             * <p>
+             * <code>uint32 gameTimes = 2;</code>
+             */
+            public Builder clearGameTimes() {
+
+                gameTimes_ = 0;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 人数
+             * </pre>
+             * <p>
+             * <code>uint32 count = 3;</code>
+             */
+            public int getCount() {
+                return count_;
+            }
+
+            /**
+             * <pre>
+             * 人数
+             * </pre>
+             * <p>
+             * <code>uint32 count = 3;</code>
+             */
+            public Builder setCount(int value) {
+
+                count_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 人数
+             * </pre>
+             * <p>
+             * <code>uint32 count = 3;</code>
+             */
+            public Builder clearCount() {
+
+                count_ = 0;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 点炮
+             * </pre>
+             * <p>
+             * <code>bool dianpao = 4;</code>
+             */
+            public boolean getDianpao() {
+                return dianpao_;
+            }
+
+            /**
+             * <pre>
+             * 点炮
+             * </pre>
+             * <p>
+             * <code>bool dianpao = 4;</code>
+             */
+            public Builder setDianpao(boolean value) {
+
+                dianpao_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 点炮
+             * </pre>
+             * <p>
+             * <code>bool dianpao = 4;</code>
+             */
+            public Builder clearDianpao() {
+
+                dianpao_ = false;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 庄闲
+             * </pre>
+             * <p>
+             * <code>uint32 zhuangxian = 5;</code>
+             */
+            public int getZhuangxian() {
+                return zhuangxian_;
+            }
+
+            /**
+             * <pre>
+             * 庄闲
+             * </pre>
+             * <p>
+             * <code>uint32 zhuangxian = 5;</code>
+             */
+            public Builder setZhuangxian(int value) {
+
+                zhuangxian_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 庄闲
+             * </pre>
+             * <p>
+             * <code>uint32 zhuangxian = 5;</code>
+             */
+            public Builder clearZhuangxian() {
+
+                zhuangxian_ = 0;
+                onChanged();
+                return this;
+            }
+
+            public final Builder setUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
+
+            public final Builder mergeUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
+
+
+            // @@protoc_insertion_point(builder_scope:RuijinMahjongIntoResponse)
         }
 
     }
@@ -1763,8 +2620,8 @@ public final class Ruijin {
 
         public static mahjong.mode.Ruijin.RuijinMahjongReplayResponse parseDelimitedFrom(java.io.InputStream input)
                 throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input);
+      return com.google.protobuf.GeneratedMessageV3
+              .parseDelimitedWithIOException(PARSER, input);
         }
 
         public static mahjong.mode.Ruijin.RuijinMahjongReplayResponse parseDelimitedFrom(
@@ -1795,7 +2652,7 @@ public final class Ruijin {
         }
 
         public static Builder newBuilder(mahjong.mode.Ruijin.RuijinMahjongReplayResponse prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
         }
 
         public static mahjong.mode.Ruijin.RuijinMahjongReplayResponse getDefaultInstance() {
@@ -2389,9 +3246,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public java.util.List<mahjong.mode.GameBase.OperationHistory> getHistoryList() {
@@ -2404,9 +3261,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public int getHistoryCount() {
@@ -2419,9 +3276,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public mahjong.mode.GameBase.OperationHistory getHistory(int index) {
@@ -2434,9 +3291,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder setHistory(
@@ -2456,9 +3313,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder setHistory(
@@ -2475,9 +3332,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder addHistory(mahjong.mode.GameBase.OperationHistory value) {
@@ -2496,9 +3353,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder addHistory(
@@ -2518,9 +3375,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder addHistory(
@@ -2537,9 +3394,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder addHistory(
@@ -2556,9 +3413,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder addAllHistory(
@@ -2576,9 +3433,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder clearHistory() {
@@ -2594,9 +3451,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public Builder removeHistory(int index) {
@@ -2612,9 +3469,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public mahjong.mode.GameBase.OperationHistory.Builder getHistoryBuilder(
@@ -2624,9 +3481,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public mahjong.mode.GameBase.OperationHistoryOrBuilder getHistoryOrBuilder(
@@ -2640,9 +3497,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public java.util.List<? extends mahjong.mode.GameBase.OperationHistoryOrBuilder>
@@ -2656,9 +3513,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public mahjong.mode.GameBase.OperationHistory.Builder addHistoryBuilder() {
@@ -2668,9 +3525,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public mahjong.mode.GameBase.OperationHistory.Builder addHistoryBuilder(
@@ -2681,9 +3538,9 @@ public final class Ruijin {
 
             /**
              * <pre>
-             * 操作记录
+             *操作记录
              * </pre>
-             * <p>
+             *
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public java.util.List<mahjong.mode.GameBase.OperationHistory.Builder>
@@ -2788,61 +3645,57 @@ public final class Ruijin {
                 }
 
                 return this;
-            }
+      }
+      /**
+       * <code>.MahjongResultResponse result = 3;</code>
+       */
+      public mahjong.mode.Mahjong.MahjongResultResponse.Builder getResultBuilder() {
 
-            /**
-             * <code>.MahjongResultResponse result = 3;</code>
-             */
-            public mahjong.mode.Mahjong.MahjongResultResponse.Builder getResultBuilder() {
-
-                onChanged();
-                return getResultFieldBuilder().getBuilder();
-            }
-
-            /**
-             * <code>.MahjongResultResponse result = 3;</code>
-             */
-            public mahjong.mode.Mahjong.MahjongResultResponseOrBuilder getResultOrBuilder() {
-                if (resultBuilder_ != null) {
-                    return resultBuilder_.getMessageOrBuilder();
-                } else {
-                    return result_ == null ?
-                            mahjong.mode.Mahjong.MahjongResultResponse.getDefaultInstance() : result_;
-                }
-            }
-
-            /**
-             * <code>.MahjongResultResponse result = 3;</code>
-             */
-            private com.google.protobuf.SingleFieldBuilderV3<
-                    mahjong.mode.Mahjong.MahjongResultResponse, mahjong.mode.Mahjong.MahjongResultResponse.Builder, mahjong.mode.Mahjong.MahjongResultResponseOrBuilder>
-            getResultFieldBuilder() {
-                if (resultBuilder_ == null) {
-                    resultBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-                            mahjong.mode.Mahjong.MahjongResultResponse, mahjong.mode.Mahjong.MahjongResultResponse.Builder, mahjong.mode.Mahjong.MahjongResultResponseOrBuilder>(
-                            getResult(),
-                            getParentForChildren(),
-                            isClean());
-                    result_ = null;
-                }
-                return resultBuilder_;
-            }
-
-            public final Builder setUnknownFields(
-                    final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            public final Builder mergeUnknownFields(
-                    final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-
-            // @@protoc_insertion_point(builder_scope:RuijinMahjongReplayResponse)
+        onChanged();
+        return getResultFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.MahjongResultResponse result = 3;</code>
+       */
+      public mahjong.mode.Mahjong.MahjongResultResponseOrBuilder getResultOrBuilder() {
+        if (resultBuilder_ != null) {
+          return resultBuilder_.getMessageOrBuilder();
+        } else {
+          return result_ == null ?
+              mahjong.mode.Mahjong.MahjongResultResponse.getDefaultInstance() : result_;
         }
+      }
+      /**
+       * <code>.MahjongResultResponse result = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          mahjong.mode.Mahjong.MahjongResultResponse, mahjong.mode.Mahjong.MahjongResultResponse.Builder, mahjong.mode.Mahjong.MahjongResultResponseOrBuilder>
+          getResultFieldBuilder() {
+        if (resultBuilder_ == null) {
+          resultBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              mahjong.mode.Mahjong.MahjongResultResponse, mahjong.mode.Mahjong.MahjongResultResponse.Builder, mahjong.mode.Mahjong.MahjongResultResponseOrBuilder>(
+                  getResult(),
+                  getParentForChildren(),
+                  isClean());
+          result_ = null;
+        }
+        return resultBuilder_;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
 
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:RuijinMahjongReplayResponse)
     }
 
-    // @@protoc_insertion_point(outer_class_scope)
+  }
+
+  // @@protoc_insertion_point(outer_class_scope)
 }
