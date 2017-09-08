@@ -1167,11 +1167,11 @@ public final class Ruijin {
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseWithIOException(PARSER, input, extensionRegistry);
-        }
+    }
 
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
+    public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+    }
 
         public static Builder newBuilder(mahjong.mode.Ruijin.RuijinMahjongIntoResponse prototype) {
             return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
@@ -2576,7 +2576,7 @@ public final class Ruijin {
                 java.nio.ByteBuffer data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
+      return PARSER.parseFrom(data, extensionRegistry);
         }
 
         public static mahjong.mode.Ruijin.RuijinMahjongReplayResponse parseFrom(
@@ -2607,7 +2607,7 @@ public final class Ruijin {
         public static mahjong.mode.Ruijin.RuijinMahjongReplayResponse parseFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
+          .parseWithIOException(PARSER, input);
         }
 
         public static mahjong.mode.Ruijin.RuijinMahjongReplayResponse parseFrom(
@@ -3576,75 +3576,74 @@ public final class Ruijin {
             public mahjong.mode.Mahjong.MahjongResultResponse getResult() {
                 if (resultBuilder_ == null) {
                     return result_ == null ? mahjong.mode.Mahjong.MahjongResultResponse.getDefaultInstance() : result_;
-                } else {
-                    return resultBuilder_.getMessage();
-                }
-            }
+        } else {
+          return resultBuilder_.getMessage();
+        }
+      }
 
-            /**
-             * <code>.MahjongResultResponse result = 3;</code>
-             */
-            public Builder setResult(
-                    mahjong.mode.Mahjong.MahjongResultResponse.Builder builderForValue) {
-                if (resultBuilder_ == null) {
-                    result_ = builderForValue.build();
-                    onChanged();
-                } else {
-                    resultBuilder_.setMessage(builderForValue.build());
-                }
+      /**
+       * <code>.MahjongResultResponse result = 3;</code>
+       */
+      public Builder setResult(
+          mahjong.mode.Mahjong.MahjongResultResponse.Builder builderForValue) {
+        if (resultBuilder_ == null) {
+          result_ = builderForValue.build();
+          onChanged();
+        } else {
+          resultBuilder_.setMessage(builderForValue.build());
+        }
 
-                return this;
-            }
+        return this;
+      }
 
-            /**
-             * <code>.MahjongResultResponse result = 3;</code>
-             */
-            public Builder setResult(mahjong.mode.Mahjong.MahjongResultResponse value) {
-                if (resultBuilder_ == null) {
-                    if (value == null) {
-                        throw new NullPointerException();
-                    }
-                    result_ = value;
-                    onChanged();
-                } else {
-                    resultBuilder_.setMessage(value);
-                }
+      /**
+       * <code>.MahjongResultResponse result = 3;</code>
+       */
+      public Builder setResult(mahjong.mode.Mahjong.MahjongResultResponse value) {
+        if (resultBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          result_ = value;
+          onChanged();
+        } else {
+          resultBuilder_.setMessage(value);
+        }
 
-                return this;
-            }
+        return this;
+      }
 
-            /**
-             * <code>.MahjongResultResponse result = 3;</code>
-             */
-            public Builder mergeResult(mahjong.mode.Mahjong.MahjongResultResponse value) {
-                if (resultBuilder_ == null) {
-                    if (result_ != null) {
-                        result_ =
-                                mahjong.mode.Mahjong.MahjongResultResponse.newBuilder(result_).mergeFrom(value).buildPartial();
-                    } else {
-                        result_ = value;
-                    }
-                    onChanged();
-                } else {
-                    resultBuilder_.mergeFrom(value);
-                }
+      /**
+       * <code>.MahjongResultResponse result = 3;</code>
+       */
+      public Builder mergeResult(mahjong.mode.Mahjong.MahjongResultResponse value) {
+        if (resultBuilder_ == null) {
+          if (result_ != null) {
+            result_ =
+              mahjong.mode.Mahjong.MahjongResultResponse.newBuilder(result_).mergeFrom(value).buildPartial();
+          } else {
+            result_ = value;
+          }
+          onChanged();
+        } else {
+          resultBuilder_.mergeFrom(value);
+        }
 
-                return this;
-            }
+        return this;
+      }
+      /**
+       * <code>.MahjongResultResponse result = 3;</code>
+       */
+      public Builder clearResult() {
+        if (resultBuilder_ == null) {
+          result_ = null;
+          onChanged();
+        } else {
+          result_ = null;
+          resultBuilder_ = null;
+        }
 
-            /**
-             * <code>.MahjongResultResponse result = 3;</code>
-             */
-            public Builder clearResult() {
-                if (resultBuilder_ == null) {
-                    result_ = null;
-                    onChanged();
-                } else {
-                    result_ = null;
-                    resultBuilder_ = null;
-                }
-
-                return this;
+        return this;
       }
       /**
        * <code>.MahjongResultResponse result = 3;</code>

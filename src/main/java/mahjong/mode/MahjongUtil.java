@@ -217,7 +217,7 @@ public class MahjongUtil {
             }
         }
 
-        List<Integer> baoCan = getComputePossible(cardList, 2);
+        List<Integer> baoCan = getComputePossible(cards, 2);
 
         List<Integer> temp = new ArrayList<>();
         if (0 != baoSize) {
@@ -237,12 +237,12 @@ public class MahjongUtil {
                         temp.clear();
                         temp.addAll(cards);
                         temp.add(baoCan.get(i));
-                        for (int aBaoCan : baoCan) {
-                            temp.add(aBaoCan);
+                        for (int j = i; j < baoCan.size(); j++) {
+                            temp.add(baoCan.get(j));
                             if (hu(temp)) {
                                 return true;
                             }
-                            Card.remove(temp, aBaoCan);
+                            Card.remove(temp, baoCan.get(j));
                         }
                     }
                     break;
@@ -253,12 +253,12 @@ public class MahjongUtil {
                         temp.add(baoCan.get(i));
                         for (int j = 0; j < baoCan.size(); j++) {
                             temp.add(baoCan.get(j));
-                            for (int aBaoCan : baoCan) {
-                                temp.add(aBaoCan);
+                            for (int k = j; k < baoCan.size(); k++) {
+                                temp.add(baoCan.get(k));
                                 if (hu(temp)) {
                                     return true;
                                 }
-                                Card.remove(temp, aBaoCan);
+                                Card.remove(temp, baoCan.get(k));
                             }
                             Card.remove(temp, baoCan.get(j));
                         }
@@ -451,7 +451,7 @@ public class MahjongUtil {
      * @param cardList
      * @return
      */
-    public static boolean hu(List<Integer> cardList) {
+    private static boolean hu(List<Integer> cardList) {
         List<Integer> handVals = new ArrayList<>();
         handVals.addAll(cardList);
         handVals.sort(new Comparator<Integer>() {

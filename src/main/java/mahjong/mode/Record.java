@@ -1,5 +1,6 @@
 package mahjong.mode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Record {
@@ -7,7 +8,7 @@ public class Record {
     private Integer jiabao;
     private Integer banker;
     private Integer[] dice;//骰子
-    private List<OperationHistory> historyList;
+    private List<OperationHistory> historyList = new ArrayList<>();
     private List<SeatRecord> seatRecordList;//座位战绩信息
 
     public Integer getJiabao() {
