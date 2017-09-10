@@ -35,6 +35,8 @@ public class Seat {
     private int dianpaoCount; //点炮次数
     private int angang; //暗杠次数
     private int minggang; //明杠次数
+    private String ip;
+    private int gameCount;
 
     private List<Integer> chiTemp = new ArrayList<>();
 
@@ -244,6 +246,22 @@ public class Seat {
 
     public void setChiTemp(List<Integer> chiTemp) {
         this.chiTemp = chiTemp;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getGameCount() {
+        return gameCount;
+    }
+
+    public void setGameCount(int gameCount) {
+        this.gameCount = gameCount;
     }
 
     public void clear() {

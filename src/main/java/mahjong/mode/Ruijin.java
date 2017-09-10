@@ -1133,8 +1133,8 @@ public final class Ruijin {
         }
 
         public static mahjong.mode.Ruijin.RuijinMahjongIntoResponse parseFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseWithIOException(PARSER, input, extensionRegistry);
@@ -2514,9 +2514,9 @@ public final class Ruijin {
                         case 10: {
                             mahjong.mode.Ruijin.RuijinStartResponse.Builder subBuilder = null;
                             if (start_ != null) {
-                                subBuilder = start_.toBuilder();
-                            }
-                            start_ = input.readMessage(mahjong.mode.Ruijin.RuijinStartResponse.parser(), extensionRegistry);
+                subBuilder = start_.toBuilder();
+              }
+              start_ = input.readMessage(mahjong.mode.Ruijin.RuijinStartResponse.parser(), extensionRegistry);
                             if (subBuilder != null) {
                                 subBuilder.mergeFrom(start_);
                                 start_ = subBuilder.buildPartial();
@@ -3455,76 +3455,75 @@ public final class Ruijin {
              * </pre>
              *
              * <code>repeated .OperationHistory history = 2;</code>
-             */
-            public Builder removeHistory(int index) {
-                if (historyBuilder_ == null) {
-                    ensureHistoryIsMutable();
-                    history_.remove(index);
-                    onChanged();
-                } else {
-                    historyBuilder_.remove(index);
-                }
-                return this;
-            }
+       */
+      public Builder removeHistory(int index) {
+        if (historyBuilder_ == null) {
+            ensureHistoryIsMutable();
+            history_.remove(index);
+            onChanged();
+        } else {
+            historyBuilder_.remove(index);
+        }
+          return this;
+      }
 
             /**
              * <pre>
-             *操作记录
+             * 操作记录
              * </pre>
-             *
+             * <p>
              * <code>repeated .OperationHistory history = 2;</code>
              */
             public mahjong.mode.GameBase.OperationHistory.Builder getHistoryBuilder(
-                    int index) {
-                return getHistoryFieldBuilder().getBuilder(index);
-            }
+          int index) {
+        return getHistoryFieldBuilder().getBuilder(index);
+      }
 
-            /**
-             * <pre>
-             *操作记录
-             * </pre>
-             *
-             * <code>repeated .OperationHistory history = 2;</code>
-             */
-            public mahjong.mode.GameBase.OperationHistoryOrBuilder getHistoryOrBuilder(
-                    int index) {
-                if (historyBuilder_ == null) {
-                    return history_.get(index);
-                } else {
-                    return historyBuilder_.getMessageOrBuilder(index);
-                }
-            }
+      /**
+       * <pre>
+       *操作记录
+       * </pre>
+       *
+       * <code>repeated .OperationHistory history = 2;</code>
+       */
+      public mahjong.mode.GameBase.OperationHistoryOrBuilder getHistoryOrBuilder(
+          int index) {
+        if (historyBuilder_ == null) {
+          return history_.get(index);  } else {
+          return historyBuilder_.getMessageOrBuilder(index);
+        }
+      }
 
-            /**
-             * <pre>
-             *操作记录
-             * </pre>
-             *
-             * <code>repeated .OperationHistory history = 2;</code>
-             */
-            public java.util.List<? extends mahjong.mode.GameBase.OperationHistoryOrBuilder>
-            getHistoryOrBuilderList() {
-                if (historyBuilder_ != null) {
-                    return historyBuilder_.getMessageOrBuilderList();
-                } else {
-                    return java.util.Collections.unmodifiableList(history_);
-                }
-            }
+      /**
+       * <pre>
+       *操作记录
+       * </pre>
+       *
+       * <code>repeated .OperationHistory history = 2;</code>
+       */
+      public java.util.List<? extends mahjong.mode.GameBase.OperationHistoryOrBuilder>
+           getHistoryOrBuilderList() {
+        if (historyBuilder_ != null) {
+          return historyBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(history_);
+        }
+      }
 
-            /**
-             * <pre>
-             *操作记录
-             * </pre>
-             *
-             * <code>repeated .OperationHistory history = 2;</code>
-             */
-            public mahjong.mode.GameBase.OperationHistory.Builder addHistoryBuilder() {
-                return getHistoryFieldBuilder().addBuilder(
-                        mahjong.mode.GameBase.OperationHistory.getDefaultInstance());
-            }
+      /**
+       * <pre>
+       *操作记录
+       * </pre>
+       *
+       * <code>repeated .OperationHistory history = 2;</code>
+       */
+      public mahjong.mode.GameBase.OperationHistory.Builder addHistoryBuilder() {
+        return getHistoryFieldBuilder().addBuilder(
+            mahjong.mode.GameBase.OperationHistory.getDefaultInstance());
+      }
 
-            /**
-             * <pre>
+      /**
+       * <pre>
        *操作记录
        * </pre>
        *
@@ -3536,19 +3535,19 @@ public final class Ruijin {
             index, mahjong.mode.GameBase.OperationHistory.getDefaultInstance());
       }
 
-            /**
-             * <pre>
-             * 操作记录
-             * </pre>
-             * <p>
-             * <code>repeated .OperationHistory history = 2;</code>
-             */
-            public java.util.List<mahjong.mode.GameBase.OperationHistory.Builder>
-            getHistoryBuilderList() {
-                return getHistoryFieldBuilder().getBuilderList();
-            }
+      /**
+       * <pre>
+       *操作记录
+       * </pre>
+       *
+       * <code>repeated .OperationHistory history = 2;</code>
+       */
+      public java.util.List<mahjong.mode.GameBase.OperationHistory.Builder>
+           getHistoryBuilderList() {
+        return getHistoryFieldBuilder().getBuilderList();
+      }
 
-            private com.google.protobuf.RepeatedFieldBuilderV3<
+      private com.google.protobuf.RepeatedFieldBuilderV3<
           mahjong.mode.GameBase.OperationHistory, mahjong.mode.GameBase.OperationHistory.Builder, mahjong.mode.GameBase.OperationHistoryOrBuilder>
           getHistoryFieldBuilder() {
         if (historyBuilder_ == null) {
@@ -3562,7 +3561,6 @@ public final class Ruijin {
         }
         return historyBuilder_;
       }
-
       /**
        * <code>.MahjongResultResponse result = 3;</code>
        */
@@ -3641,6 +3639,7 @@ public final class Ruijin {
 
         return this;
       }
+
       /**
        * <code>.MahjongResultResponse result = 3;</code>
        */

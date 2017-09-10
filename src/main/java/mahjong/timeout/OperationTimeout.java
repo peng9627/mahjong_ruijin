@@ -62,17 +62,20 @@ public class OperationTimeout extends Thread {
                     room.getSeats().stream().filter(seat -> seat.getUserId() == userId).forEach(seat -> seat.setOperation(1));
                     room.hu(userId, response, redisService);//胡
                 } else {
-                    room.getSeats().stream().filter(seat -> seat.getUserId() == userId &&
-                            room.getOperationSeatNo() != seat.getSeatNo()).forEach(seat -> {
-                        seat.setOperation(4);
-                        if (!room.passedChecked()) {//如果都操作完了，继续摸牌
-                            room.getSeats().forEach(seat1 -> {
-                                seat1.setOperation(0);
-                                seat1.getChiTemp().clear();
-                            });
-                            room.getCard(response, room.getNextSeat(), redisService);
-                        } else if (room.checkCanPeng()) { //如果可以碰、杠牌，则碰、杠
-                            room.operation(GameBase.BaseAction.newBuilder(), response, redisService);
+                    room.getSeats().stream().filter(seat -> seat.getUserId() == userId).forEach(seat -> {
+                        if (room.getOperationSeatNo() != seat.getSeatNo()) {
+                            seat.setOperation(4);
+                            if (!room.passedChecked()) {//如果都操作完了，继续摸牌
+                                room.getSeats().forEach(seat1 -> {
+                                    seat1.setOperation(0);
+                                    seat1.getChiTemp().clear();
+                                });
+                                room.getCard(response, room.getNextSeat(), redisService);
+                            } else if (room.checkCanPeng()) { //如果可以碰、杠牌，则碰、杠
+                                room.operation(GameBase.BaseAction.newBuilder(), response, redisService);
+                            }
+                        } else {
+                            new PlayCardTimeout(seat.getUserId(), roomNo, room.getHistoryList().size(), room.getGameCount(), redisService).start();
                         }
                     });
                 }
