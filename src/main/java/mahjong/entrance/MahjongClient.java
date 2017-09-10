@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.google.protobuf.InvalidProtocolBufferException;
+import mahjong.constant.Constant;
 import mahjong.mode.*;
 import mahjong.redis.RedisService;
+import mahjong.timeout.ReadyTimeout;
 import mahjong.utils.HttpUtil;
 import mahjong.utils.LoggerUtil;
 import org.slf4j.Logger;
@@ -43,20 +45,16 @@ public class MahjongClient {
                 while (!redisService.lock("lock_room" + roomNo)) {
                 }
                 Room room = JSON.parseObject(redisService.getCache("room" + roomNo), Room.class);
-
+                if (null == room) {
+                    return;
+                }
                 for (Seat seat : room.getSeats()) {
                     if (seat.getUserId() == userId) {
                         seat.setRobot(true);
                         break;
                     }
                 }
-
-                Mahjong.MahjongGameInfo.Builder gameInfo = Mahjong.MahjongGameInfo.newBuilder().setSurplusCardsSize(room.getSurplusCards().size());
-                addSeat(room, gameInfo);
-                Ruijin.RuijinMahjongGameInfo.Builder ruijinGameInfo = Ruijin.RuijinMahjongGameInfo.newBuilder().setMahjongGameInfo(gameInfo);
-                ruijinGameInfo.setRogue(room.getJiabao());
-                response.setOperationType(GameBase.OperationType.GAME_INFO).setData(ruijinGameInfo.build().toByteString());
-                messageReceive.send(response.build(), userId);
+                room.sendSeatInfo(response);
 
                 redisService.addCache("room" + roomNo, JSON.toJSONString(room));
                 redisService.unlock("lock_room" + roomNo);
@@ -79,7 +77,7 @@ public class MahjongClient {
                     userId = intoRequest.getID();
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("userId", userId);
-                    ApiResponse<User> userResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/user/info", jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
+                    ApiResponse<User> userResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.userInfoUrl, jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
                     });
                     if (0 == userResponse.getCode()) {
                         roomNo = intoRequest.getRoomNo();
@@ -102,35 +100,35 @@ public class MahjongClient {
                             redisService.addCache("reconnect" + userId, "ruijin_mahjong," + roomNo);
 
                             //是否竞技场
-                            if (redisService.exists("room_march" + roomNo)) {
-                                String marchNo = redisService.getCache("room_march" + roomNo);
-                                if (redisService.exists("match_info" + marchNo)) {
-                                    while (!redisService.lock("match_info" + marchNo)) {
+                            if (redisService.exists("room_match" + roomNo)) {
+                                String matchNo = redisService.getCache("room_match" + roomNo);
+                                if (redisService.exists("match_info" + matchNo)) {
+                                    while (!redisService.lock("lock_match_info" + matchNo)) {
                                     }
-                                    MatchInfo matchInfo = JSON.parseObject(redisService.getCache("match_info" + marchNo), MatchInfo.class);
+                                    MatchInfo matchInfo = JSON.parseObject(redisService.getCache("match_info" + matchNo), MatchInfo.class);
                                     Arena arena = matchInfo.getArena();
-                                    GameBase.MatchInfo marchInfo = GameBase.MatchInfo.newBuilder().setArenaType(arena.getArenaType())
+                                    GameBase.MatchInfo matchInfoResponse = GameBase.MatchInfo.newBuilder().setArenaType(arena.getArenaType())
                                             .setCount(arena.getCount()).setEntryFee(arena.getEntryFee()).setName(arena.getName())
                                             .setReward(arena.getReward()).build();
                                     messageReceive.send(response.setOperationType(GameBase.OperationType.MATCH_INFO)
-                                            .setData(marchInfo.toByteString()).build(), userId);
+                                            .setData(matchInfoResponse.toByteString()).build(), userId);
 
-                                    GameBase.MatchData marchData = GameBase.MatchData.newBuilder()
+                                    GameBase.MatchData matchData = GameBase.MatchData.newBuilder()
                                             .setCurrentCount(matchInfo.getMatchUsers().size())
                                             .setStartDate(matchInfo.getStartDate().getTime())
                                             .setStatus(matchInfo.getStatus()).build();
                                     messageReceive.send(response.setOperationType(GameBase.OperationType.MATCH_DATA)
-                                            .setData(marchData.toByteString()).build(), userId);
+                                            .setData(matchData.toByteString()).build(), userId);
 
                                     if (!matchInfo.isStart()) {
                                         List<Integer> roomNos = matchInfo.getRooms();
-                                        for (int i = 0; i < roomNos.size(); i++) {
-//                                            new ReadyTimeout(roomNos.getString(0), redisService).start();
+                                        for (Integer roomNo1 : roomNos) {
+                                            new ReadyTimeout(roomNo1, redisService).start();
                                         }
                                     }
                                     matchInfo.setStart(true);
-                                    redisService.addCache("match_info" + marchNo, JSON.toJSONString(matchInfo));
-                                    redisService.unlock("match_info" + marchNo);
+                                    redisService.addCache("match_info" + matchNo, JSON.toJSONString(matchInfo));
+                                    redisService.unlock("lock_match_info" + matchNo);
                                 }
                             }
 
@@ -143,7 +141,10 @@ public class MahjongClient {
 
                             //房间是否已存在当前用户，存在则为重连
                             final boolean[] find = {false};
-                            room.getSeats().stream().filter(seat -> seat.getUserId() == userId).forEach(seat -> find[0] = true);
+                            room.getSeats().stream().filter(seat -> seat.getUserId() == userId).forEach(seat -> {
+                                find[0] = true;
+                                seat.setRobot(false);
+                            });
                             if (!find[0]) {
                                 if (room.getCount() > room.getSeats().size()) {
                                     room.addSeat(userResponse.getData(), 0);
@@ -460,7 +461,7 @@ public class MahjongClient {
                                 }
                             }
                             if (!dissolveReply.getAgree()) {
-                                GameBase.DissolveConfirm dissolveConfirm = GameBase.DissolveConfirm.newBuilder().setDissolved(false).setUserId(userId).build();
+                                GameBase.DissolveConfirm dissolveConfirm = GameBase.DissolveConfirm.newBuilder().setDissolved(false).build();
                                 response.setOperationType(GameBase.OperationType.DISSOLVE_CONFIRM).setData(dissolveConfirm.toByteString());
                                 for (Seat seat : room.getSeats()) {
                                     if (MahjongTcpService.userClients.containsKey(seat.getUserId())) {

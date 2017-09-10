@@ -5,8 +5,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import mahjong.constant.Constant;
 import mahjong.entrance.MahjongTcpService;
 import mahjong.redis.RedisService;
+import mahjong.timeout.OperationTimeout;
+import mahjong.timeout.PlayCardTimeout;
 import mahjong.utils.HttpUtil;
 import org.slf4j.LoggerFactory;
 
@@ -231,6 +234,7 @@ public class Room {
         surplusCards = Card.getAllCard();
         //卖马 发牌
         for (Seat seat : seats) {
+            seat.setReady(false);
             List<Integer> cardList = new ArrayList<>();
             if (banker == seat.getUserId()) {
                 int cardIndex = 27;
@@ -439,7 +443,6 @@ public class Room {
         List<Integer> loseSeats = new ArrayList<>();
         final int[] score = {0};
 
-        //TODO 扣款
         Mahjong.MahjongResultResponse.Builder resultResponse = Mahjong.MahjongResultResponse.newBuilder();
         resultResponse.setReadyTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
         seats.forEach(seat -> {
@@ -502,7 +505,6 @@ public class Room {
         Mahjong.MahjongOverResponse.Builder over = Mahjong.MahjongOverResponse.newBuilder();
 
         for (Seat seat : seats) {
-            //TODO 统计
             Mahjong.MahjongSeatGameOver.Builder seatGameOver = Mahjong.MahjongSeatGameOver.newBuilder()
                     .setID(seat.getUserId()).setMinggang(seat.getMinggang()).setAngang(seat.getAngang())
                     .setZimoCount(seat.getZimoCount()).setHuCount(seat.getHuCount())
@@ -555,24 +557,25 @@ public class Room {
             jsonObject.put("gameData", JSON.toJSONString(recordList, feature, features).getBytes());
             jsonObject.put("scoreData", JSON.toJSONString(totalScores, feature, features).getBytes());
 
-            ApiResponse apiResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/gamerecord/create", jsonObject.toJSONString()), ApiResponse.class);
+            ApiResponse apiResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.gamerecordCreateUrl, jsonObject.toJSONString()), ApiResponse.class);
             if (0 != apiResponse.getCode()) {
-                LoggerFactory.getLogger(this.getClass()).error("http://127.0.0.1:9999/api/gamerecord/create?" + jsonObject.toJSONString());
+                LoggerFactory.getLogger(this.getClass()).error(Constant.apiUrl + Constant.gamerecordCreateUrl + "?" + jsonObject.toJSONString());
             }
         }
         //是否竞技场
-        if (redisService.exists("room_march" + roomNo)) {
-            String marchNo = redisService.getCache("room_march" + roomNo);
-            if (redisService.exists("match_info" + marchNo)) {
-                while (!redisService.lock("match_info" + marchNo)) {
+        if (redisService.exists("room_match" + roomNo)) {
+            String matchNo = redisService.getCache("room_match" + roomNo);
+            redisService.delete("room_match" + roomNo);
+            if (redisService.exists("match_info" + matchNo)) {
+                while (!redisService.lock("lock_match_info" + matchNo)) {
                 }
-                MatchInfo matchInfo = JSON.parseObject(redisService.getCache("match_info" + marchNo), MatchInfo.class);
+                MatchInfo matchInfo = JSON.parseObject(redisService.getCache("match_info" + matchNo), MatchInfo.class);
                 Arena arena = matchInfo.getArena();
 
                 //移出当前桌
                 List<Integer> rooms = matchInfo.getRooms();
                 for (Integer integer : rooms) {
-                    if (String.valueOf(integer).equals(roomNo)) {
+                    if (integer == Integer.parseInt(roomNo)) {
                         rooms.remove(integer);
                         break;
                     }
@@ -603,7 +606,8 @@ public class Room {
                 GameBase.MatchData.Builder matchData = GameBase.MatchData.newBuilder().setStartDate(matchInfo.getStartDate().getTime());
                 switch (matchInfo.getStatus()) {
                     case 1:
-                        int addScoreCount = (int) ((new Date().getTime() - matchInfo.getStartDate().getTime()) / 300000);
+                        //TODO 少一个0，记得加回来
+                        int addScoreCount = (int) ((new Date().getTime() - matchInfo.getStartDate().getTime()) / 12000);
 
                         //根据金币排序
                         seats.sort(new Comparator<Seat>() {
@@ -619,10 +623,12 @@ public class Room {
                         for (Seat seat : seats) {
                             for (MatchUser matchUser : matchUsers) {
                                 if (matchUser.getUserId() == seat.getUserId()) {
-                                    if (seat.getScore() < 200 + (addScoreCount * 100) && matchUsers.size() > arena.getCount() / 2) {
+                                    if (seat.getScore() < 500 + (addScoreCount * 100) && matchUsers.size() > arena.getCount() / 2) {
                                         matchUsers.remove(matchUser);
+                                        redisService.delete("reconnect" + seat.getUserId());
                                     } else {
                                         thisWait.add(matchUser);
+                                        redisService.addCache("reconnect" + seat.getUserId(), "sangong," + matchNo);
                                     }
                                     break;
                                 }
@@ -632,6 +638,7 @@ public class Room {
                         //淘汰人数以满
                         int count = matchUsers.size();
                         if (count == arena.getCount() / 2 && 0 == rooms.size()) {
+                            waitUsers.clear();
                             List<User> users = new ArrayList<>();
                             StringBuilder stringBuilder = new StringBuilder();
                             for (MatchUser matchUser : matchUsers) {
@@ -639,7 +646,7 @@ public class Room {
                             }
                             jsonObject.clear();
                             jsonObject.put("userIds", stringBuilder.toString().substring(1));
-                            ApiResponse<List<User>> usersResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/user/list", jsonObject.toJSONString()),
+                            ApiResponse<List<User>> usersResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.userListUrl, jsonObject.toJSONString()),
                                     new TypeReference<ApiResponse<List<User>>>() {
                                     });
                             if (0 == usersResponse.getCode()) {
@@ -651,10 +658,9 @@ public class Room {
                             matchData.setStatus(2);
                             matchData.setCurrentCount(matchUsers.size());
                             while (4 <= users.size()) {
-                                rooms.add(matchInfo.addRoom(2, redisService, users.subList(0, 4), userIdScore, response, matchData));
-                                users.removeAll(users.subList(0, 4));
+                                rooms.add(matchInfo.addRoom(matchNo, 2, redisService, users.subList(0, 4), userIdScore, response, matchData));
                             }
-                        } else {
+                        } else if (count > arena.getCount() / 2) {
                             //满四人继续匹配
                             waitUsers.addAll(thisWait);
                             while (4 <= waitUsers.size()) {
@@ -666,30 +672,33 @@ public class Room {
                                 }
                                 jsonObject.clear();
                                 jsonObject.put("userIds", stringBuilder.toString().substring(1));
-                                ApiResponse<List<User>> usersResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/user/list", jsonObject.toJSONString()),
+                                ApiResponse<List<User>> usersResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.userListUrl, jsonObject.toJSONString()),
                                         new TypeReference<ApiResponse<List<User>>>() {
                                         });
                                 if (0 == usersResponse.getCode()) {
                                     users = usersResponse.getData();
                                 }
-                                rooms.add(matchInfo.addRoom(1, redisService, users, userIdScore, response, matchData));
+                                rooms.add(matchInfo.addRoom(matchNo, 1, redisService, users, userIdScore, response, matchData));
                             }
                         }
                         break;
                     case 2:
                     case 3:
+                        for (Seat seat : seats) {
+                            redisService.addCache("reconnect" + seat.getUserId(), "sangong," + matchNo);
+                        }
                         if (0 == rooms.size()) {
                             matchInfo.setStatus(matchInfo.getStatus() + 1);
                             matchData.setStatus(matchInfo.getStatus());
 
                             List<User> users = new ArrayList<>();
                             StringBuilder stringBuilder = new StringBuilder();
-                            for (int i = 0; i < 4; i++) {
-                                stringBuilder.append(",").append(matchUsers.get(i).getUserId());
+                            for (MatchUser matchUser : matchUsers) {
+                                stringBuilder.append(",").append(matchUser.getUserId());
                             }
                             jsonObject.clear();
                             jsonObject.put("userIds", stringBuilder.toString().substring(1));
-                            ApiResponse<List<User>> usersResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/user/list", jsonObject.toJSONString()),
+                            ApiResponse<List<User>> usersResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.userListUrl, jsonObject.toJSONString()),
                                     new TypeReference<ApiResponse<List<User>>>() {
                                     });
                             if (0 == usersResponse.getCode()) {
@@ -697,18 +706,17 @@ public class Room {
                             }
                             matchData.setCurrentCount(matchUsers.size());
                             while (4 <= users.size()) {
-                                rooms.add(matchInfo.addRoom(2, redisService, users.subList(0, 4), userIdScore, response, matchData));
-                                users.removeAll(users.subList(0, 4));
+                                rooms.add(matchInfo.addRoom(matchNo, 2, redisService, users.subList(0, 4), userIdScore, response, matchData));
                             }
                         }
                         break;
                     case 4:
-
                         for (Seat seat : seats) {
                             MatchUser matchUser = new MatchUser();
                             matchUser.setUserId(seat.getUserId());
                             matchUser.setScore(seat.getScore());
                             waitUsers.add(matchUser);
+                            redisService.addCache("reconnect" + seat.getUserId(), "sangong," + matchNo);
                         }
 
                         waitUsers.sort(new Comparator<MatchUser>() {
@@ -718,7 +726,8 @@ public class Room {
                             }
                         });
                         while (waitUsers.size() > 4) {
-                            waitUsers.remove(4);
+                            MatchUser matchUser = waitUsers.remove(4);
+                            redisService.delete("reconnect" + matchUser.getUserId());
                         }
 
                         if (0 == rooms.size()) {
@@ -736,16 +745,15 @@ public class Room {
                             }
                             jsonObject.clear();
                             jsonObject.put("userIds", stringBuilder.toString().substring(1));
-                            ApiResponse<List<User>> usersResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/user/list", jsonObject.toJSONString()),
+                            ApiResponse<List<User>> usersResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.userListUrl, jsonObject.toJSONString()),
                                     new TypeReference<ApiResponse<List<User>>>() {
                                     });
                             if (0 == usersResponse.getCode()) {
                                 users = usersResponse.getData();
                             }
                             matchData.setCurrentCount(matchUsers.size());
-                            while (4 <= users.size()) {
-                                rooms.add(matchInfo.addRoom(2, redisService, users.subList(0, 4), userIdScore, response, matchData));
-                                users.removeAll(users.subList(0, 4));
+                            while (4 == users.size()) {
+                                rooms.add(matchInfo.addRoom(matchNo, 2, redisService, users, userIdScore, response, matchData));
                             }
                         }
                         break;
@@ -770,8 +778,10 @@ public class Room {
                         break;
                 }
 
-                redisService.addCache("match_info" + marchNo, JSON.toJSONString(matchInfo));
-                redisService.unlock("match_info" + marchNo);
+                matchInfo.setRooms(rooms);
+                matchInfo.setWaitUsers(waitUsers);
+                redisService.addCache("match_info" + matchNo, JSON.toJSONString(matchInfo));
+                redisService.unlock("lock_match_info" + matchNo);
             }
         }
 
@@ -792,9 +802,9 @@ public class Room {
         builder.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
         if (MahjongUtil.hu(seat.getCards(), bao, jiabao)) {
             builder.addOperationId(GameBase.ActionId.HU);
-//            new OperationTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService, true).start();
-        } else {
-//            new PlayCardTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService).start();
+            if (redisService.exists("room_match" + roomNo)) {
+                new OperationTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService, true).start();
+            }
         }
         //暗杠
         if (null != MahjongUtil.checkGang(seat.getCards())) {
@@ -805,10 +815,17 @@ public class Room {
             builder.addOperationId(GameBase.ActionId.BA_GANG);
         }
         if (0 != builder.getOperationIdCount()) {
+            if (redisService.exists("room_match" + roomNo)) {
+                new OperationTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService, false).start();
+            }
             if (MahjongTcpService.userClients.containsKey(seat.getUserId())) {
                 response.clear();
                 response.setOperationType(GameBase.OperationType.ASK).setData(builder.build().toByteString());
                 MahjongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
+            }
+        } else {
+            if (redisService.exists("room_match" + roomNo)) {
+                new PlayCardTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService).start();
             }
         }
     }
@@ -865,14 +882,15 @@ public class Room {
                 }
             }
 
+            boolean hu = false;
             for (Seat seat : seats) {
-                if (seat.getSeatNo() != operationSeatNo && seat.getUserId() == userId) {
+                if (seat.getSeatNo() != operationSeatNo) {
                     List<Integer> temp = new ArrayList<>();
                     temp.addAll(seat.getCards());
 
                     //当前玩家是否可以胡牌
                     temp.add(card);
-                    if (MahjongUtil.hu(temp, bao, jiabao) && seat.getOperation() == 1) {
+                    if (MahjongUtil.hu(temp, bao, jiabao)) {
 
                         ScoreType scoreType = MahjongUtil.getHuType(huSeat[0].getCards(), bao);
                         int score = MahjongUtil.getScore(scoreType);
@@ -887,14 +905,14 @@ public class Room {
                         loseSeat.setDianpaoCount(loseSeat.getDianpaoCount() + 1);
                         seat.setCardResult(new GameResult(scoreTypes, card, score));
                         seat.setHuCount(huSeat[0].getHuCount() + 1);
-                        //胡牌
-                        gameOver(response, redisService);
-
-                        //TODO 检查是否游戏是否结束
-//                checkEnd(room);
+                        hu = true;
                     }
                     break;
                 }
+            }
+            if (hu) {
+                //胡牌
+                gameOver(response, redisService);
             }
         }
 
@@ -1230,7 +1248,9 @@ public class Room {
                     response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
                     seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
                             .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
-
+                    if (redisService.exists("room_match" + roomNo)) {
+                        new PlayCardTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService).start();
+                    }
                     GameBase.RoundResponse roundResponse = GameBase.RoundResponse.newBuilder()
                             .setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0).setID(seat.getUserId()).build();
                     response.setOperationType(GameBase.OperationType.ROUND).setData(roundResponse.toByteString());
@@ -1256,7 +1276,9 @@ public class Room {
                 response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
                 seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
                         .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
-
+                if (redisService.exists("room_match" + roomNo)) {
+                    new PlayCardTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService).start();
+                }
                 GameBase.RoundResponse roundResponse = GameBase.RoundResponse.newBuilder()
                         .setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0).setID(seat.getUserId()).build();
                 response.setOperationType(GameBase.OperationType.ROUND).setData(roundResponse.toByteString());
@@ -1297,14 +1319,17 @@ public class Room {
         GameBase.RoundResponse roundResponse = GameBase.RoundResponse.newBuilder()
                 .setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0).setID(banker).build();
         response.setOperationType(GameBase.OperationType.ROUND).setData(roundResponse.toByteString());
-        seats.stream().filter(seat -> MahjongTcpService.userClients.containsKey(seat.getUserId()))
-                .forEach(seat -> MahjongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId()));
 
+        if (redisService.exists("room_match" + roomNo)) {
+            new PlayCardTimeout(banker, roomNo, historyList.size(), gameCount, redisService).start();
+        }
         Seat operationSeat = null;
         for (Seat seat : seats) {
             if (operationSeatNo == seat.getSeatNo()) {
                 operationSeat = seat;
-                break;
+            }
+            if (MahjongTcpService.userClients.containsKey(seat.getUserId())) {
+                MahjongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
             }
         }
 
@@ -1314,7 +1339,7 @@ public class Room {
     public void playCard(Integer card, int userId, GameBase.BaseAction.Builder actionResponse, GameBase.BaseConnection.Builder response, RedisService redisService) {
         for (Seat seat : seats) {
             if (seat.getUserId() == userId) {
-                if (operationSeatNo == seat.getSeatNo()) {
+                if (operationSeatNo == seat.getSeatNo() && lastOperation != userId) {
                     if (seat.getCards().contains(card)) {
                         seat.getCards().remove(card);
                         if (null == seat.getPlayedCards()) {
@@ -1360,7 +1385,6 @@ public class Room {
     public void sendSeatInfo(GameBase.BaseConnection.Builder response) {
         GameBase.RoomSeatsInfo.Builder roomSeatsInfo = GameBase.RoomSeatsInfo.newBuilder();
         for (Seat seat1 : seats) {
-            seat1.setRobot(false);
             GameBase.SeatResponse.Builder seatResponse = GameBase.SeatResponse.newBuilder();
             seatResponse.setSeatNo(seat1.getSeatNo());
             seatResponse.setID(seat1.getUserId());
@@ -1370,6 +1394,7 @@ public class Room {
             seatResponse.setNickname(seat1.getNickname());
             seatResponse.setHead(seat1.getHead());
             seatResponse.setSex(seat1.isSex());
+            seatResponse.setOffline(seat1.isRobot());
             roomSeatsInfo.addSeats(seatResponse.build());
         }
         response.setOperationType(GameBase.OperationType.SEAT_INFO).setData(roomSeatsInfo.build().toByteString());
