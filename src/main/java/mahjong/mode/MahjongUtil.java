@@ -493,11 +493,30 @@ public class MahjongUtil {
             handVals.remove(Integer.valueOf(md_val));
             return CheckLug(handVals);
         } else {
-            if (handVals.contains(md_val + 1) && handVals.contains(md_val + 2)) {
-                handVals.remove(Integer.valueOf(md_val + 1));
-                handVals.remove(Integer.valueOf(md_val + 2));
-                return CheckLug(handVals);
+            if (md_val < 30) {
+                if (handVals.contains(md_val + 1) && handVals.contains(md_val + 2)) {
+                    handVals.remove(Integer.valueOf(md_val + 1));
+                    handVals.remove(Integer.valueOf(md_val + 2));
+                    return CheckLug(handVals);
+                }
+            } else if (md_val > 30 && md_val < 50) {
+                if (handVals.contains(md_val + 2) && handVals.contains(md_val + 4)) {
+                    handVals.remove(Integer.valueOf(md_val + 2));
+                    handVals.remove(Integer.valueOf(md_val + 4));
+                    return CheckLug(handVals);
+                }
+                if (handVals.contains(md_val + 4) && handVals.contains(md_val + 6)) {
+                    handVals.remove(Integer.valueOf(md_val + 4));
+                    handVals.remove(Integer.valueOf(md_val + 6));
+                    return CheckLug(handVals);
+                }
+                if (handVals.contains(md_val + 2) && handVals.contains(md_val + 6)) {
+                    handVals.remove(Integer.valueOf(md_val + 2));
+                    handVals.remove(Integer.valueOf(md_val + 6));
+                    return CheckLug(handVals);
+                }
             }
+
         }
         return false;
     }

@@ -293,8 +293,8 @@ public class Room {
 
             if (seat.getUserId() == banker) {
                 operationSeatNo = seat.getSeatNo();
-                int cardIndex = 8;
-//                int cardIndex = (int) (Math.random() * surplusCards.size());
+//                int cardIndex = 8;
+                int cardIndex = (int) (Math.random() * surplusCards.size());
 //                seat.getCards().add(surplusCards.get(cardIndex));
 //                surplusCards.remove(cardIndex);
 
@@ -335,7 +335,6 @@ public class Room {
             case 5:
                 bao = 51;
         }
-        System.out.println(bao + "........" + jiabao);
     }
 
     public int getNextSeat() {
@@ -597,6 +596,23 @@ public class Room {
                             matchUser.setScore(seat.getScore());
                         }
                     }
+                    if (MahjongTcpService.userClients.containsKey(seat.getUserId())) {
+                        MahjongTcpService.userClients.get(seat.getUserId()).send(response.setOperationType(GameBase.OperationType.ROOM_INFO).clearData().build(), seat.getUserId());
+                        GameBase.RoomSeatsInfo.Builder roomSeatsInfo = GameBase.RoomSeatsInfo.newBuilder();
+                        GameBase.SeatResponse.Builder seatResponse = GameBase.SeatResponse.newBuilder();
+                        seatResponse.setSeatNo(1);
+                        seatResponse.setID(seat.getUserId());
+                        seatResponse.setScore(seat.getScore());
+                        seatResponse.setReady(false);
+                        seatResponse.setIp(seat.getIp());
+                        seatResponse.setGameCount(seat.getGameCount());
+                        seatResponse.setNickname(seat.getNickname());
+                        seatResponse.setHead(seat.getHead());
+                        seatResponse.setSex(seat.isSex());
+                        seatResponse.setOffline(false);
+                        roomSeatsInfo.addSeats(seatResponse.build());
+                        MahjongTcpService.userClients.get(seat.getUserId()).send(response.setOperationType(GameBase.OperationType.SEAT_INFO).setData(roomSeatsInfo.build().toByteString()).build(), seat.getUserId());
+                    }
                 }
 
                 //用户对应分数
@@ -627,6 +643,11 @@ public class Room {
                                 if (matchUser.getUserId() == seat.getUserId()) {
                                     if (seat.getScore() < 500 + (addScoreCount * 100) && matchUsers.size() > arena.getCount() / 2) {
                                         matchUsers.remove(matchUser);
+                                        response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(GameBase.MatchResult.newBuilder()
+                                                .setRanking(matchUsers.size()).build().toByteString());
+                                        if (MahjongTcpService.userClients.containsKey(matchUser.getUserId())) {
+                                            MahjongTcpService.userClients.get(matchUser.getUserId()).send(response.build(), matchUser.getUserId());
+                                        }
                                         redisService.delete("reconnect" + seat.getUserId());
                                     } else {
                                         thisWait.add(matchUser);
@@ -728,7 +749,13 @@ public class Room {
                             }
                         });
                         while (waitUsers.size() > 4) {
-                            MatchUser matchUser = waitUsers.remove(4);
+                            MatchUser matchUser = waitUsers.remove(waitUsers.size() - 1);
+
+                            response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(GameBase.MatchResult.newBuilder()
+                                    .setRanking(matchUsers.size()).build().toByteString());
+                            if (MahjongTcpService.userClients.containsKey(matchUser.getUserId())) {
+                                MahjongTcpService.userClients.get(matchUser.getUserId()).send(response.build(), matchUser.getUserId());
+                            }
                             redisService.delete("reconnect" + matchUser.getUserId());
                         }
 
@@ -760,7 +787,6 @@ public class Room {
                         }
                         break;
                     case 5:
-                        GameBase.MatchResult.Builder matchResult = GameBase.MatchResult.newBuilder();
                         matchUsers.sort(new Comparator<MatchUser>() {
                             @Override
                             public int compare(MatchUser o1, MatchUser o2) {
@@ -768,16 +794,12 @@ public class Room {
                             }
                         });
                         for (int i = 0; i < matchUsers.size(); i++) {
-                            matchResult.addMatchUserResult(GameBase.MatchUserResult.newBuilder()
-                                    .setUserId(matchUsers.get(i).getUserId()).setRanking(i + 1));
-                        }
-                        matchInfo.setStatus(-1);
-                        response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(matchResult.build().toByteString());
-                        for (Seat seat : seats) {
-                            if (MahjongTcpService.userClients.containsKey(seat.getUserId())) {
-                                MahjongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
+                            response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(GameBase.MatchResult.newBuilder().setRanking(i + 1).build().toByteString());
+                            if (MahjongTcpService.userClients.containsKey(matchUsers.get(i).getUserId())) {
+                                MahjongTcpService.userClients.get(matchUsers.get(i).getUserId()).send(response.build(), matchUsers.get(i).getUserId());
                             }
                         }
+                        matchInfo.setStatus(-1);
                         break;
                 }
                 if (0 < matchInfo.getStatus()) {
@@ -801,7 +823,6 @@ public class Room {
      * @param seat 座位
      */
     public void checkSelfGetCard(GameBase.BaseConnection.Builder response, Seat seat, RedisService redisService) {
-        System.out.println("摸牌后检测是否可以自摸、暗杠、扒杠");
         GameBase.AskResponse.Builder builder = GameBase.AskResponse.newBuilder();
         builder.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
         if (MahjongUtil.hu(seat.getCards(), bao, jiabao)) {
@@ -858,7 +879,7 @@ public class Room {
                 score += 1;
             }
             int loseSize[] = {0};
-
+            score *= baseScore;
             scoreTypes.add(scoreType);
             int finalScore = score;
             seats.stream().filter(seat -> seat.getUserId() != userId)
@@ -903,6 +924,7 @@ public class Room {
                             scoreType = ScoreType.DIHU;
                             score = 10;
                         }
+                        score *= baseScore;
                         scoreTypes.add(scoreType);
 
                         loseSeat.setCardResult(new GameResult(scoreTypes, card, -score));
@@ -911,7 +933,6 @@ public class Room {
                         seat.setHuCount(huSeat[0].getHuCount() + 1);
                         hu = true;
                     }
-                    break;
                 }
             }
             if (hu) {
@@ -947,10 +968,10 @@ public class Room {
                 final int[] loseSize = {0};
                 seats.stream().filter(seat1 -> seat1.getSeatNo() != seat.getSeatNo())
                         .forEach(seat1 -> {
-                            seat1.getGangResult().add(new GameResult(scoreTypes, card, -2));
+                            seat1.getGangResult().add(new GameResult(scoreTypes, card, -(2 * baseScore)));
                             loseSize[0]++;
                         });
-                seat.getGangResult().add(new GameResult(scoreTypes, card, 2 * loseSize[0]));
+                seat.getGangResult().add(new GameResult(scoreTypes, card, (2 * baseScore) * loseSize[0]));
                 seat.setAngang(seat.getAngang() + 1);
                 historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.AN_GANG, card));
 
@@ -972,10 +993,10 @@ public class Room {
                 final int[] loseSize = {0};
                 seats.stream().filter(seat1 -> seat1.getSeatNo() != seat.getSeatNo())
                         .forEach(seat1 -> {
-                            seat1.getGangResult().add(new GameResult(scoreTypes, card, -1));
+                            seat1.getGangResult().add(new GameResult(scoreTypes, card, -baseScore));
                             loseSize[0]++;
                         });
-                seat.getGangResult().add(new GameResult(scoreTypes, card, loseSize[0]));
+                seat.getGangResult().add(new GameResult(scoreTypes, card, loseSize[0] * baseScore));
                 seat.setMinggang(seat.getMinggang() + 1);
                 historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.BA_GANG, card));
 
@@ -1128,7 +1149,7 @@ public class Room {
             }
             //当前玩家是否可以胡牌
             temp.add(card[0]);
-            if (MahjongUtil.hu(temp, bao, jiabao) && seat.getOperation() == 0 && 0 == seat.getChiTemp().size()) {
+            if ((MahjongUtil.hu(temp, bao, jiabao) && dianpao) && seat.getOperation() == 0 && 0 == seat.getChiTemp().size()) {
                 canOperation[0] = false;
             }
         });
@@ -1151,7 +1172,7 @@ public class Room {
             temp.addAll(seat.getCards());
             //当前玩家是否可以胡牌
             temp.add(card[0]);
-            if (MahjongUtil.hu(temp, bao, jiabao) && seat.getOperation() == 0 && 0 == seat.getChiTemp().size()) {
+            if (MahjongUtil.hu(temp, bao, jiabao) && dianpao && seat.getOperation() == 0 && 0 == seat.getChiTemp().size()) {
                 canOperation[0] = false;
             }
         });
@@ -1226,8 +1247,8 @@ public class Room {
                     //添加结算
                     List<ScoreType> scoreTypes = new ArrayList<>();
                     scoreTypes.add(ScoreType.DIAN_GANG);
-                    operationSeat.getGangResult().add(new GameResult(scoreTypes, card[0], -3));
-                    seat.getGangResult().add(new GameResult(scoreTypes, card[0], 3));
+                    operationSeat.getGangResult().add(new GameResult(scoreTypes, card[0], -(3 * baseScore)));
+                    seat.getGangResult().add(new GameResult(scoreTypes, card[0], 3 * baseScore));
                     seat.setMinggang(seat.getMinggang() + 1);
                     historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.DIAN_GANG, card[0]));
 
