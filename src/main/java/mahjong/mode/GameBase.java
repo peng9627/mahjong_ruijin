@@ -1246,12 +1246,20 @@ public final class GameBase {
     ERROR_KEY_INCORRECT(12),
     /**
      * <pre>
-     *游戏
+     *余额不足
      * </pre>
      *
-     * <code>ROOM_NOT_EXIST = 21;</code>
+     * <code>MONEY_NOT_ENOUGH = 13;</code>
      */
-    ROOM_NOT_EXIST(21),
+    MONEY_NOT_ENOUGH(13),
+      /**
+       * <pre>
+       *游戏
+       * </pre>
+       *
+       * <code>ROOM_NOT_EXIST = 21;</code>
+       */
+      ROOM_NOT_EXIST(21),
     /**
      * <pre>
      *人数已满
@@ -1308,6 +1316,14 @@ public final class GameBase {
      * <code>AREADY_DISSOLVE = 28;</code>
      */
     AREADY_DISSOLVE(28),
+      /**
+       * <pre>
+       * 游戏已经开始
+       * </pre>
+       * <p>
+       * <code>GAME_START = 29;</code>
+       */
+      GAME_START(29),
     UNRECOGNIZED(-1),
     ;
 
@@ -1351,6 +1367,14 @@ public final class GameBase {
      * <code>ERROR_KEY_INCORRECT = 12;</code>
      */
     public static final int ERROR_KEY_INCORRECT_VALUE = 12;
+      /**
+       * <pre>
+       * 余额不足
+       * </pre>
+       * <p>
+       * <code>MONEY_NOT_ENOUGH = 13;</code>
+       */
+      public static final int MONEY_NOT_ENOUGH_VALUE = 13;
     /**
      * <pre>
      *游戏
@@ -1415,6 +1439,14 @@ public final class GameBase {
      * <code>AREADY_DISSOLVE = 28;</code>
      */
     public static final int AREADY_DISSOLVE_VALUE = 28;
+      /**
+       * <pre>
+       *游戏已经开始
+       * </pre>
+       *
+       * <code>GAME_START = 29;</code>
+       */
+      public static final int GAME_START_VALUE = 29;
 
 
     public final int getNumber() {
@@ -1439,7 +1471,9 @@ public final class GameBase {
         case 1: return ERROR_UNKNOW;
         case 10: return ERROR_UNKNOW_ACCOUNT;
         case 11: return ERROR_PASSWORD_INCORRECT;
-        case 12: return ERROR_KEY_INCORRECT;
+          case 12:
+              return ERROR_KEY_INCORRECT;
+        case 13: return MONEY_NOT_ENOUGH;
         case 21: return ROOM_NOT_EXIST;
         case 22: return COUNT_FULL;
         case 23: return SHOUND_NOT_OPERATION;
@@ -1447,7 +1481,9 @@ public final class GameBase {
         case 25: return HASNOT_CARD;
         case 26: return ERROR_SHARED;
         case 27: return AREADY_REGISTRATION;
-        case 28: return AREADY_DISSOLVE;
+          case 28:
+              return AREADY_DISSOLVE;
+        case 29: return GAME_START;
         default: return null;
       }
     }
@@ -25379,18 +25415,19 @@ public final class GameBase {
       "AY_CARD\020\r\022\010\n\004PENG\020\016\022\013\n\007AN_GANG\020\017\022\r\n\tDIAN" +
       "_GANG\020\020\022\013\n\007BA_GANG\020\021\022\006\n\002HU\020\022\022\010\n\004PASS\020\023\022\007" +
       "\n\003CHI\020\024\022\016\n\nPLAY_SCORE\020\025\022\r\n\tOPEN_CARD\020\026\022\010" +
-      "\n\004GRAB\020\027*\237\002\n\tErrorCode\022\013\n\007SUCCESS\020\000\022\020\n\014E" +
+              "\n\004GRAB\020\027*\305\002\n\tErrorCode\022\013\n\007SUCCESS\020\000\022\020\n\014E" +
       "RROR_UNKNOW\020\001\022\030\n\024ERROR_UNKNOW_ACCOUNT\020\n\022" +
       "\034\n\030ERROR_PASSWORD_INCORRECT\020\013\022\027\n\023ERROR_K" +
-      "EY_INCORRECT\020\014\022\022\n\016ROOM_NOT_EXIST\020\025\022\016\n\nCO",
-      "UNT_FULL\020\026\022\030\n\024SHOUND_NOT_OPERATION\020\027\022\023\n\017" +
-      "GOLD_TOO_LITTLE\020\030\022\017\n\013HASNOT_CARD\020\031\022\020\n\014ER" +
-      "ROR_SHARED\020\032\022\027\n\023AREADY_REGISTRATION\020\033\022\023\n" +
-      "\017AREADY_DISSOLVE\020\034*R\n\010GameType\022\024\n\020MAHJON" +
-      "G_XINGNING\020\000\022\022\n\016MAHJONG_RUIJIN\020\001\022\017\n\013RUN_" +
-      "QUICKLY\020\002\022\013\n\007SANGONG\020\003*;\n\013MessageType\022\010\n" +
-      "\004TEXT\020\000\022\014\n\010EMOTICON\020\001\022\t\n\005INPUT\020\002\022\t\n\005VOIC" +
-      "E\020\003B\016\n\014mahjong.modeb\006proto3"
+              "EY_INCORRECT\020\014\022\024\n\020MONEY_NOT_ENOUGH\020\r\022\022\n\016",
+            "ROOM_NOT_EXIST\020\025\022\016\n\nCOUNT_FULL\020\026\022\030\n\024SHOU" +
+                    "ND_NOT_OPERATION\020\027\022\023\n\017GOLD_TOO_LITTLE\020\030\022" +
+                    "\017\n\013HASNOT_CARD\020\031\022\020\n\014ERROR_SHARED\020\032\022\027\n\023AR" +
+                    "EADY_REGISTRATION\020\033\022\023\n\017AREADY_DISSOLVE\020\034" +
+                    "\022\016\n\nGAME_START\020\035*R\n\010GameType\022\024\n\020MAHJONG_" +
+                    "XINGNING\020\000\022\022\n\016MAHJONG_RUIJIN\020\001\022\017\n\013RUN_QU" +
+                    "ICKLY\020\002\022\013\n\007SANGONG\020\003*;\n\013MessageType\022\010\n\004T" +
+                    "EXT\020\000\022\014\n\010EMOTICON\020\001\022\t\n\005INPUT\020\002\022\t\n\005VOICE\020" +
+      "\003B\016\n\014mahjong.modeb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {

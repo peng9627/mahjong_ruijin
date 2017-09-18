@@ -187,7 +187,7 @@ public class MahjongUtil {
      * @param cardList
      * @return
      */
-    public static boolean hu(List<Integer> cardList, Integer bao, Integer jiabao) {
+    public static boolean fei(List<Integer> cardList, Integer bao, Integer jiabao) {
 
         List<Integer> cards = new ArrayList<>();
         int baoSize = 0;
@@ -227,7 +227,7 @@ public class MahjongUtil {
                         temp.clear();
                         temp.addAll(cards);
                         temp.add(aBaoCan);
-                        if (hu(temp)) {
+                        if (hu(temp, true)) {
                             return true;
                         }
                     }
@@ -239,7 +239,7 @@ public class MahjongUtil {
                         temp.add(baoCan.get(i));
                         for (int j = i; j < baoCan.size(); j++) {
                             temp.add(baoCan.get(j));
-                            if (hu(temp)) {
+                            if (hu(temp, true)) {
                                 return true;
                             }
                             Card.remove(temp, baoCan.get(j));
@@ -255,7 +255,7 @@ public class MahjongUtil {
                             temp.add(baoCan.get(j));
                             for (int k = j; k < baoCan.size(); k++) {
                                 temp.add(baoCan.get(k));
-                                if (hu(temp)) {
+                                if (hu(temp, true)) {
                                     return true;
                                 }
                                 Card.remove(temp, baoCan.get(k));
@@ -266,7 +266,7 @@ public class MahjongUtil {
                     break;
             }
         } else {
-            return hu(cards);
+            return hu(cards, true);
         }
         return false;
     }
@@ -324,7 +324,7 @@ public class MahjongUtil {
         if (color == 5) {
             card = jiabao;
         }
-
+        color = card / 10;
         List<Integer> sameColor = Card.getSameColor(cards, color);
 
         if (jiabao / 10 == color) {
@@ -344,7 +344,7 @@ public class MahjongUtil {
             }
         } else if (5 != color) {
             Set<Integer> allSameColor = new HashSet<>();
-            allSameColor.addAll(Card.getSameColor(cards, color));
+            allSameColor.addAll(Card.getSameColor(sameColor, color));
             int count = 0;
             for (Integer integer : allSameColor) {
                 if (integer.intValue() != card) {
@@ -451,7 +451,7 @@ public class MahjongUtil {
      * @param cardList
      * @return
      */
-    private static boolean hu(List<Integer> cardList) {
+    public static boolean hu(List<Integer> cardList, boolean fei) {
         List<Integer> handVals = new ArrayList<>();
         handVals.addAll(cardList);
         handVals.sort(new Comparator<Integer>() {
@@ -477,43 +477,57 @@ public class MahjongUtil {
             List<Integer> hand = new ArrayList<>(handVals);
             hand.remove(Integer.valueOf(md_val));
             hand.remove(Integer.valueOf(md_val));
-            if (CheckLug(hand)) {
+            if (CheckLug(hand, fei)) {
                 return true;
             }
         }
         return false;
     }
 
-    protected static boolean CheckLug(List<Integer> handVals) {
+    protected static boolean CheckLug(List<Integer> handVals, boolean fei) {
         if (handVals.size() == 0) return true;
         int md_val = handVals.get(0);
         handVals.remove(0);
         if (Card.containSize(handVals, md_val) == 2) {
             handVals.remove(Integer.valueOf(md_val));
             handVals.remove(Integer.valueOf(md_val));
-            return CheckLug(handVals);
+            return CheckLug(handVals, fei);
         } else {
-            if (md_val < 30) {
+            if (fei) {
                 if (handVals.contains(md_val + 1) && handVals.contains(md_val + 2)) {
                     handVals.remove(Integer.valueOf(md_val + 1));
                     handVals.remove(Integer.valueOf(md_val + 2));
-                    return CheckLug(handVals);
+                    return CheckLug(handVals, fei);
                 }
-            } else if (md_val > 30 && md_val < 50) {
-                if (handVals.contains(md_val + 2) && handVals.contains(md_val + 4)) {
-                    handVals.remove(Integer.valueOf(md_val + 2));
-                    handVals.remove(Integer.valueOf(md_val + 4));
-                    return CheckLug(handVals);
-                }
-                if (handVals.contains(md_val + 4) && handVals.contains(md_val + 6)) {
-                    handVals.remove(Integer.valueOf(md_val + 4));
-                    handVals.remove(Integer.valueOf(md_val + 6));
-                    return CheckLug(handVals);
-                }
-                if (handVals.contains(md_val + 2) && handVals.contains(md_val + 6)) {
-                    handVals.remove(Integer.valueOf(md_val + 2));
-                    handVals.remove(Integer.valueOf(md_val + 6));
-                    return CheckLug(handVals);
+            } else {
+                if (md_val < 30) {
+                    if (handVals.contains(md_val + 1) && handVals.contains(md_val + 2)) {
+                        handVals.remove(Integer.valueOf(md_val + 1));
+                        handVals.remove(Integer.valueOf(md_val + 2));
+                        return CheckLug(handVals, fei);
+                    }
+                } else {
+                    if (handVals.contains(md_val + 2) && handVals.contains(md_val + 4)
+                            && 3 != Card.containSize(handVals, md_val + 2)
+                            && 3 != Card.containSize(handVals, md_val + 4)) {
+                        handVals.remove(Integer.valueOf(md_val + 2));
+                        handVals.remove(Integer.valueOf(md_val + 4));
+                        return CheckLug(handVals, false);
+                    }
+                    if (handVals.contains(md_val + 4) && handVals.contains(md_val + 6)
+                            && 3 != Card.containSize(handVals, md_val + 4)
+                            && 3 != Card.containSize(handVals, md_val + 6)) {
+                        handVals.remove(Integer.valueOf(md_val + 4));
+                        handVals.remove(Integer.valueOf(md_val + 6));
+                        return CheckLug(handVals, false);
+                    }
+                    if (handVals.contains(md_val + 2) && handVals.contains(md_val + 6)
+                            && 3 != Card.containSize(handVals, md_val + 2)
+                            && 3 != Card.containSize(handVals, md_val + 6)) {
+                        handVals.remove(Integer.valueOf(md_val + 2));
+                        handVals.remove(Integer.valueOf(md_val + 6));
+                        return CheckLug(handVals, false);
+                    }
                 }
             }
 

@@ -192,6 +192,8 @@ public class MahjongClient {
 
                                 Ruijin.RuijinMahjongGameInfo.Builder ruijinMahjongGameInfo = Ruijin.RuijinMahjongGameInfo.newBuilder();
                                 Mahjong.MahjongGameInfo.Builder gameInfo = Mahjong.MahjongGameInfo.newBuilder().setSurplusCardsSize(room.getSurplusCards().size());
+                                gameInfo.setBanker(room.getBanker());
+                                gameInfo.addAllDice(Arrays.asList(room.getDice()));
                                 Seat operationSeat = null;
                                 for (Seat seat : room.getSeats()) {
                                     if (seat.getSeatNo() == room.getOperationSeatNo()) {
@@ -409,7 +411,7 @@ public class MahjongClient {
                                                 seat.setChiTemp(cards);
                                             }
                                             if (MahjongUtil.checkChi(cards, operationHistory.getCards().get(0), room.getJiabao())) {
-                                                if (room.checkCanChi()) { //如果可以吃
+                                                if (room.checkCanChi(seat.getSeatNo())) { //如果可以吃
                                                     room.operation(actionResponse, response, redisService);
                                                 }
                                             }
@@ -423,6 +425,11 @@ public class MahjongClient {
                                 break;
                             case PASS:
                                 room.getSeats().stream().filter(seat -> seat.getUserId() == userId).forEach(seat -> {
+                                    if (0 < room.getHistoryList().size()) {
+                                        if (0 != room.getHistoryList().get(room.getHistoryList().size() - 1).getHistoryType().compareTo(OperationHistoryType.PLAY_CARD)) {
+                                            return;
+                                        }
+                                    }
                                     if (room.getOperationSeatNo() != seat.getSeatNo()) {
                                         seat.setOperation(4);
                                         if (!room.passedChecked()) {//如果都操作完了，继续摸牌
