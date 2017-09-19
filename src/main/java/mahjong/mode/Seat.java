@@ -28,7 +28,8 @@ public class Seat {
     private boolean ready;                      //准备
     private boolean completed;                  //就绪
     private GameResult cardResult;              //结算
-    private List<GameResult> gangResult = new ArrayList<>();        //杠
+    private List<GameResult> mingGangResult = new ArrayList<>();        //明杠
+    private List<GameResult> anGangResult = new ArrayList<>();        //暗杠
 
     private int huCount;//胡牌次数
     private int zimoCount; //自摸次数
@@ -192,12 +193,20 @@ public class Seat {
         this.cardResult = cardResult;
     }
 
-    public List<GameResult> getGangResult() {
-        return gangResult;
+    public List<GameResult> getMingGangResult() {
+        return mingGangResult;
     }
 
-    public void setGangResult(List<GameResult> gangResult) {
-        this.gangResult = gangResult;
+    public void setMingGangResult(List<GameResult> mingGangResult) {
+        this.mingGangResult = mingGangResult;
+    }
+
+    public List<GameResult> getAnGangResult() {
+        return anGangResult;
+    }
+
+    public void setAnGangResult(List<GameResult> anGangResult) {
+        this.anGangResult = anGangResult;
     }
 
     public int getHuCount() {
@@ -275,6 +284,7 @@ public class Seat {
         ready = false;
         completed = false;
         cardResult = null;
-        gangResult.clear();
+        mingGangResult.clear();
+        anGangResult.clear();
     }
 }

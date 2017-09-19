@@ -278,7 +278,7 @@ public class Room {
 //                cardList.add(surplusCards.get(cardIndex));
 //                surplusCards.remove(cardIndex);
                 for (int i = 0; i < 14; i++) {
-                    int cardIndex = 0;
+                    int cardIndex = (int) (Math.random() * surplusCards.size());
                     cardList.add(surplusCards.get(cardIndex));
                     surplusCards.remove(cardIndex);
                 }
@@ -368,11 +368,13 @@ public class Room {
             seatRecord.setNickname(seat.getNickname());
             seatRecord.setHead(seat.getHead());
             seatRecord.setCardResult(seat.getCardResult());
-            seatRecord.getGangResult().addAll(seat.getGangResult());
+            seatRecord.getMingGangResult().addAll(seat.getMingGangResult());
+            seatRecord.getAnGangResult().addAll(seat.getAnGangResult());
             seatRecord.getInitialCards().addAll(seat.getInitialCards());
             seatRecord.getCards().addAll(seat.getCards());
             final int[] winOrLose = {0};
-            seat.getGangResult().forEach(gameResult -> winOrLose[0] += gameResult.getScore());
+            seat.getMingGangResult().forEach(gameResult -> winOrLose[0] += gameResult.getScore());
+            seat.getAnGangResult().forEach(gameResult -> winOrLose[0] += gameResult.getScore());
             if (null != seat.getCardResult()) {
                 winOrLose[0] += seat.getCardResult().getScore();
             }
@@ -472,16 +474,18 @@ public class Room {
                     userResult.addScoreTypes(Mahjong.ScoreType.forNumber(scoreType.ordinal() + 3));
                 }
             }
-            List<Integer> gangCard = new ArrayList<>();
-            int gangScore = 0;
-            for (GameResult gameResult : seat.getGangResult()) {
-                gangScore += gameResult.getScore();
-                if (0 < gameResult.getScore()) {
-                    gangCard.add(gameResult.getCard());
-                }
+            int mingGangScore = 0;
+            for (GameResult gameResult : seat.getMingGangResult()) {
+                mingGangScore += gameResult.getScore();
             }
-            userResult.setGangScore(gangScore);
-            win[0] += gangScore;
+            userResult.setMingGangScore(mingGangScore);
+            win[0] += mingGangScore;
+            int anGangScore = 0;
+            for (GameResult gameResult : seat.getAnGangResult()) {
+                anGangScore += gameResult.getScore();
+            }
+            userResult.setAnGangScore(anGangScore);
+            win[0] += anGangScore;
 
             userResult.setWinOrLose(win[0]);
             resultResponse.addUserResult(userResult);
@@ -522,10 +526,10 @@ public class Room {
             }
             jsonObject.put("description", "开房间退回" + roomNo);
             jsonObject.put("userId", roomOwner);
-            ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/money_detailed/create", jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
+            ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.moneyDetailedCreate, jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
             });
             if (0 != moneyDetail.getCode()) {
-                LoggerFactory.getLogger(this.getClass()).error("http://127.0.0.1:9999/api/money_detailed/create?" + jsonObject.toJSONString());
+                LoggerFactory.getLogger(this.getClass()).error(Constant.apiUrl + Constant.moneyDetailedCreate + "?" + jsonObject.toJSONString());
             }
         }
         Mahjong.MahjongOverResponse.Builder over = Mahjong.MahjongOverResponse.newBuilder();
@@ -580,6 +584,10 @@ public class Room {
             jsonObject.put("gameCount", gameCount);
             jsonObject.put("peopleCount", count);
             jsonObject.put("roomNo", Integer.parseInt(roomNo));
+            JSONObject gameRule = new JSONObject();
+            gameRule.put("zhuangxian", zhuangxian);
+            gameRule.put("dianpao", dianpao);
+            jsonObject.put("gameRule", gameRule.toJSONString());
             jsonObject.put("gameData", JSON.toJSONString(recordList, feature, features).getBytes());
             jsonObject.put("scoreData", JSON.toJSONString(totalScores, feature, features).getBytes());
 
@@ -1054,10 +1062,10 @@ public class Room {
                 final int[] loseSize = {0};
                 seats.stream().filter(seat1 -> seat1.getSeatNo() != seat.getSeatNo())
                         .forEach(seat1 -> {
-                            seat1.getGangResult().add(new GameResult(scoreTypes, card, -(2 * baseScore)));
+                            seat1.getAnGangResult().add(new GameResult(scoreTypes, card, -(2 * baseScore)));
                             loseSize[0]++;
                         });
-                seat.getGangResult().add(new GameResult(scoreTypes, card, (2 * baseScore) * loseSize[0]));
+                seat.getAnGangResult().add(new GameResult(scoreTypes, card, (2 * baseScore) * loseSize[0]));
                 seat.setAngang(seat.getAngang() + 1);
                 historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.AN_GANG, card));
 
@@ -1079,10 +1087,10 @@ public class Room {
                 final int[] loseSize = {0};
                 seats.stream().filter(seat1 -> seat1.getSeatNo() != seat.getSeatNo())
                         .forEach(seat1 -> {
-                            seat1.getGangResult().add(new GameResult(scoreTypes, card, -baseScore));
+                            seat1.getMingGangResult().add(new GameResult(scoreTypes, card, -baseScore));
                             loseSize[0]++;
                         });
-                seat.getGangResult().add(new GameResult(scoreTypes, card, loseSize[0] * baseScore));
+                seat.getMingGangResult().add(new GameResult(scoreTypes, card, loseSize[0] * baseScore));
                 seat.setMinggang(seat.getMinggang() + 1);
                 historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.BA_GANG, card));
 
@@ -1401,8 +1409,8 @@ public class Room {
                     //添加结算
                     List<ScoreType> scoreTypes = new ArrayList<>();
                     scoreTypes.add(ScoreType.DIAN_GANG);
-                    operationSeat.getGangResult().add(new GameResult(scoreTypes, card[0], -(3 * baseScore)));
-                    seat.getGangResult().add(new GameResult(scoreTypes, card[0], 3 * baseScore));
+                    operationSeat.getMingGangResult().add(new GameResult(scoreTypes, card[0], -(3 * baseScore)));
+                    seat.getMingGangResult().add(new GameResult(scoreTypes, card[0], 3 * baseScore));
                     seat.setMinggang(seat.getMinggang() + 1);
                     historyList.add(new OperationHistory(seat.getUserId(), OperationHistoryType.DIAN_GANG, card[0]));
 

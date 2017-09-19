@@ -1254,9 +1254,9 @@ public final class GameBase {
     MONEY_NOT_ENOUGH(13),
       /**
        * <pre>
-       *游戏
+       * 游戏
        * </pre>
-       *
+       * <p>
        * <code>ROOM_NOT_EXIST = 21;</code>
        */
       ROOM_NOT_EXIST(21),
@@ -1318,12 +1318,12 @@ public final class GameBase {
     AREADY_DISSOLVE(28),
       /**
        * <pre>
-       * 游戏已经开始
+       *游戏已经开始
        * </pre>
-       * <p>
+       *
        * <code>GAME_START = 29;</code>
-       */
-      GAME_START(29),
+     */
+    GAME_START(29),
     UNRECOGNIZED(-1),
     ;
 
@@ -1446,7 +1446,7 @@ public final class GameBase {
        *
        * <code>GAME_START = 29;</code>
        */
-      public static final int GAME_START_VALUE = 29;
+    public static final int GAME_START_VALUE = 29;
 
 
     public final int getNumber() {
@@ -1470,9 +1470,9 @@ public final class GameBase {
         case 0: return SUCCESS;
         case 1: return ERROR_UNKNOW;
         case 10: return ERROR_UNKNOW_ACCOUNT;
-        case 11: return ERROR_PASSWORD_INCORRECT;
-          case 12:
-              return ERROR_KEY_INCORRECT;
+          case 11:
+              return ERROR_PASSWORD_INCORRECT;
+        case 12: return ERROR_KEY_INCORRECT;
         case 13: return MONEY_NOT_ENOUGH;
         case 21: return ROOM_NOT_EXIST;
         case 22: return COUNT_FULL;
@@ -1480,9 +1480,9 @@ public final class GameBase {
         case 24: return GOLD_TOO_LITTLE;
         case 25: return HASNOT_CARD;
         case 26: return ERROR_SHARED;
-        case 27: return AREADY_REGISTRATION;
-          case 28:
-              return AREADY_DISSOLVE;
+          case 27:
+              return AREADY_REGISTRATION;
+        case 28: return AREADY_DISSOLVE;
         case 29: return GAME_START;
         default: return null;
       }
