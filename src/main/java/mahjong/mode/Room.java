@@ -396,7 +396,7 @@ public class Room {
 
     public void getCard(GameBase.BaseConnection.Builder response, int seatNo, RedisService redisService) {
         if (0 == surplusCards.size()) {
-            gameOver(response, redisService);
+            gameOver(response, redisService, 0);
             return;
         }
         GameBase.BaseAction.Builder actionResponse = GameBase.BaseAction.newBuilder().setOperationId(GameBase.ActionId.GET_CARD);
@@ -442,7 +442,7 @@ public class Room {
      * @param response
      * @param redisService
      */
-    public void gameOver(GameBase.BaseConnection.Builder response, RedisService redisService) {
+    public void gameOver(GameBase.BaseConnection.Builder response, RedisService redisService, int card) {
 
         List<Integer> loseSeats = new ArrayList<>();
         final int[] score = {0};
@@ -462,6 +462,7 @@ public class Room {
                 userResult.setCardScore(seat.getCardResult().getScore());
                 win[0] += seat.getCardResult().getScore();
                 if (seat.getCardResult().getScore() > 0) {
+                    userResult.setHuCard(card);
                     userResult.setCardScore(seat.getCardResult().getScore());
                     if (1 == zhuangxian) {
                         banker = seat.getUserId();
@@ -471,7 +472,7 @@ public class Room {
                     score[0] = seat.getCardResult().getScore();
                 }
                 for (ScoreType scoreType : seat.getCardResult().getScoreTypes()) {
-                    userResult.addScoreTypes(Mahjong.ScoreType.forNumber(scoreType.ordinal() + 3));
+                    userResult.addScoreTypes(Mahjong.ScoreType.forNumber(scoreType.ordinal() - 3));
                 }
             }
             int mingGangScore = 0;
@@ -491,7 +492,7 @@ public class Room {
             resultResponse.addUserResult(userResult);
 
             seat.setScore(seat.getScore() + win[0]);
-
+            userResult.setScore(seat.getScore());
         });
 
         response.setOperationType(GameBase.OperationType.RESULT).setData(resultResponse.build().toByteString());
@@ -897,15 +898,15 @@ public class Room {
             }
         }
         //暗杠
-        if (null != MahjongUtil.checkGang(seat.getCards())) {
+        if (null != MahjongUtil.checkGang(seat.getCards()) && 0 < surplusCards.size()) {
             builder.addOperationId(GameBase.ActionId.AN_GANG);
         }
         //扒杠
-        if (null != MahjongUtil.checkBaGang(seat.getCards(), seat.getPengCards())) {
+        if (null != MahjongUtil.checkBaGang(seat.getCards(), seat.getPengCards()) && 0 < surplusCards.size()) {
             builder.addOperationId(GameBase.ActionId.BA_GANG);
         }
         if (0 != builder.getOperationIdCount()) {
-            if (redisService.exists("room_match" + roomNo)) {
+            if (redisService.exists("room_match" + roomNo) && !builder.getOperationIdList().contains(GameBase.ActionId.HU)) {
                 new OperationTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService, false).start();
             }
             if (MahjongTcpService.userClients.containsKey(seat.getUserId())) {
@@ -946,10 +947,10 @@ public class Room {
 
             //天胡
             if (historyList.size() == 0 && score < 20) {
-                scoreType = ScoreType.TIANHU;
+                scoreType = ScoreType.TIAN_HU;
                 score = 10;
             } else {
-                scoreType = ScoreType.ZIMO;
+                scoreType = ScoreType.ZIMO_HU;
                 score += 1;
             }
             int loseSize[] = {0};
@@ -964,7 +965,12 @@ public class Room {
 
             huSeat[0].setCardResult(new GameResult(scoreTypes, huSeat[0].getCards().get(huSeat[0].getCards().size() - 1), loseSize[0] * score));
             huSeat[0].setZimoCount(huSeat[0].getZimoCount() + 1);
-            gameOver(response, redisService);
+            response.setOperationType(GameBase.OperationType.ACTION).setData(GameBase.BaseAction.newBuilder().setOperationId(GameBase.ActionId.HU)
+                    .setID(huSeat[0].getUserId()).setData(Mahjong.MahjongHuResponse.newBuilder().setCard(huSeat[0].getCards().size() - 1)
+                            .build().toByteString()).build().toByteString());
+            seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
+                    .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
+            gameOver(response, redisService, huSeat[0].getCards().get(huSeat[0].getCards().size() - 1));
 
             return;
         }
@@ -991,11 +997,11 @@ public class Room {
                     //当前玩家是否可以胡牌
                     temp.add(card > 50 ? jiabao : card);
                     if (MahjongUtil.hu(temp, false)) {
-                        ScoreType scoreType = ScoreType.PINGHU;
+                        ScoreType scoreType = ScoreType.PING_HU;
                         int score = MahjongUtil.getScore(scoreType);
                         //地胡
                         if (historyList.size() == 1 && score < 20) {
-                            scoreType = ScoreType.DIHU;
+                            scoreType = ScoreType.DI_HU;
                             score = 10;
                         }
                         score *= baseScore;
@@ -1006,12 +1012,17 @@ public class Room {
                         seat.setCardResult(new GameResult(scoreTypes, card, score));
                         seat.setHuCount(seat.getHuCount() + 1);
                         hu = true;
+                        response.setOperationType(GameBase.OperationType.ACTION).setData(GameBase.BaseAction.newBuilder().setOperationId(GameBase.ActionId.HU)
+                                .setID(seat.getUserId()).setData(Mahjong.MahjongHuResponse.newBuilder().setCard(card)
+                                        .build().toByteString()).build().toByteString());
+                        seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
+                                .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
                     }
                 }
             }
             if (hu) {
                 //胡牌
-                gameOver(response, redisService);
+                gameOver(response, redisService, card);
                 return;
             }
         }
@@ -1052,7 +1063,7 @@ public class Room {
                         int score = MahjongUtil.getScore(scoreType);
                         //地胡
                         if (historyList.size() == 1 && score < 20) {
-                            scoreType = ScoreType.DIHU;
+                            scoreType = ScoreType.DI_HU;
                             score = 10;
                         }
                         score *= baseScore;
@@ -1062,13 +1073,18 @@ public class Room {
                         loseSeat.setDianpaoCount(loseSeat.getDianpaoCount() + 1);
                         seat.setCardResult(new GameResult(scoreTypes, card, score));
                         seat.setHuCount(seat.getHuCount() + 1);
+                        response.setOperationType(GameBase.OperationType.ACTION).setData(GameBase.BaseAction.newBuilder().setOperationId(GameBase.ActionId.HU)
+                                .setID(seat.getUserId()).setData(Mahjong.MahjongHuResponse.newBuilder().setCard(card)
+                                        .build().toByteString()).build().toByteString());
+                        seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
+                                .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
                         hu = true;
                     }
                 }
             }
             if (hu) {
                 //胡牌
-                gameOver(response, redisService);
+                gameOver(response, redisService, card);
             }
         }
 
@@ -1181,7 +1197,9 @@ public class Room {
                 int containSize = Card.containSize(temp, card);
                 if (3 == containSize && 0 < surplusCards.size()) {
                     builder.addOperationId(GameBase.ActionId.PENG);
-                    builder.addOperationId(GameBase.ActionId.DIAN_GANG);
+                    if (0 < surplusCards.size()) {
+                        builder.addOperationId(GameBase.ActionId.DIAN_GANG);
+                    }
                 } else if (2 == containSize) {
                     builder.addOperationId(GameBase.ActionId.PENG);
                 }
@@ -1189,8 +1207,14 @@ public class Room {
                 temp.add(card);
                 if (dianpao && MahjongUtil.fei(temp, bao, jiabao) || MahjongUtil.hu(temp, false)) {
                     builder.addOperationId(GameBase.ActionId.HU);
+                    if (redisService.exists("room_match" + roomNo)) {
+                        new OperationTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService, true).start();
+                    }
                 }
                 if (0 != builder.getOperationIdCount()) {
+                    if (redisService.exists("room_match" + roomNo) && !builder.getOperationIdList().contains(GameBase.ActionId.HU)) {
+                        new OperationTimeout(seat.getUserId(), roomNo, historyList.size(), gameCount, redisService, false).start();
+                    }
                     if (MahjongTcpService.userClients.containsKey(seat.getUserId())) {
                         response.setOperationType(GameBase.OperationType.ASK).setData(builder.build().toByteString());
                         MahjongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
@@ -1242,7 +1266,9 @@ public class Room {
                 int containSize = Card.containSize(temp, card);
                 if (3 == containSize && 0 < surplusCards.size()) {
                     builder.addOperationId(GameBase.ActionId.PENG);
-                    builder.addOperationId(GameBase.ActionId.DIAN_GANG);
+                    if (0 < surplusCards.size()) {
+                        builder.addOperationId(GameBase.ActionId.DIAN_GANG);
+                    }
                 } else if (2 == containSize) {
                     builder.addOperationId(GameBase.ActionId.PENG);
                 }
@@ -1256,8 +1282,6 @@ public class Room {
                         response.setOperationType(GameBase.OperationType.ASK).setData(builder.build().toByteString());
                         MahjongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
                     }
-                    //TODO 出牌超时
-//                new OperationTimeout(deskNo, card).start();
                 }
             });
         }

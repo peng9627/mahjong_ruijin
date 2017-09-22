@@ -374,7 +374,7 @@ public class MahjongUtil {
             return ScoreType.FEI;
         }
 
-        return ScoreType.PINGHU;
+        return ScoreType.PING_HU;
     }
 
     /**
@@ -385,8 +385,8 @@ public class MahjongUtil {
      */
     public static int getScore(ScoreType scoreType) {
         switch (scoreType) {
-            case TIANHU:
-            case DIHU:
+            case TIAN_HU:
+            case DI_HU:
             case FEI:
                 return 10;
         }

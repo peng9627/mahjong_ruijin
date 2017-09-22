@@ -49,6 +49,10 @@ public class MahjongTcpService implements Runnable {
             serverSocket = new ServerSocket(port);
             started = true;
             logger.info("麻将tcp开启成功，端口[" + port + "]");
+            System.out.print("当前虚拟机最大可用内存为:");
+            System.out.println(Runtime.getRuntime().maxMemory() / 1024 / 1024 + "M");
+            System.out.print("当前，虚拟机已占用内存:");
+            System.out.println(Runtime.getRuntime().totalMemory() / 1024 / 1024 + "M");
         } catch (IOException e) {
             logger.error("socket.open.fail.message");
             e.printStackTrace();
