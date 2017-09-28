@@ -212,9 +212,9 @@ public final class GameBase {
      *比赛结果
      * </pre>
      *
-     * <code>MATCH_OVER = 33;</code>
+     * <code>MATCH_BALANCE = 33;</code>
      */
-    MATCH_OVER(33),
+    MATCH_BALANCE(33),
       /**
        * <pre>
        * 比赛淘汰分
@@ -223,6 +223,14 @@ public final class GameBase {
        * <code>MATCH_ELIMINATE_SCORE = 34;</code>
        */
       MATCH_ELIMINATE_SCORE(34),
+      /**
+       * <pre>
+       * 比赛积分更新
+       * </pre>
+       * <p>
+       * <code>MATCH_SCORE = 35;</code>
+       */
+      MATCH_SCORE(35),
       /**
        * <pre>
        * 麻将
@@ -395,12 +403,12 @@ public final class GameBase {
      * <code>UPDATE_STATUS = 72;</code>
      */
     UPDATE_STATUS(72),
-      /**
-       * <pre>
-       *结算
-       * </pre>
-       *
-       * <code>BALANCE = 73;</code>
+    /**
+     * <pre>
+     *结算
+     * </pre>
+     *
+     * <code>BALANCE = 73;</code>
      */
     BALANCE(73),
     /**
@@ -603,17 +611,25 @@ public final class GameBase {
        * 比赛结果
        * </pre>
        * <p>
-       * <code>MATCH_OVER = 33;</code>
+       * <code>MATCH_BALANCE = 33;</code>
        */
-      public static final int MATCH_OVER_VALUE = 33;
+      public static final int MATCH_BALANCE_VALUE = 33;
       /**
        * <pre>
-       * 比赛淘汰分
+       *比赛淘汰分
        * </pre>
-       * <p>
+       *
        * <code>MATCH_ELIMINATE_SCORE = 34;</code>
        */
       public static final int MATCH_ELIMINATE_SCORE_VALUE = 34;
+      /**
+       * <pre>
+       *比赛积分更新
+       * </pre>
+       *
+       * <code>MATCH_SCORE = 35;</code>
+       */
+      public static final int MATCH_SCORE_VALUE = 35;
     /**
      * <pre>
      *麻将
@@ -786,9 +802,9 @@ public final class GameBase {
      * <code>UPDATE_STATUS = 72;</code>
      */
     public static final int UPDATE_STATUS_VALUE = 72;
-      /**
-       * <pre>
-       *结算
+    /**
+     * <pre>
+     *结算
      * </pre>
      *
      * <code>BALANCE = 73;</code>
@@ -836,20 +852,23 @@ public final class GameBase {
         case 19: return MALL;
         case 20: return EXCHANGE_HISTORY;
         case 21: return REGISTRATION;
-        case 22: return COMPETITION_START;
-        case 23: return INTO_COMPETITION;
-        case 24: return CURRENCY;
-          case 25:
-              return COMPETITION_LIST;
-          case 26:
-              return TASK;
-          case 27:
-              return NOTICE;
-        case 30: return MATCH_INFO;
+          case 22:
+              return COMPETITION_START;
+          case 23:
+              return INTO_COMPETITION;
+          case 24:
+              return CURRENCY;
+        case 25: return COMPETITION_LIST;
+        case 26: return TASK;
+        case 27: return NOTICE;
+          case 30:
+              return MATCH_INFO;
         case 31: return MATCH_DATA;
-        case 32: return MATCH_RESULT;
-        case 33: return MATCH_OVER;
+          case 32:
+              return MATCH_RESULT;
+          case 33: return MATCH_BALANCE;
         case 34: return MATCH_ELIMINATE_SCORE;
+        case 35: return MATCH_SCORE;
         case 50: return CONNECTION;
         case 51: return START;
         case 52: return ROOM_INFO;
@@ -864,12 +883,13 @@ public final class GameBase {
         case 61: return RESULT;
         case 62: return MESSAGE;
         case 63: return REPLAY;
-        case 64: return OVER;
-        case 65: return RECONNECTION;
+          case 64:
+              return OVER;
+          case 65:
+              return RECONNECTION;
         case 66: return DISSOLVE;
-          case 67:
-              return DISSOLVE_REPLY;
-          case 68: return DISSOLVE_CONFIRM;
+        case 67: return DISSOLVE_REPLY;
+        case 68: return DISSOLVE_CONFIRM;
         case 69: return CONFIRM_BANKER;
         case 70: return DEAL_CARD;
         case 71: return INTERACTION;
@@ -1517,22 +1537,22 @@ public final class GameBase {
      */
     @java.lang.Deprecated
     public static ErrorCode valueOf(int value) {
-        return forNumber(value);
+      return forNumber(value);
     }
 
-      public static ErrorCode forNumber(int value) {
+    public static ErrorCode forNumber(int value) {
       switch (value) {
         case 0: return SUCCESS;
         case 1: return ERROR_UNKNOW;
         case 10: return ERROR_UNKNOW_ACCOUNT;
         case 11: return ERROR_PASSWORD_INCORRECT;
-        case 12: return ERROR_KEY_INCORRECT;
-        case 13: return MONEY_NOT_ENOUGH;
-          case 21:
-              return ROOM_NOT_EXIST;
-          case 22:
-              return COUNT_FULL;
-          case 23: return SHOUND_NOT_OPERATION;
+          case 12:
+              return ERROR_KEY_INCORRECT;
+          case 13:
+              return MONEY_NOT_ENOUGH;
+          case 21: return ROOM_NOT_EXIST;
+        case 22: return COUNT_FULL;
+        case 23: return SHOUND_NOT_OPERATION;
         case 24: return GOLD_TOO_LITTLE;
         case 25: return HASNOT_CARD;
         case 26: return ERROR_SHARED;
@@ -4206,8 +4226,8 @@ public final class GameBase {
   }
 
   public interface RoomSeatsInfoOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:RoomSeatsInfo)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:RoomSeatsInfo)
+          com.google.protobuf.MessageOrBuilder {
 
       /**
        * <pre>
@@ -4343,7 +4363,7 @@ public final class GameBase {
      * <code>repeated .SeatResponse seats = 1;</code>
      */
     public java.util.List<mahjong.mode.GameBase.SeatResponse> getSeatsList() {
-      return seats_;
+        return seats_;
     }
 
       /**
@@ -4672,11 +4692,11 @@ public final class GameBase {
             onChanged();
           }
         } else {
-          if (!other.seats_.isEmpty()) {
-            if (seatsBuilder_.isEmpty()) {
+            if (!other.seats_.isEmpty()) {
+                if (seatsBuilder_.isEmpty()) {
               seatsBuilder_.dispose();
-                seatsBuilder_ = null;
-                seats_ = other.seats_;
+                    seatsBuilder_ = null;
+                    seats_ = other.seats_;
               bitField0_ = (bitField0_ & ~0x00000001);
               seatsBuilder_ =
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
@@ -5007,7 +5027,7 @@ public final class GameBase {
        * <code>repeated .SeatResponse seats = 1;</code>
        */
       public java.util.List<mahjong.mode.GameBase.SeatResponse.Builder>
-           getSeatsBuilderList() {
+      getSeatsBuilderList() {
           return getSeatsFieldBuilder().getBuilderList();
       }
 
@@ -5195,8 +5215,8 @@ public final class GameBase {
      */
     int getGameCount();
 
-      /**
-       * <pre>
+    /**
+     * <pre>
      *是否托管
      * </pre>
      *
@@ -5219,8 +5239,7 @@ public final class GameBase {
     private SeatResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
-      private SeatResponse() {
+    private SeatResponse() {
       seatNo_ = 0;
       iD_ = 0;
       nickname_ = "";
@@ -5297,15 +5316,15 @@ public final class GameBase {
               head_ = s;
               break;
             }
-            case 64: {
+              case 64: {
 
-              sex_ = input.readBool();
-              break;
-            }
-              case 72: {
-
-                  offline_ = input.readBool();
+                  sex_ = input.readBool();
                   break;
+            }
+            case 72: {
+
+              offline_ = input.readBool();
+              break;
             }
             case 80: {
 
@@ -5558,13 +5577,12 @@ public final class GameBase {
     }
 
       public static final int ISROBOT_FIELD_NUMBER = 11;
-      private boolean isRobot_;
-
-      /**
-       * <pre>
-       *是否托管
-       * </pre>
-       *
+    private boolean isRobot_;
+    /**
+     * <pre>
+     *是否托管
+     * </pre>
+     *
      * <code>bool isRobot = 11;</code>
      */
     public boolean getIsRobot() {
@@ -5602,13 +5620,13 @@ public final class GameBase {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, ip_);
       }
       if (!getHeadBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, head_);
+          com.google.protobuf.GeneratedMessageV3.writeString(output, 7, head_);
       }
-      if (sex_ != false) {
-          output.writeBool(8, sex_);
+        if (sex_ != false) {
+        output.writeBool(8, sex_);
       }
-        if (offline_ != false) {
-            output.writeBool(9, offline_);
+      if (offline_ != false) {
+        output.writeBool(9, offline_);
       }
       if (gameCount_ != 0) {
         output.writeUInt32(10, gameCount_);
@@ -5650,17 +5668,17 @@ public final class GameBase {
       }
       if (sex_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(8, sex_);
+                .computeBoolSize(8, sex_);
       }
-      if (offline_ != false) {
-          size += com.google.protobuf.CodedOutputStream
-                  .computeBoolSize(9, offline_);
-      }
+        if (offline_ != false) {
+            size += com.google.protobuf.CodedOutputStream
+                    .computeBoolSize(9, offline_);
+        }
         if (gameCount_ != 0) {
             size += com.google.protobuf.CodedOutputStream
-                    .computeUInt32Size(10, gameCount_);
-        }
-        if (isRobot_ != false) {
+          .computeUInt32Size(10, gameCount_);
+      }
+      if (isRobot_ != false) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(11, isRobot_);
       }
@@ -5691,11 +5709,11 @@ public final class GameBase {
       result = result && (getReady()
           == other.getReady());
       result = result && getIp()
-          .equals(other.getIp());
-      result = result && getHead()
+              .equals(other.getIp());
+        result = result && getHead()
           .equals(other.getHead());
-        result = result && (getSex()
-                == other.getSex());
+      result = result && (getSex()
+          == other.getSex());
       result = result && (getOffline()
           == other.getOffline());
       result = result && (getGameCount()
@@ -5728,12 +5746,12 @@ public final class GameBase {
       hash = (37 * hash) + HEAD_FIELD_NUMBER;
       hash = (53 * hash) + getHead().hashCode();
       hash = (37 * hash) + SEX_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-          getSex());
+        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+                getSex());
         hash = (37 * hash) + OFFLINE_FIELD_NUMBER;
         hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-                getOffline());
-        hash = (37 * hash) + GAMECOUNT_FIELD_NUMBER;
+          getOffline());
+      hash = (37 * hash) + GAMECOUNT_FIELD_NUMBER;
       hash = (53 * hash) + getGameCount();
       hash = (37 * hash) + ISROBOT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
@@ -5871,9 +5889,9 @@ public final class GameBase {
       }
       public Builder clear() {
         super.clear();
-          seatNo_ = 0;
+        seatNo_ = 0;
 
-          iD_ = 0;
+        iD_ = 0;
 
         nickname_ = "";
 
@@ -5915,10 +5933,10 @@ public final class GameBase {
 
       public mahjong.mode.GameBase.SeatResponse buildPartial() {
         mahjong.mode.GameBase.SeatResponse result = new mahjong.mode.GameBase.SeatResponse(this);
-        result.seatNo_ = seatNo_;
+          result.seatNo_ = seatNo_;
         result.iD_ = iD_;
         result.nickname_ = nickname_;
-          result.score_ = score_;
+        result.score_ = score_;
         result.ready_ = ready_;
         result.ip_ = ip_;
         result.head_ = head_;
@@ -5989,13 +6007,13 @@ public final class GameBase {
         }
         if (!other.getHead().isEmpty()) {
           head_ = other.head_;
-          onChanged();
+            onChanged();
         }
-        if (other.getSex() != false) {
-          setSex(other.getSex());
+          if (other.getSex() != false) {
+              setSex(other.getSex());
         }
-          if (other.getOffline() != false) {
-              setOffline(other.getOffline());
+        if (other.getOffline() != false) {
+          setOffline(other.getOffline());
         }
         if (other.getGameCount() != 0) {
           setGameCount(other.getGameCount());
@@ -6591,12 +6609,12 @@ public final class GameBase {
 
         /**
          * <pre>
-         * 是否托管
-         * </pre>
-         * <p>
-         * <code>bool isRobot = 11;</code>
-         */
-        public Builder clearIsRobot() {
+         *是否托管
+       * </pre>
+       *
+       * <code>bool isRobot = 11;</code>
+       */
+      public Builder clearIsRobot() {
 
         isRobot_ = false;
         onChanged();
@@ -7253,7 +7271,7 @@ public final class GameBase {
       public Builder setID(int value) {
 
         iD_ = value;
-        onChanged();
+          onChanged();
         return this;
       }
       /**
@@ -7318,7 +7336,7 @@ public final class GameBase {
 
         operationId_ = value.getNumber();
         onChanged();
-        return this;
+          return this;
       }
       /**
        * <pre>
@@ -7981,7 +7999,7 @@ public final class GameBase {
           throw new NullPointerException();
         }
 
-        operationId_ = value.getNumber();
+          operationId_ = value.getNumber();
         onChanged();
         return this;
       }
@@ -8016,7 +8034,7 @@ public final class GameBase {
       public Builder setID(int value) {
 
         iD_ = value;
-        onChanged();
+          onChanged();
         return this;
       }
       /**
@@ -8057,7 +8075,7 @@ public final class GameBase {
   }
 
         data_ = value;
-        onChanged();
+          onChanged();
         return this;
       }
       /**
@@ -8772,9 +8790,10 @@ public final class GameBase {
        * <code>int32 timeCounter = 2;</code>
        */
       public int getTimeCounter() {
-        return timeCounter_;
+          return timeCounter_;
       }
-      /**
+
+        /**
        * <pre>
        *倒计时
        * </pre>
@@ -8783,7 +8802,7 @@ public final class GameBase {
        */
       public Builder setTimeCounter(int value) {
 
-          timeCounter_ = value;
+        timeCounter_ = value;
         onChanged();
         return this;
       }
@@ -9297,7 +9316,7 @@ public final class GameBase {
       public Builder setID(int value) {
 
         iD_ = value;
-        onChanged();
+          onChanged();
         return this;
       }
       /**
@@ -9323,9 +9342,10 @@ public final class GameBase {
        * <code>int32 timeCounter = 2;</code>
        */
       public int getTimeCounter() {
-        return timeCounter_;
+          return timeCounter_;
       }
-      /**
+
+        /**
        * <pre>
        *倒计时
        * </pre>
@@ -9334,7 +9354,7 @@ public final class GameBase {
        */
       public Builder setTimeCounter(int value) {
 
-          timeCounter_ = value;
+        timeCounter_ = value;
         onChanged();
         return this;
       }
@@ -9803,7 +9823,7 @@ public final class GameBase {
       public Builder setID(int value) {
 
         iD_ = value;
-        onChanged();
+          onChanged();
         return this;
       }
       /**
@@ -10283,7 +10303,7 @@ public final class GameBase {
           throw new NullPointerException();
         }
 
-        errorCode_ = value.getNumber();
+          errorCode_ = value.getNumber();
         onChanged();
         return this;
       }
@@ -10336,18 +10356,18 @@ public final class GameBase {
 
     @java.lang.Override
     public com.google.protobuf.Parser<ErrorResponse> getParserForType() {
-      return PARSER;
+        return PARSER;
     }
 
-    public mahjong.mode.GameBase.ErrorResponse getDefaultInstanceForType() {
+      public mahjong.mode.GameBase.ErrorResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   public interface RecordResponseOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:RecordResponse)
-      com.google.protobuf.MessageOrBuilder {
+      // @@protoc_insertion_point(interface_extends:RecordResponse)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <pre>
@@ -10482,7 +10502,7 @@ public final class GameBase {
      * <code>repeated .GameRecord gameRecords = 1;</code>
      */
     public java.util.List<mahjong.mode.GameBase.GameRecord> getGameRecordsList() {
-      return gameRecords_;
+        return gameRecords_;
     }
     /**
      * <pre>
@@ -10805,14 +10825,14 @@ public final class GameBase {
               bitField0_ = (bitField0_ & ~0x00000001);
             } else {
               ensureGameRecordsIsMutable();
-              gameRecords_.addAll(other.gameRecords_);
+                gameRecords_.addAll(other.gameRecords_);
             }
             onChanged();
           }
         } else {
           if (!other.gameRecords_.isEmpty()) {
-              if (gameRecordsBuilder_.isEmpty()) {
-              gameRecordsBuilder_.dispose();
+            if (gameRecordsBuilder_.isEmpty()) {
+                gameRecordsBuilder_.dispose();
               gameRecordsBuilder_ = null;
               gameRecords_ = other.gameRecords_;
               bitField0_ = (bitField0_ & ~0x00000001);
@@ -11095,13 +11115,13 @@ public final class GameBase {
       public mahjong.mode.GameBase.GameRecordOrBuilder getGameRecordsOrBuilder(
           int index) {
         if (gameRecordsBuilder_ == null) {
-          return gameRecords_.get(index);
-        } else {
-            return gameRecordsBuilder_.getMessageOrBuilder(index);
+          return gameRecords_.get(index);  } else {
+          return gameRecordsBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
-       * <pre>
+
+        /**
+         * <pre>
        *战绩列表
        * </pre>
        *
@@ -11136,14 +11156,15 @@ public final class GameBase {
       public mahjong.mode.GameBase.GameRecord.Builder addGameRecordsBuilder(
           int index) {
         return getGameRecordsFieldBuilder().addBuilder(
-                index, mahjong.mode.GameBase.GameRecord.getDefaultInstance());
+            index, mahjong.mode.GameBase.GameRecord.getDefaultInstance());
       }
-      /**
-       * <pre>
-       *战绩列表
-       * </pre>
-       *
-       * <code>repeated .GameRecord gameRecords = 1;</code>
+
+        /**
+         * <pre>
+         *战绩列表
+         * </pre>
+         *
+         * <code>repeated .GameRecord gameRecords = 1;</code>
        */
       public java.util.List<mahjong.mode.GameBase.GameRecord.Builder>
       getGameRecordsBuilderList() {
@@ -11394,7 +11415,7 @@ public final class GameBase {
      * <code>repeated .Record records = 2;</code>
      */
     public java.util.List<mahjong.mode.GameBase.Record> getRecordsList() {
-      return records_;
+        return records_;
     }
     /**
      * <pre>
@@ -11730,15 +11751,15 @@ public final class GameBase {
               records_ = other.records_;
               bitField0_ = (bitField0_ & ~0x00000002);
             } else {
-              ensureRecordsIsMutable();
-              records_.addAll(other.records_);
+                ensureRecordsIsMutable();
+                records_.addAll(other.records_);
             }
             onChanged();
           }
         } else {
           if (!other.records_.isEmpty()) {
-              if (recordsBuilder_.isEmpty()) {
-              recordsBuilder_.dispose();
+            if (recordsBuilder_.isEmpty()) {
+                recordsBuilder_.dispose();
               recordsBuilder_ = null;
               records_ = other.records_;
               bitField0_ = (bitField0_ & ~0x00000002);
@@ -11823,7 +11844,7 @@ public final class GameBase {
           throw new NullPointerException();
         }
 
-          gameType_ = value.getNumber();
+        gameType_ = value.getNumber();
         onChanged();
         return this;
       }
@@ -12085,12 +12106,12 @@ public final class GameBase {
       public mahjong.mode.GameBase.RecordOrBuilder getRecordsOrBuilder(
           int index) {
         if (recordsBuilder_ == null) {
-          return records_.get(index);
-        } else {
+          return records_.get(index);  } else {
             return recordsBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
+
+        /**
        * <pre>
        *战绩列表
        * </pre>
@@ -12128,12 +12149,13 @@ public final class GameBase {
         return getRecordsFieldBuilder().addBuilder(
                 index, mahjong.mode.GameBase.Record.getDefaultInstance());
       }
-      /**
-       * <pre>
-       *战绩列表
-       * </pre>
-       *
-       * <code>repeated .Record records = 2;</code>
+
+        /**
+         * <pre>
+         *战绩列表
+         * </pre>
+         *
+         * <code>repeated .Record records = 2;</code>
        */
       public java.util.List<mahjong.mode.GameBase.Record.Builder>
       getRecordsBuilderList() {
@@ -12232,22 +12254,23 @@ public final class GameBase {
      * <code>string roomNo = 2;</code>
      */
     java.lang.String getRoomNo();
-    /**
-     * <pre>
-     *房间号
-     * </pre>
-     *
-     * <code>string roomNo = 2;</code>
+
+      /**
+       * <pre>
+       *房间号
+       * </pre>
+       *
+       * <code>string roomNo = 2;</code>
      */
     com.google.protobuf.ByteString
         getRoomNoBytes();
 
-      /**
-       * <pre>
-       *局数
-       * </pre>
-       *
-       * <code>uint32 gameCount = 3;</code>
+    /**
+     * <pre>
+     *局数
+     * </pre>
+     *
+     * <code>uint32 gameCount = 3;</code>
      */
     int getGameCount();
 
@@ -12513,7 +12536,7 @@ public final class GameBase {
      * <code>repeated .UserRecord userRecord = 4;</code>
      */
     public java.util.List<mahjong.mode.GameBase.UserRecord> getUserRecordList() {
-      return userRecord_;
+        return userRecord_;
     }
     /**
      * <pre>
@@ -12912,15 +12935,15 @@ public final class GameBase {
               userRecord_ = other.userRecord_;
               bitField0_ = (bitField0_ & ~0x00000008);
             } else {
-              ensureUserRecordIsMutable();
-              userRecord_.addAll(other.userRecord_);
+                ensureUserRecordIsMutable();
+                userRecord_.addAll(other.userRecord_);
             }
             onChanged();
           }
         } else {
           if (!other.userRecord_.isEmpty()) {
-              if (userRecordBuilder_.isEmpty()) {
-              userRecordBuilder_.dispose();
+            if (userRecordBuilder_.isEmpty()) {
+                userRecordBuilder_.dispose();
               userRecordBuilder_ = null;
               userRecord_ = other.userRecord_;
               bitField0_ = (bitField0_ & ~0x00000008);
@@ -13013,10 +13036,10 @@ public final class GameBase {
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
-        }
+  }
 
-          recordId_ = value;
-        onChanged();
+        recordId_ = value;
+          onChanged();
         return this;
       }
       /**
@@ -13102,10 +13125,10 @@ public final class GameBase {
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
-        }
+  }
 
         roomNo_ = value;
-        onChanged();
+          onChanged();
         return this;
       }
       /**
@@ -13149,9 +13172,10 @@ public final class GameBase {
        * <code>uint32 gameCount = 3;</code>
        */
       public int getGameCount() {
-        return gameCount_;
+          return gameCount_;
       }
-      /**
+
+        /**
        * <pre>
        *局数
        * </pre>
@@ -13160,8 +13184,8 @@ public final class GameBase {
        */
       public Builder setGameCount(int value) {
 
-          gameCount_ = value;
-        onChanged();
+        gameCount_ = value;
+          onChanged();
         return this;
       }
       /**
@@ -13422,13 +13446,13 @@ public final class GameBase {
       public mahjong.mode.GameBase.UserRecordOrBuilder getUserRecordOrBuilder(
           int index) {
         if (userRecordBuilder_ == null) {
-          return userRecord_.get(index);
-        } else {
-            return userRecordBuilder_.getMessageOrBuilder(index);
+          return userRecord_.get(index);  } else {
+          return userRecordBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
-       * <pre>
+
+        /**
+         * <pre>
        *总输赢
        * </pre>
        *
@@ -13463,14 +13487,15 @@ public final class GameBase {
       public mahjong.mode.GameBase.UserRecord.Builder addUserRecordBuilder(
           int index) {
         return getUserRecordFieldBuilder().addBuilder(
-                index, mahjong.mode.GameBase.UserRecord.getDefaultInstance());
+            index, mahjong.mode.GameBase.UserRecord.getDefaultInstance());
       }
-      /**
-       * <pre>
-       *总输赢
-       * </pre>
-       *
-       * <code>repeated .UserRecord userRecord = 4;</code>
+
+        /**
+         * <pre>
+         *总输赢
+         * </pre>
+         *
+         * <code>repeated .UserRecord userRecord = 4;</code>
        */
       public java.util.List<mahjong.mode.GameBase.UserRecord.Builder>
       getUserRecordBuilderList() {
@@ -13500,7 +13525,7 @@ public final class GameBase {
        * <code>uint64 dateTime = 5;</code>
        */
       public long getDateTime() {
-        return dateTime_;
+          return dateTime_;
       }
       /**
        * <pre>
@@ -13511,8 +13536,8 @@ public final class GameBase {
        */
       public Builder setDateTime(long value) {
 
-          dateTime_ = value;
-        onChanged();
+        dateTime_ = value;
+          onChanged();
         return this;
       }
       /**
@@ -14049,10 +14074,10 @@ public final class GameBase {
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
-        }
+  }
 
-          recordId_ = value;
-        onChanged();
+        recordId_ = value;
+          onChanged();
         return this;
       }
       /**
@@ -14137,16 +14162,15 @@ public final class GameBase {
 
   public interface RecordDetailsResponseOrBuilder extends
       // @@protoc_insertion_point(interface_extends:RecordDetailsResponse)
-      com.google.protobuf.MessageOrBuilder {
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>.ErrorCode errorCode = 1;</code>
      */
     int getErrorCodeValue();
-
-      /**
-       * <code>.ErrorCode errorCode = 1;</code>
-       */
+    /**
+     * <code>.ErrorCode errorCode = 1;</code>
+     */
     mahjong.mode.GameBase.ErrorCode getErrorCode();
 
     /**
@@ -14174,7 +14198,8 @@ public final class GameBase {
      * <code>repeated .RoundItemRecord RoundItemRecord = 2;</code>
      */
     int getRoundItemRecordCount();
-    /**
+
+      /**
      * <pre>
      *每一小局
      * </pre>
@@ -14308,8 +14333,9 @@ public final class GameBase {
     public java.util.List<mahjong.mode.GameBase.RoundItemRecord> getRoundItemRecordList() {
         return roundItemRecord_;
     }
-    /**
-     * <pre>
+
+      /**
+       * <pre>
      *每一小局
      * </pre>
      *
@@ -14654,7 +14680,7 @@ public final class GameBase {
         } else {
           if (!other.roundItemRecord_.isEmpty()) {
             if (roundItemRecordBuilder_.isEmpty()) {
-              roundItemRecordBuilder_.dispose();
+                roundItemRecordBuilder_.dispose();
               roundItemRecordBuilder_ = null;
               roundItemRecord_ = other.roundItemRecord_;
               bitField0_ = (bitField0_ & ~0x00000002);
@@ -14723,7 +14749,7 @@ public final class GameBase {
           throw new NullPointerException();
         }
 
-        errorCode_ = value.getNumber();
+          errorCode_ = value.getNumber();
         onChanged();
         return this;
       }
@@ -14981,14 +15007,14 @@ public final class GameBase {
       public mahjong.mode.GameBase.RoundItemRecordOrBuilder getRoundItemRecordOrBuilder(
           int index) {
         if (roundItemRecordBuilder_ == null) {
-          return roundItemRecord_.get(index);
-        } else {
-            return roundItemRecordBuilder_.getMessageOrBuilder(index);
+          return roundItemRecord_.get(index);  } else {
+          return roundItemRecordBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
-       * <pre>
-       *每一小局
+
+        /**
+         * <pre>
+         *每一小局
        * </pre>
        *
        * <code>repeated .RoundItemRecord RoundItemRecord = 2;</code>
@@ -15022,20 +15048,22 @@ public final class GameBase {
       public mahjong.mode.GameBase.RoundItemRecord.Builder addRoundItemRecordBuilder(
           int index) {
         return getRoundItemRecordFieldBuilder().addBuilder(
-                index, mahjong.mode.GameBase.RoundItemRecord.getDefaultInstance());
+            index, mahjong.mode.GameBase.RoundItemRecord.getDefaultInstance());
       }
-      /**
-       * <pre>
-       *每一小局
-       * </pre>
-       *
-       * <code>repeated .RoundItemRecord RoundItemRecord = 2;</code>
+
+        /**
+         * <pre>
+         *每一小局
+         * </pre>
+         *
+         * <code>repeated .RoundItemRecord RoundItemRecord = 2;</code>
        */
       public java.util.List<mahjong.mode.GameBase.RoundItemRecord.Builder>
       getRoundItemRecordBuilderList() {
           return getRoundItemRecordFieldBuilder().getBuilderList();
       }
-      private com.google.protobuf.RepeatedFieldBuilderV3<
+
+        private com.google.protobuf.RepeatedFieldBuilderV3<
           mahjong.mode.GameBase.RoundItemRecord, mahjong.mode.GameBase.RoundItemRecord.Builder, mahjong.mode.GameBase.RoundItemRecordOrBuilder>
           getRoundItemRecordFieldBuilder() {
         if (roundItemRecordBuilder_ == null) {
@@ -15092,15 +15120,15 @@ public final class GameBase {
       return PARSER;
     }
 
-    public mahjong.mode.GameBase.RecordDetailsResponse getDefaultInstanceForType() {
+      public mahjong.mode.GameBase.RecordDetailsResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
   public interface RoundItemRecordOrBuilder extends
-          // @@protoc_insertion_point(interface_extends:RoundItemRecord)
-      com.google.protobuf.MessageOrBuilder {
+      // @@protoc_insertion_point(interface_extends:RoundItemRecord)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <pre>
@@ -15231,9 +15259,10 @@ public final class GameBase {
      * <code>repeated .UserRecord userRecord = 1;</code>
      */
     public java.util.List<mahjong.mode.GameBase.UserRecord> getUserRecordList() {
-      return userRecord_;
+        return userRecord_;
     }
-    /**
+
+      /**
      * <pre>
      *每个玩家详情
      * </pre>
@@ -15549,15 +15578,15 @@ public final class GameBase {
               userRecord_ = other.userRecord_;
               bitField0_ = (bitField0_ & ~0x00000001);
             } else {
-              ensureUserRecordIsMutable();
-              userRecord_.addAll(other.userRecord_);
+                ensureUserRecordIsMutable();
+                userRecord_.addAll(other.userRecord_);
             }
             onChanged();
           }
         } else {
           if (!other.userRecord_.isEmpty()) {
-              if (userRecordBuilder_.isEmpty()) {
-              userRecordBuilder_.dispose();
+            if (userRecordBuilder_.isEmpty()) {
+                userRecordBuilder_.dispose();
               userRecordBuilder_ = null;
               userRecord_ = other.userRecord_;
               bitField0_ = (bitField0_ & ~0x00000001);
@@ -15840,13 +15869,13 @@ public final class GameBase {
       public mahjong.mode.GameBase.UserRecordOrBuilder getUserRecordOrBuilder(
           int index) {
         if (userRecordBuilder_ == null) {
-          return userRecord_.get(index);
-        } else {
-            return userRecordBuilder_.getMessageOrBuilder(index);
+          return userRecord_.get(index);  } else {
+          return userRecordBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
-       * <pre>
+
+        /**
+         * <pre>
        *每个玩家详情
        * </pre>
        *
@@ -15881,14 +15910,15 @@ public final class GameBase {
       public mahjong.mode.GameBase.UserRecord.Builder addUserRecordBuilder(
           int index) {
         return getUserRecordFieldBuilder().addBuilder(
-                index, mahjong.mode.GameBase.UserRecord.getDefaultInstance());
+            index, mahjong.mode.GameBase.UserRecord.getDefaultInstance());
       }
-      /**
-       * <pre>
-       *每个玩家详情
-       * </pre>
-       *
-       * <code>repeated .UserRecord userRecord = 1;</code>
+
+        /**
+         * <pre>
+         *每个玩家详情
+         * </pre>
+         *
+         * <code>repeated .UserRecord userRecord = 1;</code>
        */
       public java.util.List<mahjong.mode.GameBase.UserRecord.Builder>
       getUserRecordBuilderList() {
@@ -15996,15 +16026,16 @@ public final class GameBase {
      * <code>string head = 3;</code>
      */
     java.lang.String getHead();
-    /**
-     * <pre>
-     *头像
-     * </pre>
-     *
-     * <code>string head = 3;</code>
-     */
-    com.google.protobuf.ByteString
-    getHeadBytes();
+
+      /**
+       * <pre>
+       * 头像
+       * </pre>
+       * <p>
+       * <code>string head = 3;</code>
+       */
+      com.google.protobuf.ByteString
+      getHeadBytes();
 
       /**
        * <pre>
@@ -16947,18 +16978,17 @@ public final class GameBase {
         // Use OverResponse.newBuilder() to construct.
         private OverResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
-        }
+    }
+    private OverResponse() {
+        backKey_ = "";
+        dateTime_ = 0L;
+    }
 
-        private OverResponse() {
-            backKey_ = "";
-            dateTime_ = 0L;
-        }
-
-        @java.lang.Override
-        public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+        return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+    }
 
         private OverResponse(
                 com.google.protobuf.CodedInputStream input,
@@ -16966,41 +16996,41 @@ public final class GameBase {
                 throws com.google.protobuf.InvalidProtocolBufferException {
             this();
             int mutable_bitField0_ = 0;
-      try {
+            try {
         boolean done = false;
-          while (!done) {
-              int tag = input.readTag();
-              switch (tag) {
-                  case 0:
-                      done = true;
-                      break;
-                  default: {
-                      if (!input.skipField(tag)) {
-                          done = true;
-                      }
-                      break;
-                  }
-                  case 10: {
-                      java.lang.String s = input.readStringRequireUtf8();
+                while (!done) {
+                    int tag = input.readTag();
+                    switch (tag) {
+                        case 0:
+                            done = true;
+                            break;
+                        default: {
+                            if (!input.skipField(tag)) {
+                                done = true;
+                            }
+                            break;
+                        }
+                        case 10: {
+                            java.lang.String s = input.readStringRequireUtf8();
 
-                      backKey_ = s;
-                      break;
-                  }
-                  case 16: {
+                            backKey_ = s;
+                            break;
+                        }
+                        case 16: {
 
-                      dateTime_ = input.readUInt64();
-                      break;
-                  }
-              }
-          }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-                  e).setUnfinishedMessage(this);
-      } finally {
-          makeExtensionsImmutable();
-      }
+                            dateTime_ = input.readUInt64();
+                            break;
+                        }
+                    }
+                }
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(this);
+            } catch (java.io.IOException e) {
+                throw new com.google.protobuf.InvalidProtocolBufferException(
+                        e).setUnfinishedMessage(this);
+            } finally {
+                makeExtensionsImmutable();
+            }
         }
 
         public static final com.google.protobuf.Descriptors.Descriptor
@@ -17486,65 +17516,61 @@ public final class GameBase {
              */
             public Builder setBackKeyBytes(
                     com.google.protobuf.ByteString value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
-                checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
 
-                backKey_ = value;
-                onChanged();
-                return this;
-            }
+        backKey_ = value;
+        onChanged();
+        return this;
+      }
 
-            private long dateTime_;
+      private long dateTime_ ;
+      /**
+       * <pre>
+       *时间
+       * </pre>
+       *
+       * <code>uint64 dateTime = 2;</code>
+       */
+      public long getDateTime() {
+        return dateTime_;
+      }
+      /**
+       * <pre>
+       *时间
+       * </pre>
+       *
+       * <code>uint64 dateTime = 2;</code>
+       */
+      public Builder setDateTime(long value) {
 
-            /**
-             * <pre>
-             *时间
-             * </pre>
-             *
-             * <code>uint64 dateTime = 2;</code>
-             */
-            public long getDateTime() {
-                return dateTime_;
-            }
+        dateTime_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *时间
+       * </pre>
+       *
+       * <code>uint64 dateTime = 2;</code>
+       */
+      public Builder clearDateTime() {
 
-            /**
-             * <pre>
-             *时间
-             * </pre>
-             *
-             * <code>uint64 dateTime = 2;</code>
-             */
-            public Builder setDateTime(long value) {
+        dateTime_ = 0L;
+        onChanged();
+        return this;
+      }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
+      }
 
-                dateTime_ = value;
-                onChanged();
-                return this;
-            }
-
-            /**
-             * <pre>
-             *时间
-             * </pre>
-             *
-             * <code>uint64 dateTime = 2;</code>
-             */
-            public Builder clearDateTime() {
-
-                dateTime_ = 0L;
-                onChanged();
-                return this;
-            }
-
-            public final Builder setUnknownFields(
-                    final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
-            }
-
-            public final Builder mergeUnknownFields(
-                    final com.google.protobuf.UnknownFieldSet unknownFields) {
-                return this;
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return this;
       }
 
 
@@ -17686,7 +17712,7 @@ public final class GameBase {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
     getDescriptor() {
-      return mahjong.mode.GameBase.internal_static_ReplayRequest_descriptor;
+        return mahjong.mode.GameBase.internal_static_ReplayRequest_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -18039,7 +18065,7 @@ public final class GameBase {
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         mahjong.mode.GameBase.ReplayRequest parsedMessage = null;
-        try {
+          try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (mahjong.mode.GameBase.ReplayRequest) e.getUnfinishedMessage();
@@ -18063,7 +18089,7 @@ public final class GameBase {
       public java.lang.String getRecordId() {
         java.lang.Object ref = recordId_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
+            com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           recordId_ = s;
@@ -18103,9 +18129,9 @@ public final class GameBase {
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
-        }
+  }
 
-          recordId_ = value;
+        recordId_ = value;
         onChanged();
         return this;
       }
@@ -18624,12 +18650,12 @@ public final class GameBase {
           setReplay(other.getReplay());
         }
         onChanged();
-        return this;
+          return this;
       }
 
-      public final boolean isInitialized() {
-        return true;
-      }
+        public final boolean isInitialized() {
+            return true;
+        }
 
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
@@ -18640,7 +18666,7 @@ public final class GameBase {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (mahjong.mode.GameBase.ReplayResponse) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
+            throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -18661,14 +18687,14 @@ public final class GameBase {
        */
       public Builder setErrorCodeValue(int value) {
         errorCode_ = value;
-          onChanged();
-        return this;
+        onChanged();
+          return this;
       }
       /**
        * <code>.ErrorCode errorCode = 1;</code>
        */
       public mahjong.mode.GameBase.ErrorCode getErrorCode() {
-          mahjong.mode.GameBase.ErrorCode result = mahjong.mode.GameBase.ErrorCode.valueOf(errorCode_);
+        mahjong.mode.GameBase.ErrorCode result = mahjong.mode.GameBase.ErrorCode.valueOf(errorCode_);
         return result == null ? mahjong.mode.GameBase.ErrorCode.UNRECOGNIZED : result;
       }
       /**
@@ -19247,14 +19273,14 @@ public final class GameBase {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        mahjong.mode.GameBase.Message parsedMessage = null;
-        try {
+          mahjong.mode.GameBase.Message parsedMessage = null;
+          try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (mahjong.mode.GameBase.Message) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
+              if (parsedMessage != null) {
             mergeFrom(parsedMessage);
           }
         }
@@ -19293,7 +19319,7 @@ public final class GameBase {
        */
       public mahjong.mode.GameBase.MessageType getMessageType() {
         mahjong.mode.GameBase.MessageType result = mahjong.mode.GameBase.MessageType.valueOf(messageType_);
-          return result == null ? mahjong.mode.GameBase.MessageType.UNRECOGNIZED : result;
+        return result == null ? mahjong.mode.GameBase.MessageType.UNRECOGNIZED : result;
       }
       /**
        * <pre>
@@ -19868,7 +19894,8 @@ public final class GameBase {
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
+
+        public Builder setRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
@@ -19887,7 +19914,7 @@ public final class GameBase {
         }
       }
 
-      public Builder mergeFrom(mahjong.mode.GameBase.AppointInteraction other) {
+        public Builder mergeFrom(mahjong.mode.GameBase.AppointInteraction other) {
         if (other == mahjong.mode.GameBase.AppointInteraction.getDefaultInstance()) return this;
         if (other.getToUserId() != 0) {
           setToUserId(other.getToUserId());
@@ -19906,7 +19933,7 @@ public final class GameBase {
         return true;
       }
 
-        public Builder mergeFrom(
+      public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
@@ -19924,9 +19951,8 @@ public final class GameBase {
         return this;
       }
 
-      private int toUserId_;
-
-        /**
+      private int toUserId_ ;
+      /**
        * <pre>
        *发送给某人
        * </pre>
@@ -19963,7 +19989,7 @@ public final class GameBase {
         return this;
       }
 
-        private int contentIndex_ ;
+      private int contentIndex_;
       /**
        * <pre>
        *互动内容标识
@@ -20116,7 +20142,7 @@ public final class GameBase {
    *
    * Protobuf type {@code LoggerRequest}
    */
-  public  static final class LoggerRequest extends
+  public static final class LoggerRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:LoggerRequest)
       LoggerRequestOrBuilder {
@@ -20171,7 +20197,7 @@ public final class GameBase {
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return mahjong.mode.GameBase.internal_static_LoggerRequest_descriptor;
     }
 
@@ -20457,8 +20483,9 @@ public final class GameBase {
           com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+
+        public Builder setRepeatedField(
+                com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
@@ -20477,7 +20504,7 @@ public final class GameBase {
       }
 
       public Builder mergeFrom(mahjong.mode.GameBase.LoggerRequest other) {
-        if (other == mahjong.mode.GameBase.LoggerRequest.getDefaultInstance()) return this;
+          if (other == mahjong.mode.GameBase.LoggerRequest.getDefaultInstance()) return this;
         if (!other.getLogger().isEmpty()) {
           logger_ = other.logger_;
           onChanged();
@@ -20494,7 +20521,7 @@ public final class GameBase {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-          mahjong.mode.GameBase.LoggerRequest parsedMessage = null;
+        mahjong.mode.GameBase.LoggerRequest parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -20518,7 +20545,7 @@ public final class GameBase {
        */
       public java.lang.String getLogger() {
         java.lang.Object ref = logger_;
-          if (!(ref instanceof java.lang.String)) {
+        if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
@@ -20732,8 +20759,8 @@ public final class GameBase {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private MatchInfo(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
@@ -20745,11 +20772,11 @@ public final class GameBase {
             case 0:
               done = true;
               break;
-            default: {
-              if (!input.skipField(tag)) {
-                done = true;
-              }
-              break;
+              default: {
+                  if (!input.skipField(tag)) {
+                      done = true;
+                  }
+                  break;
             }
             case 8: {
 
@@ -20782,7 +20809,7 @@ public final class GameBase {
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
+        throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
         makeExtensionsImmutable();
@@ -20794,7 +20821,7 @@ public final class GameBase {
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
         return mahjong.mode.GameBase.internal_static_MatchInfo_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               mahjong.mode.GameBase.MatchInfo.class, mahjong.mode.GameBase.MatchInfo.Builder.class);
@@ -21211,13 +21238,13 @@ public final class GameBase {
           name_ = other.name_;
           onChanged();
         }
-        if (other.getCount() != 0) {
+          if (other.getCount() != 0) {
           setCount(other.getCount());
         }
         if (other.getEntryFee() != 0) {
           setEntryFee(other.getEntryFee());
         }
-        if (other.getReward() != 0) {
+          if (other.getReward() != 0) {
           setReward(other.getReward());
         }
         onChanged();
@@ -21229,8 +21256,8 @@ public final class GameBase {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         mahjong.mode.GameBase.MatchInfo parsedMessage = null;
         try {
@@ -21260,7 +21287,7 @@ public final class GameBase {
 
         /**
          * <pre>
-       *竞技类型 0,钻石 1，话费
+         *竞技类型 0,钻石 1，话费
        * </pre>
        *
        * <code>uint32 arenaType = 1;</code>
@@ -21282,10 +21309,10 @@ public final class GameBase {
 
         arenaType_ = 0;
         onChanged();
-        return this;
+          return this;
       }
 
-      private java.lang.Object name_ = "";
+        private java.lang.Object name_ = "";
       /**
        * <pre>
        *竞技名
@@ -21295,7 +21322,7 @@ public final class GameBase {
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
-        if (!(ref instanceof java.lang.String)) {
+          if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
@@ -21325,20 +21352,21 @@ public final class GameBase {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
+
+        /**
        * <pre>
-       *竞技名
-       * </pre>
+         *竞技名
+         * </pre>
        *
        * <code>string name = 2;</code>
        */
       public Builder setName(
           java.lang.String value) {
         if (value == null) {
-            throw new NullPointerException();
+    throw new NullPointerException();
   }
 
-        name_ = value;
+          name_ = value;
         onChanged();
         return this;
       }
@@ -21395,8 +21423,8 @@ public final class GameBase {
       public Builder setCount(int value) {
 
         count_ = value;
-          onChanged();
-        return this;
+        onChanged();
+          return this;
       }
       /**
        * <pre>
@@ -21408,8 +21436,8 @@ public final class GameBase {
       public Builder clearCount() {
 
         count_ = 0;
-          onChanged();
-        return this;
+        onChanged();
+          return this;
       }
 
       private int entryFee_ ;
@@ -21432,7 +21460,7 @@ public final class GameBase {
        */
       public Builder setEntryFee(int value) {
 
-        entryFee_ = value;
+          entryFee_ = value;
         onChanged();
         return this;
       }
@@ -21445,67 +21473,72 @@ public final class GameBase {
        */
       public Builder clearEntryFee() {
 
-        entryFee_ = 0;
-        onChanged();
-        return this;
+          entryFee_ = 0;
+          onChanged();
+          return this;
       }
 
-      private int reward_ ;
-      /**
-       * <pre>
-       *奖励
-       * </pre>
-       *
-       * <code>uint32 reward = 5;</code>
-       */
-      public int getReward() {
-        return reward_;
-      }
-      /**
-       * <pre>
-       *奖励
-       * </pre>
-       *
-       * <code>uint32 reward = 5;</code>
-       */
-      public Builder setReward(int value) {
+        private int reward_;
 
-        reward_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *奖励
-       * </pre>
-       *
-       * <code>uint32 reward = 5;</code>
-       */
-      public Builder clearReward() {
+        /**
+         * <pre>
+         * 奖励
+         * </pre>
+         * <p>
+         * <code>uint32 reward = 5;</code>
+         */
+        public int getReward() {
+            return reward_;
+        }
 
-        reward_ = 0;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
+        /**
+         * <pre>
+         * 奖励
+         * </pre>
+         * <p>
+         * <code>uint32 reward = 5;</code>
+         */
+        public Builder setReward(int value) {
 
-      public final Builder mergeUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
+            reward_ = value;
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <pre>
+         * 奖励
+         * </pre>
+         * <p>
+         * <code>uint32 reward = 5;</code>
+         */
+        public Builder clearReward() {
+
+            reward_ = 0;
+            onChanged();
+            return this;
+        }
+
+        public final Builder setUnknownFields(
+                final com.google.protobuf.UnknownFieldSet unknownFields) {
+            return this;
+        }
+
+        public final Builder mergeUnknownFields(
+                final com.google.protobuf.UnknownFieldSet unknownFields) {
+            return this;
+        }
 
 
         // @@protoc_insertion_point(builder_scope:MatchInfo)
     }
 
-    // @@protoc_insertion_point(class_scope:MatchInfo)
-    private static final mahjong.mode.GameBase.MatchInfo DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new mahjong.mode.GameBase.MatchInfo();
-    }
+      // @@protoc_insertion_point(class_scope:MatchInfo)
+      private static final mahjong.mode.GameBase.MatchInfo DEFAULT_INSTANCE;
+
+      static {
+          DEFAULT_INSTANCE = new mahjong.mode.GameBase.MatchInfo();
+      }
 
       public static mahjong.mode.GameBase.MatchInfo getDefaultInstance() {
           return DEFAULT_INSTANCE;
@@ -21528,11 +21561,11 @@ public final class GameBase {
       @java.lang.Override
       public com.google.protobuf.Parser<MatchInfo> getParserForType() {
           return PARSER;
-      }
+    }
 
-      public mahjong.mode.GameBase.MatchInfo getDefaultInstanceForType() {
-          return DEFAULT_INSTANCE;
-      }
+    public mahjong.mode.GameBase.MatchInfo getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
 
   }
 
@@ -21557,6 +21590,15 @@ public final class GameBase {
          * <code>uint32 currentCount = 2;</code>
          */
         int getCurrentCount();
+
+        /**
+         * <pre>
+         * 轮次
+         * </pre>
+         * <p>
+         * <code>uint32 round = 3;</code>
+         */
+        int getRound();
     }
 
     /**
@@ -21578,55 +21620,60 @@ public final class GameBase {
         private MatchData() {
             status_ = 0;
             currentCount_ = 0;
+            round_ = 0;
         }
 
         @java.lang.Override
         public final com.google.protobuf.UnknownFieldSet
         getUnknownFields() {
             return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
-
-        private MatchData(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            this();
-            int mutable_bitField0_ = 0;
-            try {
-                boolean done = false;
-                while (!done) {
-                    int tag = input.readTag();
-                    switch (tag) {
-                        case 0:
+    }
+    private MatchData(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+        this();
+        int mutable_bitField0_ = 0;
+        try {
+            boolean done = false;
+            while (!done) {
+                int tag = input.readTag();
+                switch (tag) {
+                    case 0:
+                        done = true;
+                        break;
+                    default: {
+                        if (!input.skipField(tag)) {
                             done = true;
-                            break;
-                        default: {
-                            if (!input.skipField(tag)) {
-                                done = true;
-                            }
-                            break;
                         }
-                        case 8: {
+                        break;
+                    }
+                    case 8: {
 
-                            status_ = input.readUInt32();
-                            break;
-                        }
-                        case 16: {
+                        status_ = input.readUInt32();
+                        break;
+                    }
+                    case 16: {
 
-                            currentCount_ = input.readUInt32();
-                            break;
-                        }
+                        currentCount_ = input.readUInt32();
+                        break;
+                    }
+                    case 24: {
+
+                        round_ = input.readUInt32();
+                        break;
                     }
                 }
-            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                throw e.setUnfinishedMessage(this);
-            } catch (java.io.IOException e) {
-                throw new com.google.protobuf.InvalidProtocolBufferException(
-                        e).setUnfinishedMessage(this);
-            } finally {
-                makeExtensionsImmutable();
             }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(
+                    e).setUnfinishedMessage(this);
+        } finally {
+            makeExtensionsImmutable();
         }
+    }
 
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
@@ -21668,6 +21715,20 @@ public final class GameBase {
             return currentCount_;
         }
 
+        public static final int ROUND_FIELD_NUMBER = 3;
+        private int round_;
+
+        /**
+         * <pre>
+         * 轮次
+         * </pre>
+         * <p>
+         * <code>uint32 round = 3;</code>
+         */
+        public int getRound() {
+            return round_;
+        }
+
         private byte memoizedIsInitialized = -1;
 
         public final boolean isInitialized() {
@@ -21687,6 +21748,9 @@ public final class GameBase {
             if (currentCount_ != 0) {
                 output.writeUInt32(2, currentCount_);
             }
+            if (round_ != 0) {
+                output.writeUInt32(3, round_);
+            }
         }
 
         public int getSerializedSize() {
@@ -21701,6 +21765,10 @@ public final class GameBase {
             if (currentCount_ != 0) {
                 size += com.google.protobuf.CodedOutputStream
                         .computeUInt32Size(2, currentCount_);
+            }
+            if (round_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeUInt32Size(3, round_);
             }
             memoizedSize = size;
             return size;
@@ -21723,6 +21791,8 @@ public final class GameBase {
                     == other.getStatus());
             result = result && (getCurrentCount()
                     == other.getCurrentCount());
+            result = result && (getRound()
+                    == other.getRound());
             return result;
         }
 
@@ -21737,6 +21807,8 @@ public final class GameBase {
             hash = (53 * hash) + getStatus();
             hash = (37 * hash) + CURRENTCOUNT_FIELD_NUMBER;
             hash = (53 * hash) + getCurrentCount();
+            hash = (37 * hash) + ROUND_FIELD_NUMBER;
+            hash = (53 * hash) + getRound();
             hash = (29 * hash) + unknownFields.hashCode();
             memoizedHashCode = hash;
             return hash;
@@ -21893,6 +21965,8 @@ public final class GameBase {
 
                 currentCount_ = 0;
 
+                round_ = 0;
+
                 return this;
             }
 
@@ -21917,6 +21991,7 @@ public final class GameBase {
                 mahjong.mode.GameBase.MatchData result = new mahjong.mode.GameBase.MatchData(this);
                 result.status_ = status_;
                 result.currentCount_ = currentCount_;
+                result.round_ = round_;
                 onBuilt();
                 return result;
             }
@@ -21969,6 +22044,9 @@ public final class GameBase {
                 }
                 if (other.getCurrentCount() != 0) {
                     setCurrentCount(other.getCurrentCount());
+                }
+                if (other.getRound() != 0) {
+                    setRound(other.getRound());
                 }
                 onChanged();
                 return this;
@@ -22074,6 +22152,47 @@ public final class GameBase {
             public Builder clearCurrentCount() {
 
                 currentCount_ = 0;
+                onChanged();
+                return this;
+            }
+
+            private int round_;
+
+            /**
+             * <pre>
+             * 轮次
+             * </pre>
+             * <p>
+             * <code>uint32 round = 3;</code>
+             */
+            public int getRound() {
+                return round_;
+            }
+
+            /**
+             * <pre>
+             * 轮次
+             * </pre>
+             * <p>
+             * <code>uint32 round = 3;</code>
+             */
+            public Builder setRound(int value) {
+
+                round_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 轮次
+             * </pre>
+             * <p>
+             * <code>uint32 round = 3;</code>
+             */
+            public Builder clearRound() {
+
+                round_ = 0;
                 onChanged();
                 return this;
             }
@@ -22497,10 +22616,10 @@ public final class GameBase {
             }
 
             public Builder addRepeatedField(
-                    com.google.protobuf.Descriptors.FieldDescriptor field,
-                    Object value) {
-                return (Builder) super.addRepeatedField(field, value);
-            }
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
 
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof mahjong.mode.GameBase.MatchEliminateScore) {
@@ -22546,9 +22665,9 @@ public final class GameBase {
 
             /**
              * <pre>
-             *当前淘汰分
+             * 当前淘汰分
              * </pre>
-             *
+             * <p>
              * <code>uint32 score = 1;</code>
              */
             public int getScore() {
@@ -22557,9 +22676,9 @@ public final class GameBase {
 
             /**
              * <pre>
-             *当前淘汰分
+             * 当前淘汰分
              * </pre>
-             *
+             * <p>
              * <code>uint32 score = 1;</code>
              */
             public Builder setScore(int value) {
@@ -22571,21 +22690,22 @@ public final class GameBase {
 
             /**
              * <pre>
-       *当前淘汰分
-       * </pre>
-       *
-       * <code>uint32 score = 1;</code>
-       */
-      public Builder clearScore() {
+             * 当前淘汰分
+             * </pre>
+             * <p>
+             * <code>uint32 score = 1;</code>
+             */
+            public Builder clearScore() {
 
-        score_ = 0;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-              final com.google.protobuf.UnknownFieldSet unknownFields) {
-          return this;
-      }
+                score_ = 0;
+                onChanged();
+                return this;
+            }
+
+            public final Builder setUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
 
             public final Builder mergeUnknownFields(
                     final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -22638,12 +22758,30 @@ public final class GameBase {
 
         /**
          * <pre>
-         * 1.晋级 2.等待 3.淘汰
+         * 1.晋级 2.等待 3.淘汰,0.无结果
          * </pre>
          * <p>
          * <code>uint32 result = 1;</code>
          */
         int getResult();
+
+        /**
+         * <pre>
+         * 当局得分
+         * </pre>
+         * <p>
+         * <code>int32 currentScore = 2;</code>
+         */
+        int getCurrentScore();
+
+        /**
+         * <pre>
+         *总分
+         * </pre>
+         *
+         * <code>int32 totalScore = 3;</code>
+     */
+    int getTotalScore();
     }
 
     /**
@@ -22664,6 +22802,8 @@ public final class GameBase {
 
         private MatchResult() {
             result_ = 0;
+            currentScore_ = 0;
+            totalScore_ = 0;
         }
 
         @java.lang.Override
@@ -22697,6 +22837,16 @@ public final class GameBase {
                             result_ = input.readUInt32();
                             break;
                         }
+                        case 16: {
+
+                            currentScore_ = input.readInt32();
+                            break;
+                        }
+                        case 24: {
+
+                            totalScore_ = input.readInt32();
+                            break;
+                        }
                     }
                 }
             } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -22726,13 +22876,41 @@ public final class GameBase {
 
         /**
          * <pre>
-         * 1.晋级 2.等待 3.淘汰
+         * 1.晋级 2.等待 3.淘汰,0.无结果
          * </pre>
          * <p>
          * <code>uint32 result = 1;</code>
          */
         public int getResult() {
             return result_;
+        }
+
+        public static final int CURRENTSCORE_FIELD_NUMBER = 2;
+        private int currentScore_;
+
+        /**
+         * <pre>
+         * 当局得分
+         * </pre>
+         * <p>
+         * <code>int32 currentScore = 2;</code>
+         */
+        public int getCurrentScore() {
+            return currentScore_;
+        }
+
+        public static final int TOTALSCORE_FIELD_NUMBER = 3;
+        private int totalScore_;
+
+        /**
+         * <pre>
+         * 总分
+         * </pre>
+         * <p>
+         * <code>int32 totalScore = 3;</code>
+         */
+        public int getTotalScore() {
+            return totalScore_;
         }
 
         private byte memoizedIsInitialized = -1;
@@ -22751,6 +22929,12 @@ public final class GameBase {
             if (result_ != 0) {
                 output.writeUInt32(1, result_);
             }
+            if (currentScore_ != 0) {
+                output.writeInt32(2, currentScore_);
+            }
+            if (totalScore_ != 0) {
+                output.writeInt32(3, totalScore_);
+            }
         }
 
         public int getSerializedSize() {
@@ -22761,6 +22945,14 @@ public final class GameBase {
             if (result_ != 0) {
                 size += com.google.protobuf.CodedOutputStream
                         .computeUInt32Size(1, result_);
+            }
+            if (currentScore_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeInt32Size(2, currentScore_);
+            }
+            if (totalScore_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeInt32Size(3, totalScore_);
             }
             memoizedSize = size;
             return size;
@@ -22781,6 +22973,10 @@ public final class GameBase {
             boolean result = true;
             result = result && (getResult()
                     == other.getResult());
+            result = result && (getCurrentScore()
+                    == other.getCurrentScore());
+            result = result && (getTotalScore()
+                    == other.getTotalScore());
             return result;
         }
 
@@ -22793,6 +22989,10 @@ public final class GameBase {
             hash = (19 * hash) + getDescriptor().hashCode();
             hash = (37 * hash) + RESULT_FIELD_NUMBER;
             hash = (53 * hash) + getResult();
+            hash = (37 * hash) + CURRENTSCORE_FIELD_NUMBER;
+            hash = (53 * hash) + getCurrentScore();
+            hash = (37 * hash) + TOTALSCORE_FIELD_NUMBER;
+            hash = (53 * hash) + getTotalScore();
             hash = (29 * hash) + unknownFields.hashCode();
             memoizedHashCode = hash;
             return hash;
@@ -22947,6 +23147,10 @@ public final class GameBase {
                 super.clear();
                 result_ = 0;
 
+                currentScore_ = 0;
+
+                totalScore_ = 0;
+
                 return this;
             }
 
@@ -22970,6 +23174,8 @@ public final class GameBase {
             public mahjong.mode.GameBase.MatchResult buildPartial() {
                 mahjong.mode.GameBase.MatchResult result = new mahjong.mode.GameBase.MatchResult(this);
                 result.result_ = result_;
+                result.currentScore_ = currentScore_;
+                result.totalScore_ = totalScore_;
                 onBuilt();
                 return result;
             }
@@ -23020,6 +23226,12 @@ public final class GameBase {
                 if (other.getResult() != 0) {
                     setResult(other.getResult());
                 }
+                if (other.getCurrentScore() != 0) {
+                    setCurrentScore(other.getCurrentScore());
+                }
+                if (other.getTotalScore() != 0) {
+                    setTotalScore(other.getTotalScore());
+                }
                 onChanged();
                 return this;
             }
@@ -23050,7 +23262,7 @@ public final class GameBase {
 
             /**
              * <pre>
-             * 1.晋级 2.等待 3.淘汰
+             * 1.晋级 2.等待 3.淘汰,0.无结果
              * </pre>
              * <p>
              * <code>uint32 result = 1;</code>
@@ -23061,7 +23273,7 @@ public final class GameBase {
 
             /**
              * <pre>
-             * 1.晋级 2.等待 3.淘汰
+             * 1.晋级 2.等待 3.淘汰,0.无结果
              * </pre>
              * <p>
              * <code>uint32 result = 1;</code>
@@ -23075,7 +23287,7 @@ public final class GameBase {
 
             /**
              * <pre>
-             * 1.晋级 2.等待 3.淘汰
+             * 1.晋级 2.等待 3.淘汰,0.无结果
              * </pre>
              * <p>
              * <code>uint32 result = 1;</code>
@@ -23083,6 +23295,88 @@ public final class GameBase {
             public Builder clearResult() {
 
                 result_ = 0;
+                onChanged();
+                return this;
+            }
+
+            private int currentScore_;
+
+            /**
+             * <pre>
+             * 当局得分
+             * </pre>
+             * <p>
+             * <code>int32 currentScore = 2;</code>
+             */
+            public int getCurrentScore() {
+                return currentScore_;
+            }
+
+            /**
+             * <pre>
+             * 当局得分
+             * </pre>
+             * <p>
+             * <code>int32 currentScore = 2;</code>
+             */
+            public Builder setCurrentScore(int value) {
+
+                currentScore_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 当局得分
+             * </pre>
+             * <p>
+             * <code>int32 currentScore = 2;</code>
+             */
+            public Builder clearCurrentScore() {
+
+                currentScore_ = 0;
+                onChanged();
+                return this;
+            }
+
+            private int totalScore_;
+
+            /**
+             * <pre>
+             * 总分
+             * </pre>
+             * <p>
+             * <code>int32 totalScore = 3;</code>
+             */
+            public int getTotalScore() {
+                return totalScore_;
+            }
+
+            /**
+             * <pre>
+             * 总分
+             * </pre>
+             * <p>
+             * <code>int32 totalScore = 3;</code>
+             */
+            public Builder setTotalScore(int value) {
+
+                totalScore_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 总分
+             * </pre>
+             * <p>
+             * <code>int32 totalScore = 3;</code>
+             */
+            public Builder clearTotalScore() {
+
+                totalScore_ = 0;
                 onChanged();
                 return this;
             }
@@ -23137,38 +23431,57 @@ public final class GameBase {
 
     }
 
-    public interface MatchOverOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:MatchOver)
+    public interface ScoreResponseOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:ScoreResponse)
             com.google.protobuf.MessageOrBuilder {
 
         /**
-         * <pre>
-         *名次
-         * </pre>
-     *
-     * <code>uint32 ranking = 1;</code>
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
          */
-        int getRanking();
+        java.util.List<mahjong.mode.GameBase.ScoreResult>
+        getScoreResultList();
+
+        /**
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
+         */
+        mahjong.mode.GameBase.ScoreResult getScoreResult(int index);
+
+        /**
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
+         */
+        int getScoreResultCount();
+
+        /**
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
+         */
+        java.util.List<? extends mahjong.mode.GameBase.ScoreResultOrBuilder>
+        getScoreResultOrBuilderList();
+
+        /**
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
+         */
+        mahjong.mode.GameBase.ScoreResultOrBuilder getScoreResultOrBuilder(
+                int index);
     }
 
     /**
      * <pre>
-     * 比赛结果 MATCH_OVER
+     * 比赛积分更新 MATCH_SCORE
      * </pre>
      * <p>
-     * Protobuf type {@code MatchOver}
+     * Protobuf type {@code ScoreResponse}
      */
-    public static final class MatchOver extends
+    public static final class ScoreResponse extends
             com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:MatchOver)
-            MatchOverOrBuilder {
-        // Use MatchOver.newBuilder() to construct.
-        private MatchOver(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+            // @@protoc_insertion_point(message_implements:ScoreResponse)
+            ScoreResponseOrBuilder {
+        // Use ScoreResponse.newBuilder() to construct.
+        private ScoreResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
         }
 
-        private MatchOver() {
-            ranking_ = 0;
+        private ScoreResponse() {
+            scoreResult_ = java.util.Collections.emptyList();
         }
 
         @java.lang.Override
@@ -23177,7 +23490,7 @@ public final class GameBase {
             return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
-        private MatchOver(
+        private ScoreResponse(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
@@ -23197,9 +23510,13 @@ public final class GameBase {
                             }
                             break;
                         }
-                        case 8: {
-
-                            ranking_ = input.readUInt32();
+                        case 10: {
+                            if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                                scoreResult_ = new java.util.ArrayList<mahjong.mode.GameBase.ScoreResult>();
+                                mutable_bitField0_ |= 0x00000001;
+                            }
+                            scoreResult_.add(
+                                    input.readMessage(mahjong.mode.GameBase.ScoreResult.parser(), extensionRegistry));
                             break;
                         }
                     }
@@ -23210,34 +23527,63 @@ public final class GameBase {
                 throw new com.google.protobuf.InvalidProtocolBufferException(
                         e).setUnfinishedMessage(this);
             } finally {
+                if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                    scoreResult_ = java.util.Collections.unmodifiableList(scoreResult_);
+                }
                 makeExtensionsImmutable();
             }
         }
 
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-            return mahjong.mode.GameBase.internal_static_MatchOver_descriptor;
+            return mahjong.mode.GameBase.internal_static_ScoreResponse_descriptor;
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-            return mahjong.mode.GameBase.internal_static_MatchOver_fieldAccessorTable
+            return mahjong.mode.GameBase.internal_static_ScoreResponse_fieldAccessorTable
                     .ensureFieldAccessorsInitialized(
-                            mahjong.mode.GameBase.MatchOver.class, mahjong.mode.GameBase.MatchOver.Builder.class);
+                            mahjong.mode.GameBase.ScoreResponse.class, mahjong.mode.GameBase.ScoreResponse.Builder.class);
         }
 
-        public static final int RANKING_FIELD_NUMBER = 1;
-        private int ranking_;
+        public static final int SCORERESULT_FIELD_NUMBER = 1;
+        private java.util.List<mahjong.mode.GameBase.ScoreResult> scoreResult_;
 
         /**
-         * <pre>
-         *名次
-         * </pre>
-         *
-         * <code>uint32 ranking = 1;</code>
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
          */
-        public int getRanking() {
-            return ranking_;
+        public java.util.List<mahjong.mode.GameBase.ScoreResult> getScoreResultList() {
+            return scoreResult_;
+        }
+
+        /**
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
+         */
+        public java.util.List<? extends mahjong.mode.GameBase.ScoreResultOrBuilder>
+        getScoreResultOrBuilderList() {
+            return scoreResult_;
+        }
+
+        /**
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
+         */
+        public int getScoreResultCount() {
+            return scoreResult_.size();
+        }
+
+        /**
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
+         */
+        public mahjong.mode.GameBase.ScoreResult getScoreResult(int index) {
+            return scoreResult_.get(index);
+        }
+
+        /**
+         * <code>repeated .ScoreResult scoreResult = 1;</code>
+         */
+        public mahjong.mode.GameBase.ScoreResultOrBuilder getScoreResultOrBuilder(
+                int index) {
+            return scoreResult_.get(index);
         }
 
         private byte memoizedIsInitialized = -1;
@@ -23253,8 +23599,8 @@ public final class GameBase {
 
         public void writeTo(com.google.protobuf.CodedOutputStream output)
                 throws java.io.IOException {
-            if (ranking_ != 0) {
-                output.writeUInt32(1, ranking_);
+            for (int i = 0; i < scoreResult_.size(); i++) {
+                output.writeMessage(1, scoreResult_.get(i));
             }
         }
 
@@ -23263,9 +23609,9 @@ public final class GameBase {
             if (size != -1) return size;
 
             size = 0;
-            if (ranking_ != 0) {
+            for (int i = 0; i < scoreResult_.size(); i++) {
                 size += com.google.protobuf.CodedOutputStream
-                        .computeUInt32Size(1, ranking_);
+                        .computeMessageSize(1, scoreResult_.get(i));
             }
             memoizedSize = size;
             return size;
@@ -23278,14 +23624,14 @@ public final class GameBase {
             if (obj == this) {
                 return true;
             }
-            if (!(obj instanceof mahjong.mode.GameBase.MatchOver)) {
+            if (!(obj instanceof mahjong.mode.GameBase.ScoreResponse)) {
                 return super.equals(obj);
             }
-            mahjong.mode.GameBase.MatchOver other = (mahjong.mode.GameBase.MatchOver) obj;
+            mahjong.mode.GameBase.ScoreResponse other = (mahjong.mode.GameBase.ScoreResponse) obj;
 
             boolean result = true;
-            result = result && (getRanking()
-                    == other.getRanking());
+            result = result && getScoreResultList()
+                    .equals(other.getScoreResultList());
             return result;
         }
 
@@ -23296,58 +23642,60 @@ public final class GameBase {
             }
             int hash = 41;
             hash = (19 * hash) + getDescriptor().hashCode();
-            hash = (37 * hash) + RANKING_FIELD_NUMBER;
-            hash = (53 * hash) + getRanking();
+            if (getScoreResultCount() > 0) {
+                hash = (37 * hash) + SCORERESULT_FIELD_NUMBER;
+                hash = (53 * hash) + getScoreResultList().hashCode();
+            }
             hash = (29 * hash) + unknownFields.hashCode();
             memoizedHashCode = hash;
             return hash;
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(
                 java.nio.ByteBuffer data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(
                 java.nio.ByteBuffer data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(
                 com.google.protobuf.ByteString data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(
                 com.google.protobuf.ByteString data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(byte[] data)
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(byte[] data)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(
                 byte[] data,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(java.io.InputStream input)
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseWithIOException(PARSER, input);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
@@ -23355,13 +23703,13 @@ public final class GameBase {
                     .parseWithIOException(PARSER, input, extensionRegistry);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseDelimitedFrom(java.io.InputStream input)
+        public static mahjong.mode.GameBase.ScoreResponse parseDelimitedFrom(java.io.InputStream input)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseDelimitedWithIOException(PARSER, input);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseDelimitedFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseDelimitedFrom(
                 java.io.InputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
@@ -23369,14 +23717,14 @@ public final class GameBase {
                     .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(
                 com.google.protobuf.CodedInputStream input)
                 throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3
                     .parseWithIOException(PARSER, input);
         }
 
-        public static mahjong.mode.GameBase.MatchOver parseFrom(
+        public static mahjong.mode.GameBase.ScoreResponse parseFrom(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                 throws java.io.IOException {
@@ -23392,7 +23740,7 @@ public final class GameBase {
             return DEFAULT_INSTANCE.toBuilder();
         }
 
-        public static Builder newBuilder(mahjong.mode.GameBase.MatchOver prototype) {
+        public static Builder newBuilder(mahjong.mode.GameBase.ScoreResponse prototype) {
             return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
         }
 
@@ -23410,28 +23758,28 @@ public final class GameBase {
 
         /**
          * <pre>
-         *比赛结果 MATCH_OVER
+         * 比赛积分更新 MATCH_SCORE
          * </pre>
-         *
-         * Protobuf type {@code MatchOver}
+         * <p>
+         * Protobuf type {@code ScoreResponse}
          */
         public static final class Builder extends
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-                // @@protoc_insertion_point(builder_implements:MatchOver)
-                mahjong.mode.GameBase.MatchOverOrBuilder {
+                // @@protoc_insertion_point(builder_implements:ScoreResponse)
+                mahjong.mode.GameBase.ScoreResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
-                return mahjong.mode.GameBase.internal_static_MatchOver_descriptor;
+                return mahjong.mode.GameBase.internal_static_ScoreResponse_descriptor;
             }
 
             protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internalGetFieldAccessorTable() {
-                return mahjong.mode.GameBase.internal_static_MatchOver_fieldAccessorTable
+                return mahjong.mode.GameBase.internal_static_ScoreResponse_fieldAccessorTable
                         .ensureFieldAccessorsInitialized(
-                                mahjong.mode.GameBase.MatchOver.class, mahjong.mode.GameBase.MatchOver.Builder.class);
+                                mahjong.mode.GameBase.ScoreResponse.class, mahjong.mode.GameBase.ScoreResponse.Builder.class);
             }
 
-            // Construct using mahjong.mode.GameBase.MatchOver.newBuilder()
+            // Construct using mahjong.mode.GameBase.ScoreResponse.newBuilder()
             private Builder() {
                 maybeForceBuilderInitialization();
             }
@@ -23445,36 +23793,50 @@ public final class GameBase {
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3
                         .alwaysUseFieldBuilders) {
+                    getScoreResultFieldBuilder();
                 }
             }
 
             public Builder clear() {
                 super.clear();
-                ranking_ = 0;
-
+                if (scoreResultBuilder_ == null) {
+                    scoreResult_ = java.util.Collections.emptyList();
+                    bitField0_ = (bitField0_ & ~0x00000001);
+                } else {
+                    scoreResultBuilder_.clear();
+                }
                 return this;
             }
 
             public com.google.protobuf.Descriptors.Descriptor
             getDescriptorForType() {
-                return mahjong.mode.GameBase.internal_static_MatchOver_descriptor;
+                return mahjong.mode.GameBase.internal_static_ScoreResponse_descriptor;
             }
 
-            public mahjong.mode.GameBase.MatchOver getDefaultInstanceForType() {
-                return mahjong.mode.GameBase.MatchOver.getDefaultInstance();
+            public mahjong.mode.GameBase.ScoreResponse getDefaultInstanceForType() {
+                return mahjong.mode.GameBase.ScoreResponse.getDefaultInstance();
             }
 
-            public mahjong.mode.GameBase.MatchOver build() {
-                mahjong.mode.GameBase.MatchOver result = buildPartial();
+            public mahjong.mode.GameBase.ScoreResponse build() {
+                mahjong.mode.GameBase.ScoreResponse result = buildPartial();
                 if (!result.isInitialized()) {
                     throw newUninitializedMessageException(result);
                 }
                 return result;
             }
 
-            public mahjong.mode.GameBase.MatchOver buildPartial() {
-                mahjong.mode.GameBase.MatchOver result = new mahjong.mode.GameBase.MatchOver(this);
-                result.ranking_ = ranking_;
+            public mahjong.mode.GameBase.ScoreResponse buildPartial() {
+                mahjong.mode.GameBase.ScoreResponse result = new mahjong.mode.GameBase.ScoreResponse(this);
+                int from_bitField0_ = bitField0_;
+                if (scoreResultBuilder_ == null) {
+                    if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                        scoreResult_ = java.util.Collections.unmodifiableList(scoreResult_);
+                        bitField0_ = (bitField0_ & ~0x00000001);
+                    }
+                    result.scoreResult_ = scoreResult_;
+                } else {
+                    result.scoreResult_ = scoreResultBuilder_.build();
+                }
                 onBuilt();
                 return result;
             }
@@ -23512,18 +23874,41 @@ public final class GameBase {
             }
 
             public Builder mergeFrom(com.google.protobuf.Message other) {
-                if (other instanceof mahjong.mode.GameBase.MatchOver) {
-                    return mergeFrom((mahjong.mode.GameBase.MatchOver) other);
+                if (other instanceof mahjong.mode.GameBase.ScoreResponse) {
+                    return mergeFrom((mahjong.mode.GameBase.ScoreResponse) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
                 }
             }
 
-            public Builder mergeFrom(mahjong.mode.GameBase.MatchOver other) {
-                if (other == mahjong.mode.GameBase.MatchOver.getDefaultInstance()) return this;
-                if (other.getRanking() != 0) {
-                    setRanking(other.getRanking());
+            public Builder mergeFrom(mahjong.mode.GameBase.ScoreResponse other) {
+                if (other == mahjong.mode.GameBase.ScoreResponse.getDefaultInstance()) return this;
+                if (scoreResultBuilder_ == null) {
+                    if (!other.scoreResult_.isEmpty()) {
+                        if (scoreResult_.isEmpty()) {
+                            scoreResult_ = other.scoreResult_;
+                            bitField0_ = (bitField0_ & ~0x00000001);
+                        } else {
+                            ensureScoreResultIsMutable();
+                            scoreResult_.addAll(other.scoreResult_);
+                        }
+                        onChanged();
+                    }
+                } else {
+                    if (!other.scoreResult_.isEmpty()) {
+                        if (scoreResultBuilder_.isEmpty()) {
+                            scoreResultBuilder_.dispose();
+                            scoreResultBuilder_ = null;
+                            scoreResult_ = other.scoreResult_;
+                            bitField0_ = (bitField0_ & ~0x00000001);
+                            scoreResultBuilder_ =
+                                    com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                                            getScoreResultFieldBuilder() : null;
+                        } else {
+                            scoreResultBuilder_.addAllMessages(other.scoreResult_);
+                        }
+                    }
                 }
                 onChanged();
                 return this;
@@ -23537,11 +23922,11 @@ public final class GameBase {
                     com.google.protobuf.CodedInputStream input,
                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
                     throws java.io.IOException {
-                mahjong.mode.GameBase.MatchOver parsedMessage = null;
+                mahjong.mode.GameBase.ScoreResponse parsedMessage = null;
                 try {
                     parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
                 } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-                    parsedMessage = (mahjong.mode.GameBase.MatchOver) e.getUnfinishedMessage();
+                    parsedMessage = (mahjong.mode.GameBase.ScoreResponse) e.getUnfinishedMessage();
                     throw e.unwrapIOException();
                 } finally {
                     if (parsedMessage != null) {
@@ -23551,11 +23936,1325 @@ public final class GameBase {
                 return this;
             }
 
-            private int ranking_;
+            private int bitField0_;
+
+            private java.util.List<mahjong.mode.GameBase.ScoreResult> scoreResult_ =
+                    java.util.Collections.emptyList();
+
+            private void ensureScoreResultIsMutable() {
+                if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+                    scoreResult_ = new java.util.ArrayList<mahjong.mode.GameBase.ScoreResult>(scoreResult_);
+                    bitField0_ |= 0x00000001;
+                }
+            }
+
+            private com.google.protobuf.RepeatedFieldBuilderV3<
+                    mahjong.mode.GameBase.ScoreResult, mahjong.mode.GameBase.ScoreResult.Builder, mahjong.mode.GameBase.ScoreResultOrBuilder> scoreResultBuilder_;
 
             /**
-             * <pre>
-             *名次
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public java.util.List<mahjong.mode.GameBase.ScoreResult> getScoreResultList() {
+                if (scoreResultBuilder_ == null) {
+                    return java.util.Collections.unmodifiableList(scoreResult_);
+                } else {
+                    return scoreResultBuilder_.getMessageList();
+                }
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public int getScoreResultCount() {
+                if (scoreResultBuilder_ == null) {
+                    return scoreResult_.size();
+                } else {
+                    return scoreResultBuilder_.getCount();
+                }
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public mahjong.mode.GameBase.ScoreResult getScoreResult(int index) {
+                if (scoreResultBuilder_ == null) {
+                    return scoreResult_.get(index);
+                } else {
+                    return scoreResultBuilder_.getMessage(index);
+                }
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder setScoreResult(
+                    int index, mahjong.mode.GameBase.ScoreResult value) {
+                if (scoreResultBuilder_ == null) {
+                    if (value == null) {
+                        throw new NullPointerException();
+                    }
+                    ensureScoreResultIsMutable();
+                    scoreResult_.set(index, value);
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.setMessage(index, value);
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder setScoreResult(
+                    int index, mahjong.mode.GameBase.ScoreResult.Builder builderForValue) {
+                if (scoreResultBuilder_ == null) {
+                    ensureScoreResultIsMutable();
+                    scoreResult_.set(index, builderForValue.build());
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.setMessage(index, builderForValue.build());
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder addScoreResult(mahjong.mode.GameBase.ScoreResult value) {
+                if (scoreResultBuilder_ == null) {
+                    if (value == null) {
+                        throw new NullPointerException();
+                    }
+                    ensureScoreResultIsMutable();
+                    scoreResult_.add(value);
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.addMessage(value);
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder addScoreResult(
+                    int index, mahjong.mode.GameBase.ScoreResult value) {
+                if (scoreResultBuilder_ == null) {
+                    if (value == null) {
+                        throw new NullPointerException();
+                    }
+                    ensureScoreResultIsMutable();
+                    scoreResult_.add(index, value);
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.addMessage(index, value);
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder addScoreResult(
+                    mahjong.mode.GameBase.ScoreResult.Builder builderForValue) {
+                if (scoreResultBuilder_ == null) {
+                    ensureScoreResultIsMutable();
+                    scoreResult_.add(builderForValue.build());
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.addMessage(builderForValue.build());
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder addScoreResult(
+                    int index, mahjong.mode.GameBase.ScoreResult.Builder builderForValue) {
+                if (scoreResultBuilder_ == null) {
+                    ensureScoreResultIsMutable();
+                    scoreResult_.add(index, builderForValue.build());
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.addMessage(index, builderForValue.build());
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder addAllScoreResult(
+                    java.lang.Iterable<? extends mahjong.mode.GameBase.ScoreResult> values) {
+                if (scoreResultBuilder_ == null) {
+                    ensureScoreResultIsMutable();
+                    com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                            values, scoreResult_);
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.addAllMessages(values);
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder clearScoreResult() {
+                if (scoreResultBuilder_ == null) {
+                    scoreResult_ = java.util.Collections.emptyList();
+                    bitField0_ = (bitField0_ & ~0x00000001);
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.clear();
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public Builder removeScoreResult(int index) {
+                if (scoreResultBuilder_ == null) {
+                    ensureScoreResultIsMutable();
+                    scoreResult_.remove(index);
+                    onChanged();
+                } else {
+                    scoreResultBuilder_.remove(index);
+                }
+                return this;
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public mahjong.mode.GameBase.ScoreResult.Builder getScoreResultBuilder(
+                    int index) {
+                return getScoreResultFieldBuilder().getBuilder(index);
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public mahjong.mode.GameBase.ScoreResultOrBuilder getScoreResultOrBuilder(
+                    int index) {
+                if (scoreResultBuilder_ == null) {
+                    return scoreResult_.get(index);
+                } else {
+                    return scoreResultBuilder_.getMessageOrBuilder(index);
+                }
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public java.util.List<? extends mahjong.mode.GameBase.ScoreResultOrBuilder>
+            getScoreResultOrBuilderList() {
+                if (scoreResultBuilder_ != null) {
+                    return scoreResultBuilder_.getMessageOrBuilderList();
+                } else {
+                    return java.util.Collections.unmodifiableList(scoreResult_);
+                }
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public mahjong.mode.GameBase.ScoreResult.Builder addScoreResultBuilder() {
+                return getScoreResultFieldBuilder().addBuilder(
+                        mahjong.mode.GameBase.ScoreResult.getDefaultInstance());
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public mahjong.mode.GameBase.ScoreResult.Builder addScoreResultBuilder(
+                    int index) {
+                return getScoreResultFieldBuilder().addBuilder(
+                        index, mahjong.mode.GameBase.ScoreResult.getDefaultInstance());
+            }
+
+            /**
+             * <code>repeated .ScoreResult scoreResult = 1;</code>
+             */
+            public java.util.List<mahjong.mode.GameBase.ScoreResult.Builder>
+            getScoreResultBuilderList() {
+                return getScoreResultFieldBuilder().getBuilderList();
+            }
+
+            private com.google.protobuf.RepeatedFieldBuilderV3<
+                    mahjong.mode.GameBase.ScoreResult, mahjong.mode.GameBase.ScoreResult.Builder, mahjong.mode.GameBase.ScoreResultOrBuilder>
+            getScoreResultFieldBuilder() {
+                if (scoreResultBuilder_ == null) {
+                    scoreResultBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+                            mahjong.mode.GameBase.ScoreResult, mahjong.mode.GameBase.ScoreResult.Builder, mahjong.mode.GameBase.ScoreResultOrBuilder>(
+                            scoreResult_,
+                            ((bitField0_ & 0x00000001) == 0x00000001),
+                            getParentForChildren(),
+                            isClean());
+                    scoreResult_ = null;
+                }
+                return scoreResultBuilder_;
+            }
+
+            public final Builder setUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
+
+            public final Builder mergeUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
+
+
+            // @@protoc_insertion_point(builder_scope:ScoreResponse)
+        }
+
+        // @@protoc_insertion_point(class_scope:ScoreResponse)
+        private static final mahjong.mode.GameBase.ScoreResponse DEFAULT_INSTANCE;
+
+        static {
+            DEFAULT_INSTANCE = new mahjong.mode.GameBase.ScoreResponse();
+        }
+
+        public static mahjong.mode.GameBase.ScoreResponse getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        private static final com.google.protobuf.Parser<ScoreResponse>
+                PARSER = new com.google.protobuf.AbstractParser<ScoreResponse>() {
+            public ScoreResponse parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new ScoreResponse(input, extensionRegistry);
+            }
+        };
+
+        public static com.google.protobuf.Parser<ScoreResponse> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<ScoreResponse> getParserForType() {
+            return PARSER;
+        }
+
+        public mahjong.mode.GameBase.ScoreResponse getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
+    }
+
+    public interface ScoreResultOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:ScoreResult)
+            com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <code>uint32 ID = 1;</code>
+         */
+        int getID();
+
+        /**
+         * <code>int32 score = 2;</code>
+         */
+        int getScore();
+    }
+
+    /**
+     * Protobuf type {@code ScoreResult}
+     */
+    public static final class ScoreResult extends
+            com.google.protobuf.GeneratedMessageV3 implements
+            // @@protoc_insertion_point(message_implements:ScoreResult)
+            ScoreResultOrBuilder {
+        // Use ScoreResult.newBuilder() to construct.
+        private ScoreResult(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+            super(builder);
+        }
+
+        private ScoreResult() {
+            iD_ = 0;
+            score_ = 0;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
+
+        private ScoreResult(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            this();
+            int mutable_bitField0_ = 0;
+            try {
+                boolean done = false;
+                while (!done) {
+                    int tag = input.readTag();
+                    switch (tag) {
+                        case 0:
+                            done = true;
+                            break;
+                        default: {
+                            if (!input.skipField(tag)) {
+                                done = true;
+                            }
+                            break;
+                        }
+                        case 8: {
+
+                            iD_ = input.readUInt32();
+                            break;
+                        }
+                        case 16: {
+
+                            score_ = input.readInt32();
+                            break;
+                        }
+                    }
+                }
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(this);
+            } catch (java.io.IOException e) {
+                throw new com.google.protobuf.InvalidProtocolBufferException(
+                        e).setUnfinishedMessage(this);
+            } finally {
+                makeExtensionsImmutable();
+            }
+        }
+
+        public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+            return mahjong.mode.GameBase.internal_static_ScoreResult_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+            return mahjong.mode.GameBase.internal_static_ScoreResult_fieldAccessorTable
+                    .ensureFieldAccessorsInitialized(
+                            mahjong.mode.GameBase.ScoreResult.class, mahjong.mode.GameBase.ScoreResult.Builder.class);
+        }
+
+        public static final int ID_FIELD_NUMBER = 1;
+        private int iD_;
+
+        /**
+         * <code>uint32 ID = 1;</code>
+         */
+        public int getID() {
+            return iD_;
+        }
+
+        public static final int SCORE_FIELD_NUMBER = 2;
+        private int score_;
+
+        /**
+         * <code>int32 score = 2;</code>
+         */
+        public int getScore() {
+            return score_;
+        }
+
+        private byte memoizedIsInitialized = -1;
+
+        public final boolean isInitialized() {
+            byte isInitialized = memoizedIsInitialized;
+            if (isInitialized == 1) return true;
+            if (isInitialized == 0) return false;
+
+            memoizedIsInitialized = 1;
+            return true;
+        }
+
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+                throws java.io.IOException {
+            if (iD_ != 0) {
+                output.writeUInt32(1, iD_);
+            }
+            if (score_ != 0) {
+                output.writeInt32(2, score_);
+            }
+        }
+
+        public int getSerializedSize() {
+            int size = memoizedSize;
+            if (size != -1) return size;
+
+            size = 0;
+            if (iD_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeUInt32Size(1, iD_);
+            }
+            if (score_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeInt32Size(2, score_);
+            }
+            memoizedSize = size;
+            return size;
+        }
+
+        private static final long serialVersionUID = 0L;
+
+        @java.lang.Override
+        public boolean equals(final java.lang.Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof mahjong.mode.GameBase.ScoreResult)) {
+                return super.equals(obj);
+            }
+            mahjong.mode.GameBase.ScoreResult other = (mahjong.mode.GameBase.ScoreResult) obj;
+
+            boolean result = true;
+            result = result && (getID()
+                    == other.getID());
+            result = result && (getScore()
+                    == other.getScore());
+            return result;
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            if (memoizedHashCode != 0) {
+                return memoizedHashCode;
+            }
+            int hash = 41;
+            hash = (19 * hash) + getDescriptor().hashCode();
+            hash = (37 * hash) + ID_FIELD_NUMBER;
+            hash = (53 * hash) + getID();
+            hash = (37 * hash) + SCORE_FIELD_NUMBER;
+            hash = (53 * hash) + getScore();
+            hash = (29 * hash) + unknownFields.hashCode();
+            memoizedHashCode = hash;
+            return hash;
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(mahjong.mode.GameBase.ScoreResult prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public Builder toBuilder() {
+            return this == DEFAULT_INSTANCE
+                    ? new Builder() : new Builder().mergeFrom(this);
+        }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+                com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            Builder builder = new Builder(parent);
+            return builder;
+        }
+
+        /**
+         * Protobuf type {@code ScoreResult}
+         */
+        public static final class Builder extends
+                com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+                // @@protoc_insertion_point(builder_implements:ScoreResult)
+                mahjong.mode.GameBase.ScoreResultOrBuilder {
+            public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+                return mahjong.mode.GameBase.internal_static_ScoreResult_descriptor;
+            }
+
+            protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+                return mahjong.mode.GameBase.internal_static_ScoreResult_fieldAccessorTable
+                        .ensureFieldAccessorsInitialized(
+                                mahjong.mode.GameBase.ScoreResult.class, mahjong.mode.GameBase.ScoreResult.Builder.class);
+            }
+
+            // Construct using mahjong.mode.GameBase.ScoreResult.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
+            private void maybeForceBuilderInitialization() {
+                if (com.google.protobuf.GeneratedMessageV3
+                        .alwaysUseFieldBuilders) {
+                }
+            }
+
+            public Builder clear() {
+                super.clear();
+                iD_ = 0;
+
+                score_ = 0;
+
+                return this;
+            }
+
+            public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+                return mahjong.mode.GameBase.internal_static_ScoreResult_descriptor;
+            }
+
+            public mahjong.mode.GameBase.ScoreResult getDefaultInstanceForType() {
+                return mahjong.mode.GameBase.ScoreResult.getDefaultInstance();
+            }
+
+            public mahjong.mode.GameBase.ScoreResult build() {
+                mahjong.mode.GameBase.ScoreResult result = buildPartial();
+                if (!result.isInitialized()) {
+                    throw newUninitializedMessageException(result);
+                }
+                return result;
+            }
+
+            public mahjong.mode.GameBase.ScoreResult buildPartial() {
+                mahjong.mode.GameBase.ScoreResult result = new mahjong.mode.GameBase.ScoreResult(this);
+                result.iD_ = iD_;
+                result.score_ = score_;
+                onBuilt();
+                return result;
+            }
+
+            public Builder clone() {
+                return (Builder) super.clone();
+            }
+
+            public Builder setField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    Object value) {
+                return (Builder) super.setField(field, value);
+            }
+
+            public Builder clearField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field) {
+                return (Builder) super.clearField(field);
+            }
+
+            public Builder clearOneof(
+                    com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+                return (Builder) super.clearOneof(oneof);
+            }
+
+            public Builder setRepeatedField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    int index, Object value) {
+                return (Builder) super.setRepeatedField(field, index, value);
+            }
+
+            public Builder addRepeatedField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    Object value) {
+                return (Builder) super.addRepeatedField(field, value);
+            }
+
+            public Builder mergeFrom(com.google.protobuf.Message other) {
+                if (other instanceof mahjong.mode.GameBase.ScoreResult) {
+                    return mergeFrom((mahjong.mode.GameBase.ScoreResult) other);
+                } else {
+                    super.mergeFrom(other);
+                    return this;
+                }
+            }
+
+            public Builder mergeFrom(mahjong.mode.GameBase.ScoreResult other) {
+                if (other == mahjong.mode.GameBase.ScoreResult.getDefaultInstance()) return this;
+                if (other.getID() != 0) {
+                    setID(other.getID());
+                }
+                if (other.getScore() != 0) {
+                    setScore(other.getScore());
+                }
+                onChanged();
+                return this;
+            }
+
+            public final boolean isInitialized() {
+                return true;
+            }
+
+            public Builder mergeFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws java.io.IOException {
+                mahjong.mode.GameBase.ScoreResult parsedMessage = null;
+                try {
+                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                    parsedMessage = (mahjong.mode.GameBase.ScoreResult) e.getUnfinishedMessage();
+                    throw e.unwrapIOException();
+                } finally {
+                    if (parsedMessage != null) {
+                        mergeFrom(parsedMessage);
+                    }
+                }
+                return this;
+            }
+
+            private int iD_;
+
+            /**
+             * <code>uint32 ID = 1;</code>
+             */
+            public int getID() {
+                return iD_;
+            }
+
+            /**
+             * <code>uint32 ID = 1;</code>
+             */
+            public Builder setID(int value) {
+
+                iD_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>uint32 ID = 1;</code>
+             */
+            public Builder clearID() {
+
+                iD_ = 0;
+                onChanged();
+                return this;
+            }
+
+            private int score_;
+
+            /**
+             * <code>int32 score = 2;</code>
+             */
+            public int getScore() {
+                return score_;
+            }
+
+            /**
+             * <code>int32 score = 2;</code>
+             */
+            public Builder setScore(int value) {
+
+                score_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>int32 score = 2;</code>
+             */
+            public Builder clearScore() {
+
+                score_ = 0;
+                onChanged();
+                return this;
+            }
+
+            public final Builder setUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
+
+            public final Builder mergeUnknownFields(
+                    final com.google.protobuf.UnknownFieldSet unknownFields) {
+                return this;
+            }
+
+
+            // @@protoc_insertion_point(builder_scope:ScoreResult)
+        }
+
+        // @@protoc_insertion_point(class_scope:ScoreResult)
+        private static final mahjong.mode.GameBase.ScoreResult DEFAULT_INSTANCE;
+
+        static {
+            DEFAULT_INSTANCE = new mahjong.mode.GameBase.ScoreResult();
+        }
+
+        public static mahjong.mode.GameBase.ScoreResult getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        private static final com.google.protobuf.Parser<ScoreResult>
+                PARSER = new com.google.protobuf.AbstractParser<ScoreResult>() {
+            public ScoreResult parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new ScoreResult(input, extensionRegistry);
+            }
+        };
+
+        public static com.google.protobuf.Parser<ScoreResult> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<ScoreResult> getParserForType() {
+            return PARSER;
+        }
+
+        public mahjong.mode.GameBase.ScoreResult getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
+    }
+
+    public interface MatchBalanceOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:MatchBalance)
+            com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <pre>
+         * 名次
+         * </pre>
+         * <p>
+         * <code>uint32 ranking = 1;</code>
+         */
+        int getRanking();
+
+        /**
+         * <pre>
+         * 总分
+         * </pre>
+         * <p>
+         * <code>int32 totalScore = 2;</code>
+         */
+        int getTotalScore();
+    }
+
+    /**
+     * <pre>
+     * 比赛结果 MATCH_BALANCE
+     * </pre>
+     * <p>
+     * Protobuf type {@code MatchBalance}
+     */
+    public static final class MatchBalance extends
+            com.google.protobuf.GeneratedMessageV3 implements
+            // @@protoc_insertion_point(message_implements:MatchBalance)
+            MatchBalanceOrBuilder {
+        // Use MatchBalance.newBuilder() to construct.
+        private MatchBalance(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+            super(builder);
+        }
+
+        private MatchBalance() {
+            ranking_ = 0;
+            totalScore_ = 0;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+        }
+
+        private MatchBalance(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            this();
+            int mutable_bitField0_ = 0;
+            try {
+                boolean done = false;
+                while (!done) {
+                    int tag = input.readTag();
+                    switch (tag) {
+                        case 0:
+                            done = true;
+                            break;
+                        default: {
+                            if (!input.skipField(tag)) {
+                                done = true;
+                            }
+                            break;
+                        }
+                        case 8: {
+
+                            ranking_ = input.readUInt32();
+                            break;
+                        }
+                        case 16: {
+
+                            totalScore_ = input.readInt32();
+                            break;
+                        }
+                    }
+                }
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(this);
+            } catch (java.io.IOException e) {
+                throw new com.google.protobuf.InvalidProtocolBufferException(
+                        e).setUnfinishedMessage(this);
+            } finally {
+                makeExtensionsImmutable();
+            }
+        }
+
+        public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+            return mahjong.mode.GameBase.internal_static_MatchBalance_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+            return mahjong.mode.GameBase.internal_static_MatchBalance_fieldAccessorTable
+                    .ensureFieldAccessorsInitialized(
+                            mahjong.mode.GameBase.MatchBalance.class, mahjong.mode.GameBase.MatchBalance.Builder.class);
+        }
+
+        public static final int RANKING_FIELD_NUMBER = 1;
+        private int ranking_;
+
+        /**
+         * <pre>
+         *名次
+         * </pre>
+         *
+         * <code>uint32 ranking = 1;</code>
+         */
+        public int getRanking() {
+            return ranking_;
+        }
+
+        public static final int TOTALSCORE_FIELD_NUMBER = 2;
+        private int totalScore_;
+
+        /**
+         * <pre>
+         *总分
+         * </pre>
+         *
+         * <code>int32 totalScore = 2;</code>
+         */
+        public int getTotalScore() {
+            return totalScore_;
+        }
+
+        private byte memoizedIsInitialized = -1;
+
+        public final boolean isInitialized() {
+            byte isInitialized = memoizedIsInitialized;
+            if (isInitialized == 1) return true;
+            if (isInitialized == 0) return false;
+
+            memoizedIsInitialized = 1;
+            return true;
+        }
+
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+                throws java.io.IOException {
+            if (ranking_ != 0) {
+                output.writeUInt32(1, ranking_);
+            }
+            if (totalScore_ != 0) {
+                output.writeInt32(2, totalScore_);
+            }
+        }
+
+        public int getSerializedSize() {
+            int size = memoizedSize;
+            if (size != -1) return size;
+
+            size = 0;
+            if (ranking_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeUInt32Size(1, ranking_);
+            }
+            if (totalScore_ != 0) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeInt32Size(2, totalScore_);
+            }
+            memoizedSize = size;
+            return size;
+        }
+
+        private static final long serialVersionUID = 0L;
+
+        @java.lang.Override
+        public boolean equals(final java.lang.Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof mahjong.mode.GameBase.MatchBalance)) {
+                return super.equals(obj);
+            }
+            mahjong.mode.GameBase.MatchBalance other = (mahjong.mode.GameBase.MatchBalance) obj;
+
+            boolean result = true;
+            result = result && (getRanking()
+                    == other.getRanking());
+            result = result && (getTotalScore()
+                    == other.getTotalScore());
+            return result;
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            if (memoizedHashCode != 0) {
+                return memoizedHashCode;
+            }
+            int hash = 41;
+            hash = (19 * hash) + getDescriptor().hashCode();
+            hash = (37 * hash) + RANKING_FIELD_NUMBER;
+            hash = (53 * hash) + getRanking();
+            hash = (37 * hash) + TOTALSCORE_FIELD_NUMBER;
+            hash = (53 * hash) + getTotalScore();
+            hash = (29 * hash) + unknownFields.hashCode();
+            memoizedHashCode = hash;
+            return hash;
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static mahjong.mode.GameBase.MatchBalance parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(mahjong.mode.GameBase.MatchBalance prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public Builder toBuilder() {
+            return this == DEFAULT_INSTANCE
+                    ? new Builder() : new Builder().mergeFrom(this);
+        }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+                com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            Builder builder = new Builder(parent);
+            return builder;
+        }
+
+        /**
+         * <pre>
+         *比赛结果 MATCH_BALANCE
+         * </pre>
+         *
+         * Protobuf type {@code MatchBalance}
+         */
+        public static final class Builder extends
+                com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+                // @@protoc_insertion_point(builder_implements:MatchBalance)
+                mahjong.mode.GameBase.MatchBalanceOrBuilder {
+            public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+                return mahjong.mode.GameBase.internal_static_MatchBalance_descriptor;
+            }
+
+            protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+                return mahjong.mode.GameBase.internal_static_MatchBalance_fieldAccessorTable
+                        .ensureFieldAccessorsInitialized(
+                                mahjong.mode.GameBase.MatchBalance.class, mahjong.mode.GameBase.MatchBalance.Builder.class);
+            }
+
+            // Construct using mahjong.mode.GameBase.MatchBalance.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
+            private void maybeForceBuilderInitialization() {
+                if (com.google.protobuf.GeneratedMessageV3
+                        .alwaysUseFieldBuilders) {
+                }
+            }
+
+            public Builder clear() {
+                super.clear();
+                ranking_ = 0;
+
+                totalScore_ = 0;
+
+                return this;
+            }
+
+            public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+                return mahjong.mode.GameBase.internal_static_MatchBalance_descriptor;
+            }
+
+            public mahjong.mode.GameBase.MatchBalance getDefaultInstanceForType() {
+        return mahjong.mode.GameBase.MatchBalance.getDefaultInstance();
+      }
+
+      public mahjong.mode.GameBase.MatchBalance build() {
+        mahjong.mode.GameBase.MatchBalance result = buildPartial();
+          if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public mahjong.mode.GameBase.MatchBalance buildPartial() {
+        mahjong.mode.GameBase.MatchBalance result = new mahjong.mode.GameBase.MatchBalance(this);
+        result.ranking_ = ranking_;
+          result.totalScore_ = totalScore_;
+          onBuilt();
+          return result;
+      }
+
+            public Builder clone() {
+                return (Builder) super.clone();
+            }
+
+            public Builder setField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field,
+                    Object value) {
+                return (Builder) super.setField(field, value);
+            }
+
+            public Builder clearField(
+                    com.google.protobuf.Descriptors.FieldDescriptor field) {
+                return (Builder) super.clearField(field);
+            }
+
+            public Builder clearOneof(
+                    com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+                return (Builder) super.clearOneof(oneof);
+            }
+
+            public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+          return (Builder) super.addRepeatedField(field, value);
+      }
+
+            public Builder mergeFrom(com.google.protobuf.Message other) {
+                if (other instanceof mahjong.mode.GameBase.MatchBalance) {
+                    return mergeFrom((mahjong.mode.GameBase.MatchBalance) other);
+                } else {
+                    super.mergeFrom(other);
+          return this;
+                }
+            }
+
+            public Builder mergeFrom(mahjong.mode.GameBase.MatchBalance other) {
+                if (other == mahjong.mode.GameBase.MatchBalance.getDefaultInstance()) return this;
+                if (other.getRanking() != 0) {
+          setRanking(other.getRanking());
+        }
+        if (other.getTotalScore() != 0) {
+          setTotalScore(other.getTotalScore());
+        }
+        onChanged();
+                return this;
+            }
+
+            public final boolean isInitialized() {
+                return true;
+            }
+
+            public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+                mahjong.mode.GameBase.MatchBalance parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (mahjong.mode.GameBase.MatchBalance) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private int ranking_ ;
+      /**
+       * <pre>
+       *名次
        * </pre>
        *
        * <code>uint32 ranking = 1;</code>
@@ -23589,6 +25288,44 @@ public final class GameBase {
         onChanged();
         return this;
       }
+
+      private int totalScore_ ;
+      /**
+       * <pre>
+       *总分
+       * </pre>
+       *
+       * <code>int32 totalScore = 2;</code>
+       */
+      public int getTotalScore() {
+        return totalScore_;
+      }
+      /**
+       * <pre>
+       *总分
+       * </pre>
+       *
+       * <code>int32 totalScore = 2;</code>
+       */
+      public Builder setTotalScore(int value) {
+
+        totalScore_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *总分
+       * </pre>
+       *
+       * <code>int32 totalScore = 2;</code>
+       */
+      public Builder clearTotalScore() {
+
+        totalScore_ = 0;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -23600,39 +25337,39 @@ public final class GameBase {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:MatchOver)
+      // @@protoc_insertion_point(builder_scope:MatchBalance)
     }
 
-    // @@protoc_insertion_point(class_scope:MatchOver)
-    private static final mahjong.mode.GameBase.MatchOver DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:MatchBalance)
+    private static final mahjong.mode.GameBase.MatchBalance DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new mahjong.mode.GameBase.MatchOver();
+      DEFAULT_INSTANCE = new mahjong.mode.GameBase.MatchBalance();
     }
 
-    public static mahjong.mode.GameBase.MatchOver getDefaultInstance() {
+    public static mahjong.mode.GameBase.MatchBalance getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<MatchOver>
-        PARSER = new com.google.protobuf.AbstractParser<MatchOver>() {
-      public MatchOver parsePartialFrom(
+    private static final com.google.protobuf.Parser<MatchBalance>
+        PARSER = new com.google.protobuf.AbstractParser<MatchBalance>() {
+      public MatchBalance parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new MatchOver(input, extensionRegistry);
+          return new MatchBalance(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<MatchOver> parser() {
+    public static com.google.protobuf.Parser<MatchBalance> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<MatchOver> getParserForType() {
+    public com.google.protobuf.Parser<MatchBalance> getParserForType() {
       return PARSER;
     }
 
-    public mahjong.mode.GameBase.MatchOver getDefaultInstanceForType() {
+    public mahjong.mode.GameBase.MatchBalance getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -23949,7 +25686,7 @@ public final class GameBase {
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
+          super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
@@ -23994,12 +25731,14 @@ public final class GameBase {
       public Builder clone() {
         return (Builder) super.clone();
       }
-      public Builder setField(
+
+        public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
       }
-      public Builder clearField(
+
+        public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
@@ -24022,7 +25761,7 @@ public final class GameBase {
           return mergeFrom((mahjong.mode.GameBase.DissolveApply)other);
         } else {
           super.mergeFrom(other);
-            return this;
+          return this;
         }
       }
 
@@ -24046,7 +25785,7 @@ public final class GameBase {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-          mahjong.mode.GameBase.DissolveApply parsedMessage = null;
+        mahjong.mode.GameBase.DissolveApply parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -24422,7 +26161,7 @@ public final class GameBase {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -24434,7 +26173,7 @@ public final class GameBase {
      * Protobuf type {@code DissolveReplyRequest}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:DissolveReplyRequest)
         mahjong.mode.GameBase.DissolveReplyRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -24481,7 +26220,7 @@ public final class GameBase {
       }
 
       public mahjong.mode.GameBase.DissolveReplyRequest build() {
-        mahjong.mode.GameBase.DissolveReplyRequest result = buildPartial();
+          mahjong.mode.GameBase.DissolveReplyRequest result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -24501,7 +26240,7 @@ public final class GameBase {
       public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
-        return (Builder) super.setField(field, value);
+          return (Builder) super.setField(field, value);
       }
       public Builder clearField(
           com.google.protobuf.Descriptors.FieldDescriptor field) {
@@ -24512,14 +26251,14 @@ public final class GameBase {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-              com.google.protobuf.Descriptors.FieldDescriptor field,
-              int index, Object value) {
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
-          return (Builder) super.addRepeatedField(field, value);
+        return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof mahjong.mode.GameBase.DissolveReplyRequest) {
@@ -24543,8 +26282,8 @@ public final class GameBase {
         return true;
       }
 
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+        public Builder mergeFrom(
+                com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         mahjong.mode.GameBase.DissolveReplyRequest parsedMessage = null;
@@ -24552,7 +26291,7 @@ public final class GameBase {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (mahjong.mode.GameBase.DissolveReplyRequest) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
+            throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -24612,17 +26351,17 @@ public final class GameBase {
       // @@protoc_insertion_point(builder_scope:DissolveReplyRequest)
     }
 
-      // @@protoc_insertion_point(class_scope:DissolveReplyRequest)
+    // @@protoc_insertion_point(class_scope:DissolveReplyRequest)
     private static final mahjong.mode.GameBase.DissolveReplyRequest DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new mahjong.mode.GameBase.DissolveReplyRequest();
     }
 
     public static mahjong.mode.GameBase.DissolveReplyRequest getDefaultInstance() {
-      return DEFAULT_INSTANCE;
+        return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<DissolveReplyRequest>
+      private static final com.google.protobuf.Parser<DissolveReplyRequest>
         PARSER = new com.google.protobuf.AbstractParser<DissolveReplyRequest>() {
       public DissolveReplyRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
@@ -24702,7 +26441,7 @@ public final class GameBase {
    *
    * Protobuf type {@code DissolveReplyResponse}
    */
-  public  static final class DissolveReplyResponse extends
+  public static final class DissolveReplyResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:DissolveReplyResponse)
       DissolveReplyResponseOrBuilder {
@@ -24733,9 +26472,9 @@ public final class GameBase {
             case 0:
               done = true;
               break;
-              default: {
-                  if (!input.skipField(tag)) {
-                      done = true;
+            default: {
+              if (!input.skipField(tag)) {
+                done = true;
               }
               break;
             }
@@ -25035,7 +26774,7 @@ public final class GameBase {
         return mahjong.mode.GameBase.internal_static_DissolveReplyResponse_descriptor;
       }
 
-      public mahjong.mode.GameBase.DissolveReplyResponse getDefaultInstanceForType() {
+        public mahjong.mode.GameBase.DissolveReplyResponse getDefaultInstanceForType() {
         return mahjong.mode.GameBase.DissolveReplyResponse.getDefaultInstance();
       }
 
@@ -25066,8 +26805,7 @@ public final class GameBase {
       public Builder clone() {
         return (Builder) super.clone();
       }
-
-        public Builder setField(
+      public Builder setField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.setField(field, value);
@@ -25286,10 +27024,11 @@ public final class GameBase {
         } else {
           dissolveBuilder_.addMessage(index, value);
         }
-        return this;
+          return this;
       }
-      /**
-       * <pre>
+
+        /**
+         * <pre>
        *是否同意
        * </pre>
        *
@@ -25332,11 +27071,11 @@ public final class GameBase {
        * <code>repeated .Dissolve dissolve = 1;</code>
        */
       public Builder addAllDissolve(
-              java.lang.Iterable<? extends mahjong.mode.GameBase.Dissolve> values) {
+          java.lang.Iterable<? extends mahjong.mode.GameBase.Dissolve> values) {
         if (dissolveBuilder_ == null) {
-          ensureDissolveIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, dissolve_);
+            ensureDissolveIsMutable();
+            com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                    values, dissolve_);
           onChanged();
         } else {
           dissolveBuilder_.addAllMessages(values);
@@ -25371,9 +27110,9 @@ public final class GameBase {
         if (dissolveBuilder_ == null) {
           ensureDissolveIsMutable();
           dissolve_.remove(index);
-            onChanged();
+          onChanged();
         } else {
-            dissolveBuilder_.remove(index);
+          dissolveBuilder_.remove(index);
         }
         return this;
       }
@@ -25385,7 +27124,7 @@ public final class GameBase {
        * <code>repeated .Dissolve dissolve = 1;</code>
        */
       public mahjong.mode.GameBase.Dissolve.Builder getDissolveBuilder(
-              int index) {
+          int index) {
         return getDissolveFieldBuilder().getBuilder(index);
       }
       /**
@@ -25843,7 +27582,7 @@ public final class GameBase {
 
       public mahjong.mode.GameBase.Dissolve build() {
         mahjong.mode.GameBase.Dissolve result = buildPartial();
-        if (!result.isInitialized()) {
+          if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
@@ -25878,8 +27617,7 @@ public final class GameBase {
           int index, Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
-
-        public Builder addRepeatedField(
+      public Builder addRepeatedField(
           com.google.protobuf.Descriptors.FieldDescriptor field,
           Object value) {
         return (Builder) super.addRepeatedField(field, value);
@@ -26342,7 +28080,7 @@ public final class GameBase {
       }
 
       public mahjong.mode.GameBase.DissolveConfirm build() {
-        mahjong.mode.GameBase.DissolveConfirm result = buildPartial();
+          mahjong.mode.GameBase.DissolveConfirm result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -26422,10 +28160,11 @@ public final class GameBase {
         return this;
       }
 
-      private boolean dissolved_ ;
-      /**
-       * <pre>
-       *是否成功解散
+        private boolean dissolved_;
+
+        /**
+         * <pre>
+         *是否成功解散
        * </pre>
        *
        * <code>bool dissolved = 1;</code>
@@ -26443,8 +28182,8 @@ public final class GameBase {
       public Builder setDissolved(boolean value) {
 
         dissolved_ = value;
-        onChanged();
-        return this;
+          onChanged();
+          return this;
       }
       /**
        * <pre>
@@ -26499,7 +28238,7 @@ public final class GameBase {
 
     @java.lang.Override
     public com.google.protobuf.Parser<DissolveConfirm> getParserForType() {
-      return PARSER;
+        return PARSER;
     }
 
     public mahjong.mode.GameBase.DissolveConfirm getDefaultInstanceForType() {
@@ -26520,9 +28259,10 @@ public final class GameBase {
      * <code>string message = 1;</code>
      */
     java.lang.String getMessage();
-    /**
-     * <pre>
-     *通知
+
+      /**
+       * <pre>
+       *通知
      * </pre>
      *
      * <code>string message = 1;</code>
@@ -26552,7 +28292,7 @@ public final class GameBase {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-        return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
+      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
     private Notice(
         com.google.protobuf.CodedInputStream input,
@@ -26564,8 +28304,8 @@ public final class GameBase {
         boolean done = false;
         while (!done) {
           int tag = input.readTag();
-            switch (tag) {
-                case 0:
+          switch (tag) {
+            case 0:
               done = true;
               break;
             default: {
@@ -26801,7 +28541,7 @@ public final class GameBase {
      * Protobuf type {@code Notice}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:Notice)
         mahjong.mode.GameBase.NoticeOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -26816,7 +28556,7 @@ public final class GameBase {
                 mahjong.mode.GameBase.Notice.class, mahjong.mode.GameBase.Notice.Builder.class);
       }
 
-      // Construct using mahjong.mode.GameBase.Notice.newBuilder()
+        // Construct using mahjong.mode.GameBase.Notice.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -26857,8 +28597,8 @@ public final class GameBase {
 
       public mahjong.mode.GameBase.Notice buildPartial() {
         mahjong.mode.GameBase.Notice result = new mahjong.mode.GameBase.Notice(this);
-        result.message_ = message_;
-        onBuilt();
+          result.message_ = message_;
+          onBuilt();
         return result;
       }
 
@@ -26890,7 +28630,7 @@ public final class GameBase {
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof mahjong.mode.GameBase.Notice) {
-            return mergeFrom((mahjong.mode.GameBase.Notice)other);
+          return mergeFrom((mahjong.mode.GameBase.Notice)other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -26911,11 +28651,11 @@ public final class GameBase {
         return true;
       }
 
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+        public Builder mergeFrom(
+                com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-          mahjong.mode.GameBase.Notice parsedMessage = null;
+        mahjong.mode.GameBase.Notice parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -26923,7 +28663,7 @@ public final class GameBase {
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
+            mergeFrom(parsedMessage);
           }
         }
         return this;
@@ -26941,7 +28681,7 @@ public final class GameBase {
         java.lang.Object ref = message_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+                  (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           message_ = s;
           return s;
@@ -26949,19 +28689,20 @@ public final class GameBase {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <pre>
-       *通知
-       * </pre>
-       *
-       * <code>string message = 1;</code>
+
+        /**
+         * <pre>
+         *通知
+         * </pre>
+         *
+         * <code>string message = 1;</code>
        */
       public com.google.protobuf.ByteString
           getMessageBytes() {
         java.lang.Object ref = message_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-              com.google.protobuf.ByteString.copyFromUtf8(
+            com.google.protobuf.ByteString b =
+                    com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           message_ = b;
           return b;
@@ -26969,10 +28710,11 @@ public final class GameBase {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <pre>
-       *通知
-       * </pre>
+
+        /**
+         * <pre>
+         *通知
+         * </pre>
        *
        * <code>string message = 1;</code>
        */
@@ -26983,7 +28725,7 @@ public final class GameBase {
   }
 
         message_ = value;
-        onChanged();
+          onChanged();
         return this;
       }
       /**
@@ -26996,7 +28738,7 @@ public final class GameBase {
       public Builder clearMessage() {
 
         message_ = getDefaultInstance().getMessage();
-        onChanged();
+          onChanged();
         return this;
       }
       /**
@@ -27008,47 +28750,48 @@ public final class GameBase {
        */
       public Builder setMessageBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
+          if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
 
         message_ = value;
         onChanged();
-          return this;
+        return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
       }
 
       public final Builder mergeUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
+          return this;
       }
 
 
-      // @@protoc_insertion_point(builder_scope:Notice)
+        // @@protoc_insertion_point(builder_scope:Notice)
     }
 
     // @@protoc_insertion_point(class_scope:Notice)
     private static final mahjong.mode.GameBase.Notice DEFAULT_INSTANCE;
-    static {
-        DEFAULT_INSTANCE = new mahjong.mode.GameBase.Notice();
-    }
 
-    public static mahjong.mode.GameBase.Notice getDefaultInstance() {
+      static {
+          DEFAULT_INSTANCE = new mahjong.mode.GameBase.Notice();
+      }
+
+      public static mahjong.mode.GameBase.Notice getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
     private static final com.google.protobuf.Parser<Notice>
         PARSER = new com.google.protobuf.AbstractParser<Notice>() {
-      public Notice parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
+        public Notice parsePartialFrom(
+                com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Notice(input, extensionRegistry);
-      }
+            return new Notice(input, extensionRegistry);
+        }
     };
 
     public static com.google.protobuf.Parser<Notice> parser() {
@@ -27057,10 +28800,10 @@ public final class GameBase {
 
     @java.lang.Override
     public com.google.protobuf.Parser<Notice> getParserForType() {
-      return PARSER;
+        return PARSER;
     }
 
-    public mahjong.mode.GameBase.Notice getDefaultInstanceForType() {
+      public mahjong.mode.GameBase.Notice getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -27068,72 +28811,72 @@ public final class GameBase {
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_BaseConnection_descriptor;
-  private static final
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_BaseConnection_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_RoomCardIntoRequest_descriptor;
+    internal_static_RoomCardIntoRequest_descriptor;
   private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_RoomCardIntoRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_RoomCardIntoResponse_descriptor;
-  private static final
+    internal_static_RoomCardIntoResponse_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_RoomCardIntoResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_RoomSeatsInfo_descriptor;
-  private static final
+    internal_static_RoomSeatsInfo_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_RoomSeatsInfo_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_SeatResponse_descriptor;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_SeatResponse_descriptor;
   private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_SeatResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_OperationHistory_descriptor;
   private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_OperationHistory_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_BaseAction_descriptor;
-  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_OperationHistory_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_BaseAction_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_BaseAction_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_AskResponse_descriptor;
+    internal_static_AskResponse_descriptor;
   private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_AskResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_RoundResponse_descriptor;
-    private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internal_static_RoundResponse_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_ReadyResponse_descriptor;
+    internal_static_RoundResponse_descriptor;
   private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_RoundResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ReadyResponse_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ReadyResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_ErrorResponse_descriptor;
-  private static final
+    internal_static_ErrorResponse_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ErrorResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_RecordResponse_descriptor;
-  private static final
+    internal_static_RecordResponse_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_RecordResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_GameRecord_descriptor;
-  private static final
+    internal_static_GameRecord_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_GameRecord_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_Record_descriptor;
-  private static final
+    internal_static_Record_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Record_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
@@ -27142,85 +28885,95 @@ public final class GameBase {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_RecordDetailsRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_RecordDetailsResponse_descriptor;
-  private static final
+    internal_static_RecordDetailsResponse_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_RecordDetailsResponse_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_RoundItemRecord_descriptor;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_RoundItemRecord_descriptor;
     private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
             internal_static_RoundItemRecord_fieldAccessorTable;
     private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_UserRecord_descriptor;
-  private static final
+            internal_static_UserRecord_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_UserRecord_fieldAccessorTable;
+            internal_static_UserRecord_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_OverResponse_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_OverResponse_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ReplayRequest_descriptor;
   private static final
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_OverResponse_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_ReplayRequest_descriptor;
-  private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ReplayRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_ReplayResponse_descriptor;
-  private static final
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_ReplayResponse_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ReplayResponse_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Message_descriptor;
-  private static final
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_Message_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Message_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_AppointInteraction_descriptor;
-  private static final
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_AppointInteraction_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_AppointInteraction_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_LoggerRequest_descriptor;
-  private static final
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_LoggerRequest_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_LoggerRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_MatchInfo_descriptor;
-  private static final
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_MatchInfo_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_MatchInfo_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_MatchData_descriptor;
-  private static final
+            internal_static_MatchInfo_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_MatchData_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_MatchData_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-          internal_static_MatchEliminateScore_descriptor;
-  private static final
+            internal_static_MatchData_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_MatchEliminateScore_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_MatchEliminateScore_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_MatchResult_descriptor;
-  private static final
+            internal_static_MatchEliminateScore_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_MatchResult_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_MatchResult_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_MatchOver_descriptor;
-  private static final
+            internal_static_MatchResult_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_ScoreResponse_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_MatchOver_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_DissolveApply_descriptor;
-  private static final
+            internal_static_ScoreResponse_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_ScoreResult_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_DissolveApply_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_DissolveReplyRequest_descriptor;
-  private static final
+            internal_static_ScoreResult_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_MatchBalance_descriptor;
+    private static final
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internal_static_DissolveReplyRequest_fieldAccessorTable;
+            internal_static_MatchBalance_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_DissolveApply_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_DissolveApply_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_DissolveReplyRequest_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_DissolveReplyRequest_fieldAccessorTable;
     private static final com.google.protobuf.Descriptors.Descriptor
             internal_static_DissolveReplyResponse_descriptor;
     private static final
@@ -27298,53 +29051,58 @@ public final class GameBase {
                         "erRequest\022\016\n\006logger\030\001 \001(\t\"]\n\tMatchInfo\022\021" +
                         "\n\tarenaType\030\001 \001(\r\022\014\n\004name\030\002 \001(\t\022\r\n\005count" +
                         "\030\003 \001(\r\022\020\n\010entryFee\030\004 \001(\r\022\016\n\006reward\030\005 \001(\r" +
-                        "\"1\n\tMatchData\022\016\n\006status\030\001 \001(\r\022\024\n\014current" +
-                        "Count\030\002 \001(\r\"$\n\023MatchEliminateScore\022\r\n\005sc" +
-                        "ore\030\001 \001(\r\"\035\n\013MatchResult\022\016\n\006result\030\001 \001(\r" +
-                        "\"\034\n\tMatchOver\022\017\n\007ranking\030\001 \001(\r\":\n\rDissol",
-                "veApply\022\031\n\005error\030\001 \001(\0162\n.ErrorCode\022\016\n\006us" +
-                        "erId\030\002 \001(\r\"%\n\024DissolveReplyRequest\022\r\n\005ag" +
-                        "ree\030\001 \001(\010\"4\n\025DissolveReplyResponse\022\033\n\010di" +
-                        "ssolve\030\001 \003(\0132\t.Dissolve\")\n\010Dissolve\022\016\n\006u" +
-                        "serId\030\001 \001(\r\022\r\n\005agree\030\002 \001(\010\"$\n\017DissolveCo" +
-                        "nfirm\022\021\n\tdissolved\030\001 \001(\010\"\031\n\006Notice\022\017\n\007me" +
-                        "ssage\030\001 \001(\t*\207\006\n\rOperationType\022\t\n\005ERROR\020\000" +
-                        "\022\r\n\tHEARTBEAT\020\001\022\t\n\005LOGIN\020\n\022\017\n\013CREATE_ROO" +
-                        "M\020\013\022\t\n\005QUERY\020\014\022\n\n\006REBACK\020\r\022\014\n\010ADD_ROOM\020\016" +
-                        "\022\n\n\006RECORD\020\017\022\022\n\016RECORD_DETAILS\020\020\022\021\n\rSHAR",
-                "E_SUCCESS\020\021\022\r\n\tUSER_INFO\020\022\022\010\n\004MALL\020\023\022\024\n\020" +
-                        "EXCHANGE_HISTORY\020\024\022\020\n\014REGISTRATION\020\025\022\025\n\021" +
-                        "COMPETITION_START\020\026\022\024\n\020INTO_COMPETITION\020" +
-                        "\027\022\014\n\010CURRENCY\020\030\022\024\n\020COMPETITION_LIST\020\031\022\010\n" +
-      "\004TASK\020\032\022\n\n\006NOTICE\020\033\022\016\n\nMATCH_INFO\020\036\022\016\n\nM" +
-      "ATCH_DATA\020\037\022\020\n\014MATCH_RESULT\020 \022\016\n\nMATCH_O" +
-      "VER\020!\022\031\n\025MATCH_ELIMINATE_SCORE\020\"\022\016\n\nCONN" +
-      "ECTION\0202\022\t\n\005START\0203\022\r\n\tROOM_INFO\0204\022\r\n\tSE" +
-      "AT_INFO\0205\022\r\n\tGAME_INFO\0206\022\t\n\005READY\0207\022\r\n\tC" +
-      "OMPLETED\0208\022\n\n\006ACTION\0209\022\t\n\005ROUND\020:\022\007\n\003ASK",
-      "\020;\022\010\n\004EXIT\020<\022\n\n\006RESULT\020=\022\013\n\007MESSAGE\020>\022\n\n" +
-      "\006REPLAY\020?\022\010\n\004OVER\020@\022\020\n\014RECONNECTION\020A\022\014\n" +
-      "\010DISSOLVE\020B\022\022\n\016DISSOLVE_REPLY\020C\022\024\n\020DISSO" +
-      "LVE_CONFIRM\020D\022\022\n\016CONFIRM_BANKER\020E\022\r\n\tDEA" +
-      "L_CARD\020F\022\017\n\013INTERACTION\020G\022\021\n\rUPDATE_STAT" +
-      "US\020H\022\013\n\007BALANCE\020I\022\n\n\006LOGGER\020P*\274\001\n\010Action" +
-      "Id\022\r\n\tROOM_LIST\020\000\022\r\n\tBUY_HORSE\020\013\022\014\n\010GET_" +
-      "CARD\020\014\022\r\n\tPLAY_CARD\020\r\022\010\n\004PENG\020\016\022\013\n\007AN_GA" +
-      "NG\020\017\022\r\n\tDIAN_GANG\020\020\022\013\n\007BA_GANG\020\021\022\006\n\002HU\020\022" +
-      "\022\010\n\004PASS\020\023\022\007\n\003CHI\020\024\022\016\n\nPLAY_SCORE\020\025\022\r\n\tO",
-      "PEN_CARD\020\026\022\010\n\004GRAB\020\027*\305\002\n\tErrorCode\022\013\n\007SU" +
-      "CCESS\020\000\022\020\n\014ERROR_UNKNOW\020\001\022\030\n\024ERROR_UNKNO" +
-      "W_ACCOUNT\020\n\022\034\n\030ERROR_PASSWORD_INCORRECT\020" +
-      "\013\022\027\n\023ERROR_KEY_INCORRECT\020\014\022\024\n\020MONEY_NOT_" +
-      "ENOUGH\020\r\022\022\n\016ROOM_NOT_EXIST\020\025\022\016\n\nCOUNT_FU" +
-      "LL\020\026\022\030\n\024SHOUND_NOT_OPERATION\020\027\022\023\n\017GOLD_T" +
-      "OO_LITTLE\020\030\022\017\n\013HASNOT_CARD\020\031\022\020\n\014ERROR_SH" +
-      "ARED\020\032\022\027\n\023AREADY_REGISTRATION\020\033\022\023\n\017AREAD" +
-      "Y_DISSOLVE\020\034\022\016\n\nGAME_START\020\035*R\n\010GameType" +
-      "\022\024\n\020MAHJONG_XINGNING\020\000\022\022\n\016MAHJONG_RUIJIN",
-                "\020\001\022\017\n\013RUN_QUICKLY\020\002\022\013\n\007SANGONG\020\003*;\n\013Mess" +
-                        "ageType\022\010\n\004TEXT\020\000\022\014\n\010EMOTICON\020\001\022\t\n\005INPUT" +
-      "\020\002\022\t\n\005VOICE\020\003B\016\n\014mahjong.modeb\006proto3"
+                        "\"@\n\tMatchData\022\016\n\006status\030\001 \001(\r\022\024\n\014current" +
+                        "Count\030\002 \001(\r\022\r\n\005round\030\003 \001(\r\"$\n\023MatchElimi" +
+                        "nateScore\022\r\n\005score\030\001 \001(\r\"G\n\013MatchResult\022" +
+                        "\016\n\006result\030\001 \001(\r\022\024\n\014currentScore\030\002 \001(\005\022\022\n",
+                "\ntotalScore\030\003 \001(\005\"2\n\rScoreResponse\022!\n\013sc" +
+                        "oreResult\030\001 \003(\0132\014.ScoreResult\"(\n\013ScoreRe" +
+                        "sult\022\n\n\002ID\030\001 \001(\r\022\r\n\005score\030\002 \001(\005\"3\n\014Match" +
+                        "Balance\022\017\n\007ranking\030\001 \001(\r\022\022\n\ntotalScore\030\002" +
+                        " \001(\005\":\n\rDissolveApply\022\031\n\005error\030\001 \001(\0162\n.E" +
+                        "rrorCode\022\016\n\006userId\030\002 \001(\r\"%\n\024DissolveRepl" +
+                        "yRequest\022\r\n\005agree\030\001 \001(\010\"4\n\025DissolveReply" +
+                        "Response\022\033\n\010dissolve\030\001 \003(\0132\t.Dissolve\")\n" +
+                        "\010Dissolve\022\016\n\006userId\030\001 \001(\r\022\r\n\005agree\030\002 \001(\010" +
+                        "\"$\n\017DissolveConfirm\022\021\n\tdissolved\030\001 \001(\010\"\031",
+      "\n\006Notice\022\017\n\007message\030\001 \001(\t*\233\006\n\rOperationT" +
+      "ype\022\t\n\005ERROR\020\000\022\r\n\tHEARTBEAT\020\001\022\t\n\005LOGIN\020\n" +
+      "\022\017\n\013CREATE_ROOM\020\013\022\t\n\005QUERY\020\014\022\n\n\006REBACK\020\r" +
+      "\022\014\n\010ADD_ROOM\020\016\022\n\n\006RECORD\020\017\022\022\n\016RECORD_DET" +
+      "AILS\020\020\022\021\n\rSHARE_SUCCESS\020\021\022\r\n\tUSER_INFO\020\022" +
+      "\022\010\n\004MALL\020\023\022\024\n\020EXCHANGE_HISTORY\020\024\022\020\n\014REGI" +
+      "STRATION\020\025\022\025\n\021COMPETITION_START\020\026\022\024\n\020INT" +
+      "O_COMPETITION\020\027\022\014\n\010CURRENCY\020\030\022\024\n\020COMPETI" +
+      "TION_LIST\020\031\022\010\n\004TASK\020\032\022\n\n\006NOTICE\020\033\022\016\n\nMAT" +
+      "CH_INFO\020\036\022\016\n\nMATCH_DATA\020\037\022\020\n\014MATCH_RESUL",
+      "T\020 \022\021\n\rMATCH_BALANCE\020!\022\031\n\025MATCH_ELIMINAT" +
+      "E_SCORE\020\"\022\017\n\013MATCH_SCORE\020#\022\016\n\nCONNECTION" +
+      "\0202\022\t\n\005START\0203\022\r\n\tROOM_INFO\0204\022\r\n\tSEAT_INF" +
+      "O\0205\022\r\n\tGAME_INFO\0206\022\t\n\005READY\0207\022\r\n\tCOMPLET" +
+      "ED\0208\022\n\n\006ACTION\0209\022\t\n\005ROUND\020:\022\007\n\003ASK\020;\022\010\n\004" +
+      "EXIT\020<\022\n\n\006RESULT\020=\022\013\n\007MESSAGE\020>\022\n\n\006REPLA" +
+      "Y\020?\022\010\n\004OVER\020@\022\020\n\014RECONNECTION\020A\022\014\n\010DISSO" +
+      "LVE\020B\022\022\n\016DISSOLVE_REPLY\020C\022\024\n\020DISSOLVE_CO" +
+      "NFIRM\020D\022\022\n\016CONFIRM_BANKER\020E\022\r\n\tDEAL_CARD" +
+      "\020F\022\017\n\013INTERACTION\020G\022\021\n\rUPDATE_STATUS\020H\022\013",
+      "\n\007BALANCE\020I\022\n\n\006LOGGER\020P*\274\001\n\010ActionId\022\r\n\t" +
+      "ROOM_LIST\020\000\022\r\n\tBUY_HORSE\020\013\022\014\n\010GET_CARD\020\014" +
+      "\022\r\n\tPLAY_CARD\020\r\022\010\n\004PENG\020\016\022\013\n\007AN_GANG\020\017\022\r" +
+      "\n\tDIAN_GANG\020\020\022\013\n\007BA_GANG\020\021\022\006\n\002HU\020\022\022\010\n\004PA" +
+      "SS\020\023\022\007\n\003CHI\020\024\022\016\n\nPLAY_SCORE\020\025\022\r\n\tOPEN_CA" +
+      "RD\020\026\022\010\n\004GRAB\020\027*\305\002\n\tErrorCode\022\013\n\007SUCCESS\020" +
+      "\000\022\020\n\014ERROR_UNKNOW\020\001\022\030\n\024ERROR_UNKNOW_ACCO" +
+      "UNT\020\n\022\034\n\030ERROR_PASSWORD_INCORRECT\020\013\022\027\n\023E" +
+      "RROR_KEY_INCORRECT\020\014\022\024\n\020MONEY_NOT_ENOUGH" +
+      "\020\r\022\022\n\016ROOM_NOT_EXIST\020\025\022\016\n\nCOUNT_FULL\020\026\022\030",
+      "\n\024SHOUND_NOT_OPERATION\020\027\022\023\n\017GOLD_TOO_LIT" +
+      "TLE\020\030\022\017\n\013HASNOT_CARD\020\031\022\020\n\014ERROR_SHARED\020\032" +
+      "\022\027\n\023AREADY_REGISTRATION\020\033\022\023\n\017AREADY_DISS" +
+      "OLVE\020\034\022\016\n\nGAME_START\020\035*R\n\010GameType\022\024\n\020MA" +
+      "HJONG_XINGNING\020\000\022\022\n\016MAHJONG_RUIJIN\020\001\022\017\n\013" +
+      "RUN_QUICKLY\020\002\022\013\n\007SANGONG\020\003*;\n\013MessageTyp" +
+      "e\022\010\n\004TEXT\020\000\022\014\n\010EMOTICON\020\001\022\t\n\005INPUT\020\002\022\t\n\005" +
+      "VOICE\020\003B\016\n\014mahjong.modeb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -27363,27 +29121,27 @@ public final class GameBase {
     internal_static_BaseConnection_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_BaseConnection_descriptor,
-        new java.lang.String[] { "OperationType", "Data", });
-    internal_static_RoomCardIntoRequest_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_RoomCardIntoRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_RoomCardIntoRequest_descriptor,
-        new java.lang.String[] { "ID", "RoomNo", });
-    internal_static_RoomCardIntoResponse_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+        new java.lang.String[] { "OperationType", "Data",});
+        internal_static_RoomCardIntoRequest_descriptor =
+                getDescriptor().getMessageTypes().get(1);
+        internal_static_RoomCardIntoRequest_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_RoomCardIntoRequest_descriptor,
+                new java.lang.String[]{"ID", "RoomNo",});
+        internal_static_RoomCardIntoResponse_descriptor =
+                getDescriptor().getMessageTypes().get(2);
     internal_static_RoomCardIntoResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_RoomCardIntoResponse_descriptor,
-        new java.lang.String[] { "Error", "GameType", "RoomNo", "RoomOwner", "Started", "Data", "ReadyTimeCounter", });
-    internal_static_RoomSeatsInfo_descriptor =
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_RoomCardIntoResponse_descriptor,
+            new java.lang.String[]{"Error", "GameType", "RoomNo", "RoomOwner", "Started", "Data", "ReadyTimeCounter",});
+        internal_static_RoomSeatsInfo_descriptor =
       getDescriptor().getMessageTypes().get(3);
     internal_static_RoomSeatsInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_RoomSeatsInfo_descriptor,
-        new java.lang.String[] { "Seats", });
-    internal_static_SeatResponse_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+            new java.lang.String[]{"Seats",});
+        internal_static_SeatResponse_descriptor =
+                getDescriptor().getMessageTypes().get(4);
     internal_static_SeatResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SeatResponse_descriptor,
@@ -27392,32 +29150,32 @@ public final class GameBase {
       getDescriptor().getMessageTypes().get(5);
     internal_static_OperationHistory_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_OperationHistory_descriptor,
-        new java.lang.String[] { "ID", "OperationId", "Card", });
+            internal_static_OperationHistory_descriptor,
+            new java.lang.String[] { "ID", "OperationId", "Card", });
     internal_static_BaseAction_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_BaseAction_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_BaseAction_descriptor,
-        new java.lang.String[] { "OperationId", "ID", "Data", });
+            internal_static_BaseAction_descriptor,
+            new java.lang.String[]{"OperationId", "ID", "Data", });
     internal_static_AskResponse_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_AskResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_AskResponse_descriptor,
-        new java.lang.String[] { "OperationId", "TimeCounter", });
-    internal_static_RoundResponse_descriptor =
+            new java.lang.String[]{"OperationId", "TimeCounter",});
+        internal_static_RoundResponse_descriptor =
       getDescriptor().getMessageTypes().get(8);
     internal_static_RoundResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_RoundResponse_descriptor,
-        new java.lang.String[] { "ID", "TimeCounter", });
-    internal_static_ReadyResponse_descriptor =
-      getDescriptor().getMessageTypes().get(9);
-    internal_static_ReadyResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_ReadyResponse_descriptor,
-        new java.lang.String[] { "ID", });
+            internal_static_RoundResponse_descriptor,
+            new java.lang.String[]{"ID", "TimeCounter",});
+        internal_static_ReadyResponse_descriptor =
+                getDescriptor().getMessageTypes().get(9);
+        internal_static_ReadyResponse_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_ReadyResponse_descriptor,
+                new java.lang.String[] { "ID", });
     internal_static_ErrorResponse_descriptor =
       getDescriptor().getMessageTypes().get(10);
     internal_static_ErrorResponse_fieldAccessorTable = new
@@ -27429,9 +29187,9 @@ public final class GameBase {
         internal_static_RecordResponse_fieldAccessorTable = new
                 com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
                 internal_static_RecordResponse_descriptor,
-        new java.lang.String[] { "GameRecords", });
-    internal_static_GameRecord_descriptor =
-            getDescriptor().getMessageTypes().get(12);
+                new java.lang.String[]{"GameRecords",});
+        internal_static_GameRecord_descriptor =
+                getDescriptor().getMessageTypes().get(12);
         internal_static_GameRecord_fieldAccessorTable = new
                 com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
                 internal_static_GameRecord_descriptor,
@@ -27440,9 +29198,9 @@ public final class GameBase {
       getDescriptor().getMessageTypes().get(13);
     internal_static_Record_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_Record_descriptor,
-            new java.lang.String[] { "RecordId", "RoomNo", "GameCount", "UserRecord", "DateTime", });
-    internal_static_RecordDetailsRequest_descriptor =
+        internal_static_Record_descriptor,
+            new java.lang.String[]{"RecordId", "RoomNo", "GameCount", "UserRecord", "DateTime",});
+        internal_static_RecordDetailsRequest_descriptor =
       getDescriptor().getMessageTypes().get(14);
     internal_static_RecordDetailsRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
@@ -27451,35 +29209,35 @@ public final class GameBase {
     internal_static_RecordDetailsResponse_descriptor =
       getDescriptor().getMessageTypes().get(15);
     internal_static_RecordDetailsResponse_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_RecordDetailsResponse_descriptor,
-        new java.lang.String[] { "ErrorCode", "RoundItemRecord", });
-    internal_static_RoundItemRecord_descriptor =
+        new java.lang.String[] { "ErrorCode", "RoundItemRecord",});
+        internal_static_RoundItemRecord_descriptor =
       getDescriptor().getMessageTypes().get(16);
     internal_static_RoundItemRecord_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_RoundItemRecord_descriptor,
         new java.lang.String[] { "UserRecord", });
     internal_static_UserRecord_descriptor =
       getDescriptor().getMessageTypes().get(17);
     internal_static_UserRecord_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_UserRecord_descriptor,
-            new java.lang.String[] { "ID", "Nickname", "Head", "Score", });
-    internal_static_OverResponse_descriptor =
-      getDescriptor().getMessageTypes().get(18);
-    internal_static_OverResponse_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_OverResponse_descriptor,
-            new java.lang.String[]{"BackKey", "DateTime",});
+        internal_static_UserRecord_descriptor,
+        new java.lang.String[] { "ID", "Nickname", "Head", "Score",});
+        internal_static_OverResponse_descriptor =
+                getDescriptor().getMessageTypes().get(18);
+        internal_static_OverResponse_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_OverResponse_descriptor,
+        new java.lang.String[]{"BackKey", "DateTime",});
         internal_static_ReplayRequest_descriptor =
                 getDescriptor().getMessageTypes().get(19);
-        internal_static_ReplayRequest_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_ReplayRequest_descriptor,
-        new java.lang.String[] { "RecordId", "Round", });
-    internal_static_ReplayResponse_descriptor =
-      getDescriptor().getMessageTypes().get(20);
+    internal_static_ReplayRequest_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_ReplayRequest_descriptor,
+            new java.lang.String[]{"RecordId", "Round",});
+        internal_static_ReplayResponse_descriptor =
+                getDescriptor().getMessageTypes().get(20);
         internal_static_ReplayResponse_fieldAccessorTable = new
                 com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
                 internal_static_ReplayResponse_descriptor,
@@ -27487,37 +29245,37 @@ public final class GameBase {
         internal_static_Message_descriptor =
                 getDescriptor().getMessageTypes().get(21);
         internal_static_Message_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_Message_descriptor,
-        new java.lang.String[] { "MessageType", "Content", "UserId",});
-        internal_static_AppointInteraction_descriptor =
-                getDescriptor().getMessageTypes().get(22);
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_Message_descriptor,
+        new java.lang.String[] { "MessageType", "Content", "UserId", });
+    internal_static_AppointInteraction_descriptor =
+      getDescriptor().getMessageTypes().get(22);
         internal_static_AppointInteraction_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_AppointInteraction_descriptor,
         new java.lang.String[] { "ToUserId", "ContentIndex", "UserId", });
     internal_static_LoggerRequest_descriptor =
       getDescriptor().getMessageTypes().get(23);
-    internal_static_LoggerRequest_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_LoggerRequest_descriptor,
+        internal_static_LoggerRequest_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_LoggerRequest_descriptor,
         new java.lang.String[] { "Logger", });
     internal_static_MatchInfo_descriptor =
       getDescriptor().getMessageTypes().get(24);
-    internal_static_MatchInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_MatchInfo_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_MatchInfo_descriptor,
         new java.lang.String[] { "ArenaType", "Name", "Count", "EntryFee", "Reward", });
     internal_static_MatchData_descriptor =
       getDescriptor().getMessageTypes().get(25);
-    internal_static_MatchData_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_MatchData_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_MatchData_descriptor,
-        new java.lang.String[] { "Status", "CurrentCount", });
+        new java.lang.String[] { "Status", "CurrentCount", "Round", });
     internal_static_MatchEliminateScore_descriptor =
-      getDescriptor().getMessageTypes().get(26);
+            getDescriptor().getMessageTypes().get(26);
     internal_static_MatchEliminateScore_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_MatchEliminateScore_descriptor,
         new java.lang.String[] { "Score", });
     internal_static_MatchResult_descriptor =
@@ -27525,45 +29283,57 @@ public final class GameBase {
     internal_static_MatchResult_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_MatchResult_descriptor,
-        new java.lang.String[] { "Result", });
-    internal_static_MatchOver_descriptor =
+        new java.lang.String[] { "Result", "CurrentScore", "TotalScore", });
+    internal_static_ScoreResponse_descriptor =
       getDescriptor().getMessageTypes().get(28);
-    internal_static_MatchOver_fieldAccessorTable = new
+    internal_static_ScoreResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_MatchOver_descriptor,
-        new java.lang.String[] { "Ranking", });
-    internal_static_DissolveApply_descriptor =
+        internal_static_ScoreResponse_descriptor,
+        new java.lang.String[] { "ScoreResult", });
+    internal_static_ScoreResult_descriptor =
       getDescriptor().getMessageTypes().get(29);
+    internal_static_ScoreResult_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ScoreResult_descriptor,
+        new java.lang.String[] { "ID", "Score", });
+    internal_static_MatchBalance_descriptor =
+      getDescriptor().getMessageTypes().get(30);
+    internal_static_MatchBalance_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_MatchBalance_descriptor,
+        new java.lang.String[] { "Ranking", "TotalScore", });
+    internal_static_DissolveApply_descriptor =
+      getDescriptor().getMessageTypes().get(31);
     internal_static_DissolveApply_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_DissolveApply_descriptor,
         new java.lang.String[] { "Error", "UserId", });
     internal_static_DissolveReplyRequest_descriptor =
-      getDescriptor().getMessageTypes().get(30);
+      getDescriptor().getMessageTypes().get(32);
     internal_static_DissolveReplyRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_DissolveReplyRequest_descriptor,
         new java.lang.String[] { "Agree", });
     internal_static_DissolveReplyResponse_descriptor =
-      getDescriptor().getMessageTypes().get(31);
+      getDescriptor().getMessageTypes().get(33);
     internal_static_DissolveReplyResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_DissolveReplyResponse_descriptor,
         new java.lang.String[] { "Dissolve", });
     internal_static_Dissolve_descriptor =
-      getDescriptor().getMessageTypes().get(32);
+      getDescriptor().getMessageTypes().get(34);
     internal_static_Dissolve_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Dissolve_descriptor,
         new java.lang.String[] { "UserId", "Agree", });
     internal_static_DissolveConfirm_descriptor =
-      getDescriptor().getMessageTypes().get(33);
+      getDescriptor().getMessageTypes().get(35);
     internal_static_DissolveConfirm_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_DissolveConfirm_descriptor,
         new java.lang.String[] { "Dissolved", });
     internal_static_Notice_descriptor =
-      getDescriptor().getMessageTypes().get(34);
+      getDescriptor().getMessageTypes().get(36);
     internal_static_Notice_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Notice_descriptor,
