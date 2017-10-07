@@ -39,6 +39,8 @@ public class Seat {
     private String ip;
     private int gameCount;
 
+    private boolean canNotHu;//弃胡后不能胡牌
+
     private List<Integer> chiTemp = new ArrayList<>();
 
     public int getSeatNo() {
@@ -273,6 +275,14 @@ public class Seat {
         this.gameCount = gameCount;
     }
 
+    public boolean isCanNotHu() {
+        return canNotHu;
+    }
+
+    public void setCanNotHu(boolean canNotHu) {
+        this.canNotHu = canNotHu;
+    }
+
     public void clear() {
         initialCards.clear();
         cards.clear();
@@ -286,5 +296,6 @@ public class Seat {
         cardResult = null;
         mingGangResult.clear();
         anGangResult.clear();
+        canNotHu = false;
     }
 }

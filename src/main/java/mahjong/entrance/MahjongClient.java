@@ -240,7 +240,7 @@ public class MahjongClient {
                                 //才开始的时候检测是否该当前玩家出牌
                                 if (0 == room.getHistoryList().size()) {
                                     for (Seat seat : room.getSeats()) {
-                                        if (seat.getSeatNo() == room.getOperationSeatNo() && seat.getUserId() == userId) {
+                                        if (seat.getSeatNo() == room.getOperationSeatNo() && seat.getUserId() == userId && 0 == room.getGameStatus().compareTo(GameStatus.PLAYING)) {
                                             room.checkSelfGetCard(response, operationSeat, redisService);
                                             break;
                                         }
@@ -426,7 +426,7 @@ public class MahjongClient {
                                     }
                                 }
                                 Mahjong.MahjongGang gangRequest = Mahjong.MahjongGang.parseFrom(actionRequest.getData());
-                                room.selfGang(actionResponse, gangRequest.getCard(), response, redisService, userId);
+                                room.selfGang(actionResponse, gangRequest.getCard(0), response, redisService, userId);
                                 break;
                             case DIAN_GANG:
                                 if (0 < room.getHistoryList().size()) {
@@ -482,15 +482,19 @@ public class MahjongClient {
                                         actionResponse.setOperationId(GameBase.ActionId.PASS).clearData();
                                         messageReceive.send(response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString()).build(), userId);
                                         seat.setOperation(4);
-                                        if (!room.passedChecked()) {//如果都操作完了，继续摸牌
-                                            room.getSeats().forEach(seat1 -> {
-                                                seat1.setOperation(0);
-                                                seat1.getChiTemp().clear();
-                                            });
-                                            room.getCard(response, room.getNextSeat(), redisService);
-                                        } else if (room.checkCanPeng()) { //如果可以碰、杠牌，则碰、杠
-                                            room.operation(actionResponse, response, redisService);
+                                        seat.setCanNotHu(true);
+                                        if (!room.checkHu(response, redisService)) {
+                                            if (!room.passedChecked()) {//如果都操作完了，继续摸牌
+                                                room.getSeats().forEach(seat1 -> {
+                                                    seat1.setOperation(0);
+                                                    seat1.getChiTemp().clear();
+                                                });
+                                                room.getCard(response, room.getNextSeat(), redisService);
+                                            } else if (room.checkCanPeng()) { //如果可以碰、杠牌，则碰、杠
+                                                room.operation(actionResponse, response, redisService);
+                                            }
                                         }
+
                                     } else {
                                         actionResponse.setOperationId(GameBase.ActionId.PASS).clearData();
                                         messageReceive.send(response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString()).build(), userId);

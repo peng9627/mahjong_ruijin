@@ -217,6 +217,10 @@ public class MahjongUtil {
             }
         }
 
+        if (0 == cards.size()) {
+            return true;
+        }
+
         cards.remove(cards.size() - 1);
         cards.sort(new Comparator<Integer>() {
             @Override
@@ -326,7 +330,7 @@ public class MahjongUtil {
      * @param cards
      * @return
      */
-    public static Integer checkGang(List<Integer> cards) {
+    public static Integer checkGang(List<Integer> cards, int bao) {
         List<Integer> cardList = new ArrayList<>();
         cardList.addAll(cards);
         cardList.sort(new Comparator<Integer>() {
@@ -336,7 +340,7 @@ public class MahjongUtil {
             }
         });
         for (int i = 0; i < cardList.size() - 3; i++) {
-            if (cardList.get(i).intValue() == cardList.get(i + 3)) {
+            if (cardList.get(i).intValue() != bao && cardList.get(i).intValue() == cardList.get(i + 3)) {
                 return cardList.get(i);
             }
         }
@@ -439,7 +443,7 @@ public class MahjongUtil {
             case FEI:
                 return 10;
         }
-        return 2;
+        return 1;
     }
 
     private static Map<Integer, Integer> cardsSize(List<Integer> mahjongs) {

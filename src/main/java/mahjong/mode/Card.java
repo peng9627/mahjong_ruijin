@@ -15,6 +15,9 @@ public class Card {
             if (card.intValue() == containCard) {
                 size++;
             }
+            if (containCard > 50 && card > 50) {
+                size++;
+            }
         }
         return size;
     }
@@ -111,13 +114,18 @@ public class Card {
         return getAllCard().contains(card);
     }
 
-    public static void remove(List<Integer> cards, Integer card) {
+    public static Integer remove(List<Integer> cards, Integer card) {
         for (Integer card1 : cards) {
             if (card1.intValue() == card) {
                 cards.remove(card1);
-                return;
+                return card1;
+            }
+            if (card > 50 && card1 > 50) {
+                cards.remove(card1);
+                return card1;
             }
         }
+        return null;
     }
 
     public static void removeAll(List<Integer> cards, List<Integer> removes) {
