@@ -1531,7 +1531,7 @@ public class Room {
             //当前玩家是否可以胡牌
             temp.add(card[0]);
 //            if (dianpao && (MahjongUtil.fei(temp, bao) || MahjongUtil.hu(temp, bao)) && seat.getOperation() != 4) {
-            if (dianpao && MahjongUtil.hu(temp, bao) && seat.getOperation() != 4) {
+            if (dianpao && MahjongUtil.hu(temp, bao) && seat.getOperation() != 4 && !seat.isCanNotHu()) {
                 hasNoOperation[0] = true;
                 return;
             }
