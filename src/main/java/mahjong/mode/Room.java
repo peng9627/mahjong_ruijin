@@ -478,8 +478,9 @@ public class Room {
             userResult.addAllMingGangCards(seat.getMingGangCards());
             final int[] win = {0};
             if (null != seat.getCardResult()) {
+                seat.getCardResult().setScore(seat.getCardResult().getScore() * baseScore);
                 userResult.setCardScore(seat.getCardResult().getScore());
-                win[0] += seat.getCardResult().getScore() * baseScore;
+                win[0] += seat.getCardResult().getScore();
                 if (seat.getCardResult().getScore() > 0) {
                     userResult.setHuCard(card);
                     userResult.setCardScore(seat.getCardResult().getScore());
