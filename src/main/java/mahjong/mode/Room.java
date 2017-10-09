@@ -435,6 +435,7 @@ public class Room {
         for (Seat seat : seats) {
             if (seat.getSeatNo() == seatNo) {
                 seat.getCards().add(card1);
+                seat.setCanNotHu(false);
                 operationSeat = seat;
                 actionResponse.setData(builder1.build().toByteString());
             } else {
@@ -1048,6 +1049,7 @@ public class Room {
                 score = 10;
             }
             if (banker == huSeat[0].getUserId()) {
+                score += 1;
                 if (1 == zhuangxian) {
                     score += 1;
                 } else {
@@ -1077,7 +1079,7 @@ public class Room {
                         score1 = -10;
                     }
                     seat.setCardResult(new GameResult(scoreTypes, huSeat[0].getCards().get(huSeat[0].getCards().size() - 1), score1));
-                    loseScore[0] += -finalScore;
+                    loseScore[0] += score1;
                 }
             });
             if (huSeat[0].getUserId() == banker) {
@@ -1616,6 +1618,9 @@ public class Room {
 
                     //点杠后需要摸牌
                     getCard(response, seat.getSeatNo(), redisService);
+                    for (Seat seat1 : seats) {
+                        seat1.setCanNotHu(false);
+                    }
                     return;
                 } else if (2 <= containSize && seat.getOperation() == 3) {//碰
                     List<Integer> pengCards = new ArrayList<>();
@@ -1641,6 +1646,9 @@ public class Room {
                     response.setOperationType(GameBase.OperationType.ROUND).setData(roundResponse.toByteString());
                     seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
                             .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
+                    for (Seat seat1 : seats) {
+                        seat1.setCanNotHu(false);
+                    }
                     return;
                 }
             }
@@ -1680,6 +1688,9 @@ public class Room {
                         response.setOperationType(GameBase.OperationType.ROUND).setData(roundResponse.toByteString());
                         seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
                                 .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
+                        for (Seat seat1 : seats) {
+                            seat1.setCanNotHu(false);
+                        }
                         return;
                     }
                     break;

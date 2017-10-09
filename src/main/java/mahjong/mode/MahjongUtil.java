@@ -33,7 +33,7 @@ public class MahjongUtil {
                 }
             });
             for (int i = 0; i < cards.size() - 1; i++) {
-                if (cards.get(i).intValue() == cardList.get(i + 1).intValue()) {
+                if (cards.get(i).intValue() == cards.get(i + 1).intValue()) {
                     dui_arr.add(cards.get(i));
                     dui_arr.add(cards.get(i));
                     i++;
@@ -552,7 +552,7 @@ public class MahjongUtil {
                     handVals.remove(Integer.valueOf(md_val + 2));
                     return CheckLug(handVals);
                 }
-            } else {
+            } else if (md_val < 40) {
                 if (handVals.contains(md_val + 2) && handVals.contains(md_val + 4)
                         && 3 != Card.containSize(handVals, md_val + 2)
                         && 3 != Card.containSize(handVals, md_val + 4)) {
@@ -573,6 +573,18 @@ public class MahjongUtil {
                     handVals.remove(Integer.valueOf(md_val + 2));
                     handVals.remove(Integer.valueOf(md_val + 6));
                     return CheckLug(handVals);
+                }
+            } else {
+                handVals.add(md_val);
+                switch (handVals.size()) {
+                    case 3:
+                        return 0 == get_dui(handVals).size() || 3 == get_san(handVals).size();
+                    case 6:
+                        return 0 == get_san(handVals).size() || 6 == get_san(handVals).size();
+                    case 9:
+                        return 0 == get_si(handVals).size() || 9 == get_san(handVals).size();
+                    case 12:
+                        return true;
                 }
             }
 
@@ -595,7 +607,7 @@ public class MahjongUtil {
                     handVals.remove(Integer.valueOf(md_val + 2));
                     return CheckFei(handVals);
                 }
-            } else {
+            } else if (md_val < 40) {
                 if (handVals.contains(md_val + 2) && handVals.contains(md_val + 4)
                         && 3 != Card.containSize(handVals, md_val + 2)
                         && 3 != Card.containSize(handVals, md_val + 4)) {
@@ -616,6 +628,18 @@ public class MahjongUtil {
                     handVals.remove(Integer.valueOf(md_val + 2));
                     handVals.remove(Integer.valueOf(md_val + 6));
                     return CheckFei(handVals);
+                }
+            } else {
+                handVals.add(md_val);
+                switch (handVals.size()) {
+                    case 3:
+                        return 0 == get_dui(handVals).size() || 3 == get_san(handVals).size() ? 0 : 1;
+                    case 6:
+                        return 0 == get_san(handVals).size() || 6 == get_san(handVals).size() ? 0 : 1;
+                    case 9:
+                        return 0 == get_si(handVals).size() || 9 == get_san(handVals).size() ? 0 : 1;
+                    case 12:
+                        return 0;
                 }
             }
 
