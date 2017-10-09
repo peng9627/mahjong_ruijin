@@ -1049,7 +1049,6 @@ public class Room {
                 score = 10;
             }
             if (banker == huSeat[0].getUserId()) {
-                score += 1;
                 if (1 == zhuangxian) {
                     score += 1;
                 } else {

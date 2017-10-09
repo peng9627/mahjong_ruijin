@@ -442,6 +442,8 @@ public class MahjongUtil {
             case DI_HU:
             case FEI:
                 return 10;
+            case ZIMO_HU:
+                return 2;
         }
         return 1;
     }
