@@ -14,8 +14,7 @@ public class Card {
         for (Integer card : cardList) {
             if (card.intValue() == containCard) {
                 size++;
-            }
-            if (containCard > 50 && card > 50) {
+            } else if (containCard > 50 && card > 50) {
                 size++;
             }
         }
