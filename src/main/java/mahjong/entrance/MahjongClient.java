@@ -16,10 +16,7 @@ import mahjong.utils.LoggerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created date 2016/3/25
@@ -326,7 +323,7 @@ public class MahjongClient {
                             seatResponse.setGameCount(userResponse.getData().getGameCount());
                             seatResponse.setNickname(userResponse.getData().getNickname());
                             seatResponse.setHead(userResponse.getData().getHead());
-                            seatResponse.setSex(userResponse.getData().getSex().equals("MAN"));
+                            seatResponse.setSex(userResponse.getData().getSex().equals("1"));
                             seatResponse.setOffline(false);
                             seatResponse.setIsRobot(false);
                             roomSeatsInfo.addSeats(seatResponse.build());
@@ -406,8 +403,8 @@ public class MahjongClient {
                         Room room = JSON.parseObject(redisService.getCache("room" + messageReceive.roomNo), Room.class);
                         switch (actionRequest.getOperationId()) {
                             case PLAY_CARD:
-                                Mahjong.MahjongPlayCard playCardRequest = Mahjong.MahjongPlayCard.parseFrom(actionRequest.getData());
-                                Integer card = playCardRequest.getCard();
+                                Mahjong.CardsData playCardRequest = Mahjong.CardsData.parseFrom(actionRequest.getData());
+                                Integer card = playCardRequest.getCards(0);
                                 room.playCard(card, userId, actionResponse, response, redisService);
                                 break;
                             case PENG:
@@ -430,8 +427,8 @@ public class MahjongClient {
                                         return;
                                     }
                                 }
-                                Mahjong.MahjongGang gangRequest = Mahjong.MahjongGang.parseFrom(actionRequest.getData());
-                                room.selfGang(actionResponse, gangRequest.getCard(0), response, redisService, userId);
+                                Mahjong.CardsData gangRequest = Mahjong.CardsData.parseFrom(actionRequest.getData());
+                                room.selfGang(actionResponse, gangRequest.getCards(0), response, redisService, userId);
                                 break;
                             case DIAN_GANG:
                                 if (0 < room.getHistoryList().size()) {
@@ -451,7 +448,7 @@ public class MahjongClient {
                                         return;
                                     }
                                 }
-                                Mahjong.MahjongChi chiRequest = Mahjong.MahjongChi.parseFrom(actionRequest.getData());
+                                Mahjong.CardsData chiRequest = Mahjong.CardsData.parseFrom(actionRequest.getData());
                                 if (0 < room.getHistoryList().size()) {
                                     OperationHistory operationHistory = room.getHistoryList().get(room.getHistoryList().size() - 1);
                                     if (0 == operationHistory.getHistoryType().compareTo(OperationHistoryType.PLAY_CARD)) {
@@ -519,54 +516,39 @@ public class MahjongClient {
                         logger.warn("房间不存在");
                     }
                     break;
-                case REPLAY:
-                    Ruijin.RuijinMahjongReplayResponse.Builder replayResponse = Ruijin.RuijinMahjongReplayResponse.newBuilder();
-                    if (redisService.exists("room" + messageReceive.roomNo)) {
+                case EXIT:
+                    if (redisService.exists("room" + messageReceive.roomNo) && !redisService.exists("room_match" + messageReceive.roomNo)) {
                         while (!redisService.lock("lock_room" + messageReceive.roomNo)) {
                         }
+                        GameBase.ExitRoom.Builder exitRoom = GameBase.ExitRoom.newBuilder();
                         Room room = JSON.parseObject(redisService.getCache("room" + messageReceive.roomNo), Room.class);
-
-                        Mahjong.MahjongStartResponse.Builder dealCard = Mahjong.MahjongStartResponse.newBuilder();
-                        Mahjong.MahjongStartResponse.Builder ruijinDealCard = Mahjong.MahjongStartResponse.newBuilder();
-                        dealCard.setBanker(room.getBanker()).addAllDice(Arrays.asList(room.getDice()));
-                        ruijinDealCard.setRogue(room.getJiabao());
-                        replayResponse.setStart(ruijinDealCard);
-
-                        for (OperationHistory operationHistory : room.getHistoryList()) {
-                            GameBase.OperationHistory.Builder builder = GameBase.OperationHistory.newBuilder();
-                            builder.setID(operationHistory.getUserId());
-                            builder.addAllCard(operationHistory.getCards());
-                            switch (operationHistory.getHistoryType()) {
-                                case GET_CARD:
-                                    builder.setOperationId(GameBase.ActionId.GET_CARD);
+                        if (0 == room.getGameStatus().compareTo(GameStatus.WAITING)) {
+                            for (Seat seat : room.getSeats()) {
+                                if (seat.getUserId() == userId) {
+                                    exitRoom.setUserId(userId);
+                                    String uuid = UUID.randomUUID().toString().replace("-", "");
+                                    while (redisService.exists(uuid)) {
+                                        uuid = UUID.randomUUID().toString().replace("-", "");
+                                    }
+                                    redisService.addCache("backkey" + uuid, seat.getUserId() + "", 1800);
+                                    exitRoom.setBackKey(uuid);
+                                    response.setOperationType(GameBase.OperationType.EXIT).setData(exitRoom.build().toByteString());
+                                    messageReceive.send(response.build(), userId);
+                                    room.getSeatNos().add(seat.getSeatNo());
+                                    room.getSeats().remove(seat);
+                                    redisService.delete("reconnect" + seat.getUserId());
+                                    room.sendSeatInfo(response);
+                                    redisService.addCache("room" + messageReceive.roomNo, JSON.toJSONString(room));
                                     break;
-                                case PLAY_CARD:
-                                    builder.setOperationId(GameBase.ActionId.PLAY_CARD);
-                                    break;
-                                case PENG:
-                                    builder.setOperationId(GameBase.ActionId.PENG);
-                                    break;
-                                case AN_GANG:
-                                    builder.setOperationId(GameBase.ActionId.AN_GANG);
-                                    break;
-                                case DIAN_GANG:
-                                    builder.setOperationId(GameBase.ActionId.DIAN_GANG);
-                                    break;
-                                case BA_GANG:
-                                    builder.setOperationId(GameBase.ActionId.BA_GANG);
-                                    break;
-                                case HU:
-                                    builder.setOperationId(GameBase.ActionId.HU);
-                                    break;
+                                }
                             }
-                            replayResponse.addHistory(builder);
+                        } else {
+                            exitRoom.setError(GameBase.ErrorCode.SHOUND_NOT_OPERATION);
+                            response.setOperationType(GameBase.OperationType.EXIT).setData(exitRoom.build().toByteString());
+                            messageReceive.send(response.build(), userId);
                         }
-                        response.setOperationType(GameBase.OperationType.REPLAY).setData(replayResponse.build().toByteString());
-                        messageReceive.send(response.build(), userId);
                         redisService.unlock("lock_room" + messageReceive.roomNo);
                     }
-                    break;
-                case EXIT:
                     break;
                 case DISSOLVE:
                     if (redisService.exists("room" + messageReceive.roomNo) && !redisService.exists("room_match" + messageReceive.roomNo)) {

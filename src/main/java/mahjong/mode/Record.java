@@ -1,6 +1,7 @@
 package mahjong.mode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Record {
@@ -10,6 +11,8 @@ public class Record {
     private Integer[] dice;//骰子
     private List<OperationHistory> historyList = new ArrayList<>();
     private List<SeatRecord> seatRecordList;//座位战绩信息
+    private Date startDate;
+    private int gameCount;
 
     public Integer getJiabao() {
         return jiabao;
@@ -49,5 +52,21 @@ public class Record {
 
     public void setSeatRecordList(List<SeatRecord> seatRecordList) {
         this.seatRecordList = seatRecordList;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public int getGameCount() {
+        return gameCount;
+    }
+
+    public void setGameCount(int gameCount) {
+        this.gameCount = gameCount;
     }
 }

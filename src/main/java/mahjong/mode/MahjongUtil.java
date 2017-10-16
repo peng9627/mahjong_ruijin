@@ -229,9 +229,42 @@ public class MahjongUtil {
             }
         });
 
-        if (1 == baoSize) {
-            if (0 == CheckFei(cards)) {
-                return true;
+        if (0 < baoSize) {
+            List<Integer> baoCan = getComputePossible(cards, 2);
+
+            List<Integer> temp = new ArrayList<>();
+            switch (baoSize) {
+                case 1:
+                    temp.clear();
+                    temp.addAll(cards);
+                    if (0 == CheckFei(temp)) {
+                        return true;
+                    }
+                    break;
+                case 2:
+                    for (int aBaoCan : baoCan) {
+                        temp.clear();
+                        temp.addAll(cards);
+                        temp.add(aBaoCan);
+                        if (0 == CheckFei(temp)) {
+                            return true;
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < baoCan.size(); i++) {
+                        temp.clear();
+                        temp.addAll(cards);
+                        temp.add(baoCan.get(i));
+                        for (int j = i; j < baoCan.size(); j++) {
+                            temp.add(baoCan.get(j));
+                            if (0 == CheckFei(temp)) {
+                                return true;
+                            }
+                            Card.remove(temp, baoCan.get(j));
+                        }
+                    }
+                    break;
             }
         }
         return false;
