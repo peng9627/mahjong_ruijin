@@ -55,7 +55,7 @@ public class MahjongTcpService implements Runnable {
             System.out.println(Runtime.getRuntime().totalMemory() / 1024 / 1024 + "M");
         } catch (IOException e) {
             logger.error("socket.open.fail.message");
-            e.printStackTrace();
+            logger.error(e.toString(), e);
         }
 
         try {
@@ -65,12 +65,12 @@ public class MahjongTcpService implements Runnable {
             }
         } catch (IOException e) {
             logger.error("socket.server.dirty.shutdown.message");
-            e.printStackTrace();
+            logger.error(e.toString(), e);
         } finally {
             try {
                 serverSocket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.toString(), e);
             }
         }
     }
