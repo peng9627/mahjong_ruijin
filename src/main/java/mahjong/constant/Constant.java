@@ -12,18 +12,18 @@ import java.util.Properties;
  */
 public class Constant {
 
-    public static String apiUrl = "http://127.0.0.1:9999/api";
-    public static String userInfoUrl = "/user/info";
-    public static String userListUrl = "/user/list";
-    public static String gamerecordCreateUrl = "/gamerecord/create";
-    public static String moneyDetailedCreate = "/money_detailed/create";
+    public static String apiUrl;
+    public static String userInfoUrl;
+    public static String userListUrl;
+    public static String gamerecordCreateUrl;
+    public static String moneyDetailedCreate;
 
-    public static int readyTimeout = 10000;
-    public static int playCardTimeout = 18000;
-    public static int dissolve = 60000;
-    public static int messageTimeout = 60000;
-    public static int matchEliminateScoreTimeout = 30000;
-    public static int matchEliminateScore = 100;
+    public static int readyTimeout;
+    public static int playCardTimeout;
+    public static int dissolve;
+    public static int messageTimeout;
+    public static int matchEliminateScoreTimeout;
+    public static int matchEliminateScore;
 
     public static void init() {
         BufferedInputStream in = null;
