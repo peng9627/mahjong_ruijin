@@ -1236,9 +1236,25 @@ public class Room {
                 } else {
                     actionResponse.setOperationId(GameBase.ActionId.AN_GANG).setData(Mahjong.CardsData.newBuilder().addAllCards(gangCards).build().toByteString());
                 }
-                response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
                 seats.stream().filter(seat1 -> MahjongTcpService.userClients.containsKey(seat1.getUserId()))
-                        .forEach(seat1 -> MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
+                        .forEach(seat1 -> {
+                            if (seat1.getUserId() == seat.getUserId()) {
+                                if (card < 50) {
+                                    actionResponse.setOperationId(GameBase.ActionId.AN_GANG).setData(Mahjong.CardsData.newBuilder().addCards(card).build().toByteString());
+                                } else {
+                                    actionResponse.setOperationId(GameBase.ActionId.AN_GANG).setData(Mahjong.CardsData.newBuilder().addAllCards(gangCards).build().toByteString());
+                                }
+                                response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
+                            } else {
+                                if (card < 50) {
+                                    actionResponse.setOperationId(GameBase.ActionId.AN_GANG).setData(Mahjong.CardsData.newBuilder().addCards(0).build().toByteString());
+                                } else {
+                                    actionResponse.setOperationId(GameBase.ActionId.AN_GANG).setData(Mahjong.CardsData.newBuilder().addCards(0).addCards(0).addCards(0).addCards(0).build().toByteString());
+                                }
+                                response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
+                            }
+                            MahjongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
+                        });
                 getCard(response, seat.getSeatNo(), redisService);
             } else if (3 == Card.containSize(seat.getPengCards(), card) && 1 == Card.containSize(seat.getCards(), card)) {//扒杠
                 List<Integer> gangList = new ArrayList<>();

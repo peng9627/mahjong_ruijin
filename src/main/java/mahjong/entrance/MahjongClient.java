@@ -751,7 +751,13 @@ public class MahjongClient {
                 seatResponse.addAllPengCards(seat1.getPengCards());
             }
             if (null != seat1.getAnGangCards()) {
-                seatResponse.addAllAnGangCards(seat1.getAnGangCards());
+                if (seat1.getUserId() == userId) {
+                    seatResponse.addAllAnGangCards(seat1.getAnGangCards());
+                } else {
+                    for (int i = 0; i < seat1.getAnGangCards().size(); i++) {
+                        seatResponse.addAnGangCards(0);
+                    }
+                }
             }
             if (null != seat1.getMingGangCards()) {
                 seatResponse.addAllMingGangCards(seat1.getMingGangCards());
